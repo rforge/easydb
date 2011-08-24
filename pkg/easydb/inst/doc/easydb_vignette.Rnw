@@ -1,0 +1,520 @@
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+% | Document header                                             |
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+
+\documentclass[a4paper]{article}
+
+\title{\texttt{easydb}, a simple database interface for%
+    SQLite, MS Access and MySQL} 
+
+\author{Julien Moeys}
+% In case of changes, also change the 'PDF setup' and 
+% 'cited as follow'
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+% | Nodifications of the Sweave style                           |
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+
+% Load Sweave and color, in order to modify 
+% sweave's environments:
+
+\RequirePackage{Sweave,url,hyperref} % ,sweave,color,placeins,rotating,subfig
+\SweaveOpts{width=14,height=14,keep.source=TRUE} 
+% Also modified in the document
+
+% \VignetteIndexEntry{easydb tutorial}
+% \VignetteDepends{easydb}
+% \VignetteKeyword{database} 
+% \VignetteKeyword{SQLite} 
+% \VignetteKeyword{MS Access} 
+% \VignetteKeyword{MySQL} 
+% \VignetteKeyword{data.frame} 
+
+% Modify the definition of the 'Sinput' environment:
+\RecustomVerbatimEnvironment{Sinput}{Verbatim}{%
+    frame       = leftline,         % vert line on the left
+    framerule   = 0.50mm            % width of the vert line
+}   %
+
+% Modify the definition of the 'Scode' environment:
+\RecustomVerbatimEnvironment{Scode}{Verbatim}{%
+    frame       = leftline,         % vert line on the left
+    framerule   = 0.50mm            % width of the vert line
+}   %
+
+% Modify the spacing between R code and R outputs:
+\fvset{listparameters={\setlength{\topsep}{0pt}}} 
+\renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}} 
+
+\renewcommand\floatpagefraction{1.0}
+\renewcommand\topfraction{1.0}
+\renewcommand\bottomfraction{1.0}
+\renewcommand\textfraction{0.0}   
+\setcounter{topnumber}{4}
+\setcounter{bottomnumber}{4}
+\setcounter{totalnumber}{12}
+
+
+
+%%% PDF setup -- fill in the title
+% \usepackage[dvipdfm, bookmarks, colorlinks, breaklinks, %
+%     pdftitle={The soil texture wizard:R functions for plotting, classifying, transforming and exploring soil texture data},%
+%     pdfauthor={Julien MOEYS}]{hyperref}  
+% \hypersetup{linkcolor=MidnightBlue, citecolor=MidnightBlue, 
+%     filecolor=MidnightBlue,urlcolor=MidnightBlue} 
+% From: http://malecki.wustl.edu/sweaveTemplate.Rnw
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+% | Beginning of the document                                   |
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+
+% Don't forget to add this to path:
+% C:\Program Files\_SCIENCE\R_PROJECT\share\texmf
+
+\usepackage{Sweave}
+\begin{document}
+\bibliographystyle{plain}
+
+
+% \graphicspath{{INOUT/}} 
+
+
+%INVISIBLY sets a few options for Sweave :: KEEP THIS
+<<echo=FALSE>>= 
+# Set a few Sweave options:
+options( 
+    width       = 65,  # width of R output
+    prompt      = " ", # Sign preceding R input in R-GUI
+    continue    = " "  # same, but after 2nd line
+)   # 
+@ 
+
+% \SweaveOpts{width=14,height=14,keep.source=TRUE}
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+% | Front page TITLE 
+\maketitle
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+% | Edit here                  |
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+
+
+
+% <<echo=FALSE,results=hide,quiet=TRUE>>= 
+% old.wd  <- getwd() 
+
+% # setwd("C:/_RTOOLS/SWEAVE_WORK/SOIL_TEXTURES/rforge/pkg/soiltexture/inst/doc/INOUT") 
+
+% if( !("soiltexture" %in%  as.character( installed.packages()[,1] )) ) 
+% {   #
+%     suppressMessages( 
+%         install.packages( 
+%             pkgs  = "soiltexture"  
+%             # repos = "http://R-Forge.R-project.org" 
+%         )   #
+%     )   #
+% }   #
+
+% require( 
+%     package        = "soiltexture", 
+%     character.only = TRUE, 
+%     quietly        = TRUE 
+% )   #
+
+% # setwd(old.wd) 
+% @ 
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+% | Table of Content:
+\tableofcontents 
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+\section{Forewords} 
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+\subsection{What is \texttt{easydb}?} 
+
+\texttt{easydb} is an R package providing functions to easily read 
+and write data from / to SQLite, MS Access and MySQL databases, and 
+perform a few other operations. \texttt{easydb} provide the same 
+interface (set of functions) for all these databases. It is build 
+on top of \texttt{RSQLite} and \texttt{RODBC}, but tries to hide 
+tedious operations such as opening and closing database connections, 
+or writing SQL queries. \texttt{easydb} provides S3 classes functions 
+to manipulate databases in a similar way as a \texttt{data.frame} 
+(single brackets \[ \] subsetting). Nonetheless it does not work 
+exactly as a \texttt{data.frame} (because a \texttt{data.frame} have 
+rows and columns, while a databases have tables, rows and columns).
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+\subsection{Credits and License} 
+
+\texttt{easydb} is licensed under an \href{http://www.gnu.org/licenses/agpl.html}{Affero GNU General Public 
+License Version 3}.\\
+
+\textbf{This package and this document is provided with NO 
+responsibilities, guarantees or automatic supports from the author 
+or his employer} (\href{http://www.slu.se}{SLU} / \href{http://www.slu.se/CKB}{CKB}).\\
+
+Many ideas behind \texttt{easydb} have been introduced before by 
+\textbf{John Fox and Oswaldo Cruz} in their package 
+\href{http://r-forge.r-project.org/projects/dfdb-rodbc/}{\texttt{dfdb}}, in 
+a very similar form as in this package.\\
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+\subsection{Disclaimer} 
+
+The author of this package is neither a database/SQL specialist (rather a 
+self taught database user), nor an R guRu. Some functions in 
+\texttt{easydb} might be coded in a sub-optimal way. They should 
+nonetheless work as expected. Please let me know if that is not the 
+case!
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+\section{Working with \texttt{easydb}} 
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+\subsection{Install \texttt{easydb}} 
+
+\textbf{Method 1:} If you have the latest R version, open R, 
+and then type:
+
+<<echo=TRUE,eval=FALSE>>= 
+install.packages(
+    pkgs  = "easydb", 
+    repos = "http://R-Forge.R-project.org" )
+@ 
+
+
+
+\textbf{Method 2:} Otherwise, try to install the package from the 
+binaries. First download the binaries from 
+\url{http://r-forge.r-project.org/R/?group_id=1200}. Save the 
+package binaries in your working directory, and then open R and 
+type:
+
+<<echo=TRUE,eval=FALSE>>= 
+install.packages(
+    pkgs  = "easydb_0.3.1.zip", 
+    repos = NULL )
+@ 
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+\subsection{ODBC and Access} 
+
+If you want to use MS Access with \texttt{easydb}, you need a computer 
+with ODBC (installation not covered by this manual). 
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+\subsection{ODBC and MySQL} 
+
+If you want to use MySQL with \texttt{easydb}, you need a computer 
+with ODBC (installation not covered by this manual). You also need 
+to install a MySQL driver for ODBC, that you can find here: 
+\url{http://dev.mysql.com/downloads/connector/odbc/}.
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+\subsection{Example databases} 
+
+
+
+Some example databases are provided with the package. They are located 
+in the folder:
+
+<<echo=TRUE,eval=TRUE>>= 
+system.file( package = "easydb" ) 
+@ 
+
+
+
+Here is the list of files you can find in that folder:
+
+<<echo=TRUE,eval=TRUE>>= 
+list.files( system.file( package = "easydb" ) )
+@ 
+
+
+All the example databases are the same (but for diffferent database
+systems). They are pseudo-databases containing the physico-chemical 
+properties of some soil profiles (but data are dummy).\\
+
+At present, you can not create databases with \texttt{easydb}, but 
+that feature should come sooner or later (except for MySQL).
+
+
+
+\subsubsection{SQLite} 
+
+The example SQLite database is:
+
+<<echo=TRUE,eval=TRUE>>= 
+system.file( "soils.db", package = "easydb" ) 
+@ 
+
+
+
+\subsubsection{MS Access (< 2008)} 
+
+The example MS Access database is:
+
+<<echo=TRUE,eval=TRUE>>= 
+system.file( "soils.mdb", package = "easydb" ) 
+@ 
+
+Notice that this example database is not a MS Access 2008 database 
+(to be done later).
+
+
+
+\subsubsection{MySQL} 
+
+The example MySQL database can be created using the following SQL
+code file (dump that in a blank database, using PhPMyAdmin for 
+example):
+
+<<echo=TRUE,eval=TRUE>>= 
+system.file( "create_MySQL_db.sql", package = "easydb" ) 
+@ 
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+\subsection{First step: 'describe' you database} 
+
+The path and name of the database you are using is not enough for 
+\texttt{easydb}, because (a) it is not possible to know from the 
+file name which database type it is and (b) not all databases are 
+described by a file path and name (MySQL for instance).\\
+
+So you need to 'describe' a bit your database, using the function 
+\texttt{edb()}. Notice that \texttt{edb()} does not create any 
+connection to the database (so no need to close any connection 
+after \texttt{edb()}). It just creates an R object containing the 
+database description that will be recognised by R as an 
+"\texttt{easydb} database" (with so called S3 classes).\\
+
+This step is the \textbf{only} step that has database-specific 
+requirements. The rest of the database handly will use the same 
+set of functions, whatever the database system.
+
+
+
+\subsubsection{SQLite} 
+
+To describe an SQLite database (here the example database), type:
+
+<<echo=TRUE,eval=TRUE>>= 
+# Get the file path:
+sqliteFile <- system.file( "soils.db", package = "easydb" ) 
+sqliteFile 
+#
+# Describe the database:
+sDb <- edb( dbName = sqliteFile, dbType = "RSQLite_SQLite" ) 
+@ 
+
+\texttt{edb()} arguments are:
+\begin{itemize}
+    \item \texttt{dbName}: Name and path of the database, as a text 
+        string;
+    \item \texttt{dbType}: Database type. Here the string 
+        \texttt{RSQLite_SQLite} should be understood as 
+        "An SQLite database managed (internally) by the RSQLite package";
+\end{itemize}
+
+We now have an object called \texttt{sDb} that can be used for all 
+our database operations.
+
+<<echo=TRUE,eval=TRUE>>= 
+# Object class:
+class( sDb )
+@ 
+
+
+
+\subsubsection{MS Access (< 2008)} 
+
+To describe an MS Access database (here the example database), type:
+
+<<echo=TRUE,eval=TRUE>>= 
+# Get the file path:
+accessFile <- system.file( "soils.mdb", package = "easydb" ) 
+accessFile 
+#
+# Describe the database:
+aDb <- edb( dbName = access, dbType = "RSQLite_SQLite" ) 
+@ 
+
+\texttt{edb()} arguments are:
+\begin{itemize}
+    \item \texttt{dbName}: Name and path of the database, as a text 
+        string;
+    \item \texttt{dbType}: Database type. Here the string 
+        \texttt{RODBC_Access} should be understood as 
+        "An Access database managed (internally) by the RODBC package";
+\end{itemize}
+
+We now have an object called \texttt{aDb} that can be used for all 
+our database operations.
+
+<<echo=TRUE,eval=TRUE>>= 
+# Object class:
+class( aDb )
+@ 
+
+
+
+\subsubsection{MySQL} 
+
+It is a bit more complicated to describe a MySQL database. Type:
+
+<<echo=TRUE,eval=TRUE>>= 
+mDb <- edb( 
+    dbType       = "RODBC_MySQL", 
+    dbSourceName = "nameOfODBCSource", # or any name you like
+    dbName       = "nameOfDatabase", 
+    dbLogin      = "yourUserName", 
+    dbPwd        = "yourPassword", 
+    dbHost       = "127.0.0.1", 
+    dbPort       = 3306 
+)   #    
+@ 
+
+\texttt{edb()} arguments are:
+\begin{itemize}
+    \item \texttt{dbSourceName}: Name of the ODBC connection to 
+        the database. That connexion does not need to exist yet. 
+        You can create it manually, or create it using 
+        \texttt{edbDataSource()} (see below);
+    \item \texttt{dbName}: Name of the database in the MySQL 
+        system (not in ODBC);
+    \item \texttt{dbType}: Database type. Here the string 
+        \texttt{RODBC_Access} should be understood as 
+        "An Access database managed (internally) by the RODBC package";
+    \item \texttt{...}: Replace all the login, password and IP/Host 
+    values by values relevant for your database;
+\end{itemize}
+
+We now have an object called \texttt{mDb} that will be used for all 
+our database operations. You need to register you database first in 
+ODBC. You can do it with \texttt{edbDataSource()}, but please notice 
+that this functions is experimental (be careful):
+
+<<echo=TRUE,eval=TRUE>>= 
+edbDataSource( mDb, verbose = TRUE ) 
+@ 
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+\subsection{Second step: 'inspect' you database} 
+
+
+
+
+%(2000$\mu$m)
+% \cite{RICHER2008INRA}
+%\pageref{ISSSTRIANGLE} 
+% \label{ISSSSIZE}
+% \footnote{% 
+% Food and Agriculture Organization of the United Nations 
+% (\texttt{www.fao.org})}
+
+
+
+% \SweaveOpts{width=14,height=4,keep.source=TRUE}
+% <<echo=FALSE,fig=TRUE,include=TRUE>>= 
+% bornes <- c(0,2,20,50,200,2e3,20e3)
+% noms   <- c("Cl","FiSi","CoSi","FiSa","CoSa","Gr","St")
+% txt.b  <- expression( 0*mu*m, 2*mu*m, 20*mu*m, 50*mu*m, 200*mu*m, 2*'mm', 2*'cm')
+
+% tmp <- data.frame(bornes,noms) # ,txt.b
+% #tmp$"txt.b" <- as.character(tmp$"txt.b")
+
+% par(  "mar"=c(4,1,1,1)+0.1  )  #  c(bottom, left, top, right)
+
+% plot( 
+% 	x		= tmp$"bornes"[-1],  
+% 	y		= rep(1,dim(tmp[-1,])[1]),  
+% 	type	= "n",  
+% 	main	= "",  
+% 	xlab	= "Soil particule sizes",  
+% 	ylab	= "",  
+% 	yaxt	= "n",  xaxt = "n",  
+% 	log		= "x",  
+% 	xlim	= c(0.2,75e3), 
+% 	bty		= "n", 
+% 	cex.lab = 2  
+% )	#
+
+% abline(v=tmp$"bornes",lty=3,lwd=c(2,4,2,4,2,4,2))
+% abline(h=par("usr")[3:4],lty=1,lwd=4)
+
+% mtext( 
+%     text    = txt.b[-1], 
+%     side    = 1, 
+%     line    = rep( 
+%         c(0.5,1.25), 
+%         (dim(tmp)[1]-1)/2
+%     ),  #
+%     at  = tmp$"bornes"[-1], 
+%     cex = 2  
+% )   #
+
+% xtxt <- (tmp$"bornes"[1:(length(tmp$"bornes"))]+c(tmp$"bornes"[2:length(tmp$"bornes")],75e3))/2
+
+% text(x=xtxt,y=rep(1,length(xtxt)),labels=tmp$"noms",cex=2) 
+% @ 
+% \SweaveOpts{width=14,height=14,keep.source=TRUE}
+
+
+
+% \begin{itemize}
+%     \item Soil's fine earth is generally (but not always) divided 
+%         into 3 soil texture classes: 
+% \end{itemize}
+
+
+
+% <<echo=TRUE,eval=FALSE>>= 
+% install.packages( 
+%     pkgs  = "soiltexture", 
+%     repos = "http://R-Forge.R-project.org" 
+% )   #
+% @ 
+
+
+% <<echo=TRUE>>= 
+% require( soiltexture ) 
+% @ 
+
+
+
+\bibliography{easydb_vignette} % no .bib extension here
+\end{document}
