@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html dir="ltr" lang="en-gb"><head>
+
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>easydb: simple database interface for SQLite, MS</title>
+  
+
+  
+  
+  <style type="text/css">
+h1 {
+  border-left: medium solid #330099;
+  color: #330099;
+}
+pre {
+  border-style: none;
+  border-color: #9999ff;
+  font-size: large;
+  background-color: #ccccff;
+}
+h3 {
+  color: #330099;
+}
+body {
+  font-size: large;
+}
+
+</style>
+  <meta content="Julien Moeys" name="author">
+  <meta content="Describe the R package easydb" name="description"></head><body>
+<h1>&nbsp;easydb:
+easy database interface for SQLite, MS Access and MySQL<br>
+</h1>
+
+[[ <a href="easydb_web.htm#easydb_detailed">Jump to the detailed description</a> ]]<br>
+<span style="font-weight: bold;">easydb allows you to read and write data from / to </span><a style="font-weight: bold;" href="http://en.wikipedia.org/wiki/SQLite" target="_blank">SQLite</a><span style="font-weight: bold;">, </span><a style="font-weight: bold;" href="http://en.wikipedia.org/wiki/MS_Access" target="_blank">MS Access</a><span style="font-weight: bold;">
+and </span><a style="font-weight: bold;" href="http://en.wikipedia.org/wiki/MySQL" target="_blank">MySQL</a><span style="font-weight: bold;"> databases, very simply</span> (<span style="font-style: italic;">see below</span>).<br>
+
+easydb works on top of&nbsp; <a href="http://cran.r-project.org/web/packages/RSQLite/" target="_blank">RSQLite</a> and <a href="http://cran.r-project.org/web/packages/RODBC/" target="_blank">RODBC</a>. easydb subsetting style
+is similar to the <a href="http://r-forge.r-project.org/projects/dfdb-rodbc/" target="_blank">dfdb package</a> (that brought the idea).<br>
+
+<h3>Step 1: describe the database</h3>
+
+<pre><span style="font-weight: bold;">library( "easydb" )</span><br><br># For a MS Access database<br><span style="font-weight: bold;">myDb &lt;- edb( dbName = "soils.mdb", dbType = "RODBC_Access" )</span><br><br># For a SQLite database<br>myDb &lt;- edb( dbName = "soils.db", dbType = "RSQLite_SQLite" )<br></pre>
+
+Notes: This step is the only operation that vary with database type.
+myDb is not a connexion. It doesn't need to be "closed" when operations
+are finished.<br>
+
+<h3>Step 2: inspect the database<br>
+</h3>
+
+<pre># List existing tables<br><span style="font-weight: bold;">res &lt;- edbNames( myDb )</span> <br><br># List columns in a table<br><span style="font-weight: bold;">res &lt;- edbColnames( myDb, tableName = "SOIL_PROFILES" )</span><br></pre>
+
+<h3>Step 3: Retrieve data:</h3>
+
+<pre># data.frame style subseting, with single square brackets [ ] <br><br># Get the table "SOIL_PROFILES"<br><span style="font-weight: bold;">res &lt;- myDb[ "SOIL_PROFILES" ]</span><br><br># Or retreive only some columns "ID_PROFILE" and "NAME"<br><span style="font-weight: bold;">res &lt;- myDb[ "SOIL_PROFILES", , c("ID_PROFILE","NAME") ]</span><br><br># Or retreive only some rows and some columns (id 1 to 5)<br><span style="font-weight: bold;">res &lt;- myDb[ "SOIL_PROFILES", list( "ID_PROFILE" = 1:5 ), c("ID_PROFILE","NAME") ]</span><br></pre>
+
+Notes: No need of SQL queries, easydb does it internally (for basic
+operations). More row constrains can be passed in list( ... )<br>
+
+<h3>Step 4: Write data:</h3>
+
+<pre># Add data to a table<br><span style="font-weight: bold;">myDb[ "SOIL_PROFILES" ] &lt;- some_data_frame</span><br></pre>
+
+<h1><a name="easydb_detailed"></a>&nbsp;easydb: detailed package
+description</h1>
+<h3>About easydb</h3>
+easydb has been created after I realised I was often performing the
+same operations on different types of databases, whatever the project I
+was working on. I found the connection / disconnection operations
+tedious and the different SQL dialects not so fun (especially when you
+learn SQL). So I gradually created a set of functions simplifying these
+operations, untill I got something close to a standalone package. I
+lately realised that the idea has actually been already been
+implemented since 2009 by John Fox and Oswaldo Cruz in their <a href="http://r-forge.r-project.org/projects/dfdb-rodbc/" target="_blank">dfdb package</a>
+(very similar to easydb for some things). I hope you will find the
+package usefull and not too buggy (please report me any problem). <br>
+<h3>Credit and license</h3>
+<ul>
+  <li>Author: Julien Moeys (<a href="http://www.slu.se/mark" target="_blank">Swedish University of Agricultural Sciences</a> / <a href="http://www.slu.se/ckb" target="_blank">CKB</a>);</li>
+  <li>Licence: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">GNU Affero General Public Licence (AGPL) version 3</a>;</li>
+  <li>Contact: jules_m78-soiltexture @@AT@@ yahoo.fr</li>
+</ul>
+<h3>Project page on rforge</h3>
+<ul>
+  <li><a href="http://r-forge.r-project.org/projects/easydb/" target="_blank">Project page on rforge</a>;</li>
+  <li>Code repository (SCM);</li>
+  <li>Download the package;</li>
+  <li>Tutorial / vignette;<br>
+  </li>
+  <li>Help forum;<br>
+  </li>
+</ul>
+<h3>Feature list<br>
+</h3>
+
+<ul>
+  <li>Common database interface for SQLite, MS Access and MySQL (same functions, same arguments);</li>
+  <li>Data fetching, subseting and writing similar to data.frame operation (single square brackets "db[,,]") <br>
+  </li>
+  <li>No connections to open or close (done internally);</li>
+  <li>In case of operation failure, the database connection is closed internally (no open connections in the wild);<br>
+  </li>
+  <li>Table subsetting is SQL free (select only some rows or columns); SQL is internal (edbRead() or "db[,,]");<br>
+  </li>
+  <li>Can create tables, appen, overwrite or update data in a table with the same function (edbWrite() or "db[,,]&lt;-" );<br>
+  </li>
+  <li>Can
+retrieve the Primary Key ID automatically attributed (edbWrite() or
+"db[,,]&lt;-" ), which is usefull for database referential integrity;</li>
+  <li>Fetch table dimensions (edbDim()), number of rows or columns (edbBRow() and edbNCol());</li>
+  <li>Possibility to pass SQL constrains for rows subsetting;</li>
+  <li>S3 class methods are used to define database operations for each database type;<br>
+  </li>
+</ul>
+<h3>What easydb doesn't do</h3>
+<ul>
+  <li>Completely replace RSQLite or RODBC. For more complex operations, you will need to know / use these packages;<br>
+  </li>
+  <li>Data fetching and subseting using row / columns with integer indexes or vectors of logicals;</li>
+  <li>More complex SQL operations like joins, ...;</li>
+  <li>Sorting data with SQL queries;<br>
+  </li>
+  <li>Renaming tables and columns;&nbsp;</li>
+  <li>Double square brackets "[[]]" or dollar "$" table subsetting;</li>
+  <li><span style="font-style: italic;">and a lot more</span>;</li>
+</ul>
+Note: this is <span style="font-style: italic;">not</span> a roadmap. I
+may implement some of these features in the future (especially those I
+need), but I don't intend to create the ultimate / universal R Swiss
+Army Knife for handling databases :o). Any code contribution is more
+than welcome. Report me any bug you may find.<br>
+<h3>Similar R packages</h3>
+<ul>
+  <li><a href="http://r-forge.r-project.org/projects/dfdb-rodbc/">dfdb</a> (easydb wouldn't be there if I hadn't re-invented the wheel);</li>
+  <li><a href="http://cran.r-project.org/web/packages/SQLiteDF" target="_blank">sqlitedf</a> (store data.frame's in SQLite databases)<br>
+  </li>
+  <li><a href="http://cran.r-project.org/web/packages/bigmemory" target="_blank">bigmemory</a> (massive datasets);</li>
+  <li><a href="http://cran.r-project.org/web/packages/ff/" target="_blank">ff</a>;</li>
+  <li><a href="http://cran.r-project.org/web/packages/sqldf" target="_blank">sqldf</a> (easydb's reverse mirror: subset data.frame's with SQL!);<br>
+  </li>
+</ul>
+<hr style="width: 100%; height: 2px;">Last updated: 2011-08-18<br>
+<a title="Document made with KompoZer" href="http://kompozer.net/"><img style="border: 0px solid ; width: 80px; height: 15px;" alt="Document made with KompoZer" src="kompozer_80x15.png"></a><br>
+</body></html>

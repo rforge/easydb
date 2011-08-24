@@ -1,0 +1,12 @@
+Package: easydb
+Version: 0.3.1
+Date: 2011-08-18
+Title: Simple database interface for SQLite, MySQL and MS Access.
+Author: Julien MOEYS <Julien.Moeys@mark.slu.se> 
+Maintainer: Julien MOEYS <Julien.Moeys@mark.slu.se> 
+Depends: R (>= 2.10.0)
+Suggests: RODBC, RSQLite
+LazyLoad: no
+Description: Simple database interface for SQLite, MySQL and MS Access. easydb is build on top of RSQLite and RODBC. It provides functions for reading, writing, listing and subsetting tables in SQLite, MySQL and MS Access. easydb allow to retrieve, write and subset database's tables in a similar way as data.frame's, using single square brackets db[,,,]. easydb internalise many database operations (otherwise tedious) such as rows and columns subsetting (no SQL needed) and connection and disconnection to / from databases. 
+License: AGPL-3
+URL: http://www.mark.slu.se, http://ckb.slu.se, http://julienmoeys.free.fr

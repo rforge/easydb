@@ -1,0 +1,6 @@
+- Finished implementing MySQL support (v 0.2) 
+- Test edbDrop and edbDelete for MySQL;
+- Implement edbJoin for JOIN queries (unschedule);
+- Implement MS Excel support;
+
+

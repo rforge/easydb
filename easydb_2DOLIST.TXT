@@ -1,0 +1,4 @@
+- Finished implementing MySQL support (v 0.2) 
+- Implement MS Access support (v 0.3) 
+- Implement edbJoin for JOIN queries (unschedule) 
+- Implement MS Excel support 

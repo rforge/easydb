@@ -1,0 +1,7 @@
+- 2011/07/07 Added support for MS Access (via RODBC).
+- 2011/07/01 Finished edbDelete and edbDrop for MySQL and SQLite.
+- 2011/06/10 Added support to MySQL. edbWrite still to be done.
+- 2011/06/01 Version 0.1 of the package. Documented. Only SQLite.
+
+
+
