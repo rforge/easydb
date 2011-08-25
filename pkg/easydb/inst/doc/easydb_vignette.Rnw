@@ -155,7 +155,7 @@ on top of \texttt{RSQLite} and \texttt{RODBC}, but tries to hide
 tedious operations such as opening and closing database connections, 
 or writing SQL queries. \texttt{easydb} provides S3 classes functions 
 to manipulate databases in a similar way as a \texttt{data.frame} 
-(single brackets \[ \] subsetting). Nonetheless it does not work 
+(single square brackets [ ] subsetting). Nonetheless it does not work 
 exactly as a \texttt{data.frame} (because a \texttt{data.frame} have 
 rows and columns, while a databases have tables, rows and columns).
 
