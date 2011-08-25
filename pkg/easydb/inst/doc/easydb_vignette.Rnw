@@ -75,7 +75,7 @@
 
 \usepackage{Sweave}
 \begin{document}
-\bibliographystyle{plain}
+% \bibliographystyle{plain}
 
 
 % \graphicspath{{INOUT/}} 
@@ -195,7 +195,7 @@ case!
 
 
 % +~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
-\subsection{Install \texttt{easydb}} 
+\subsection{Install and load \texttt{easydb}} 
 
 \textbf{Method 1:} If you have the latest R version, open R, 
 and then type:
@@ -218,6 +218,14 @@ type:
 install.packages(
     pkgs  = "easydb_0.3.1.zip", 
     repos = NULL )
+@ 
+
+
+
+Then you can load \texttt{easydb}:
+
+<<echo=TRUE,eval=TRUE>>= 
+library( "easydb" ) 
 @ 
 
 
@@ -344,7 +352,7 @@ sDb <- edb( dbName = sqliteFile, dbType = "RSQLite_SQLite" )
     \item \texttt{dbName}: Name and path of the database, as a text 
         string;
     \item \texttt{dbType}: Database type. Here the string 
-        \texttt{RSQLite_SQLite} should be understood as 
+        \texttt{RSQLite\_SQLite} should be understood as 
         "An SQLite database managed (internally) by the RSQLite package";
 \end{itemize}
 
@@ -368,7 +376,7 @@ accessFile <- system.file( "soils.mdb", package = "easydb" )
 accessFile 
 #
 # Describe the database:
-aDb <- edb( dbName = access, dbType = "RSQLite_SQLite" ) 
+aDb <- edb( dbName = accessFile, dbType = "RSQLite_SQLite" ) 
 @ 
 
 \texttt{edb()} arguments are:
@@ -376,7 +384,7 @@ aDb <- edb( dbName = access, dbType = "RSQLite_SQLite" )
     \item \texttt{dbName}: Name and path of the database, as a text 
         string;
     \item \texttt{dbType}: Database type. Here the string 
-        \texttt{RODBC_Access} should be understood as 
+        \texttt{RODBC\_Access} should be understood as 
         "An Access database managed (internally) by the RODBC package";
 \end{itemize}
 
@@ -415,7 +423,7 @@ mDb <- edb(
     \item \texttt{dbName}: Name of the database in the MySQL 
         system (not in ODBC);
     \item \texttt{dbType}: Database type. Here the string 
-        \texttt{RODBC_Access} should be understood as 
+        \texttt{RODBC\_Access} should be understood as 
         "An Access database managed (internally) by the RODBC package";
     \item \texttt{...}: Replace all the login, password and IP/Host 
     values by values relevant for your database;
@@ -426,7 +434,7 @@ our database operations. You need to register you database first in
 ODBC. You can do it with \texttt{edbDataSource()}, but please notice 
 that this functions is experimental (be careful):
 
-<<echo=TRUE,eval=TRUE>>= 
+<<echo=TRUE,eval=FALSE>>= 
 edbDataSource( mDb, verbose = TRUE ) 
 @ 
 
@@ -435,6 +443,28 @@ edbDataSource( mDb, verbose = TRUE )
 % +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 \subsection{Second step: 'inspect' you database} 
 
+WORK ON PROGRESS!
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+\subsection{Retreive and subset data} 
+
+WORK ON PROGRESS!
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+\subsection{Write data} 
+
+WORK ON PROGRESS!
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+\subsection{Miscelaneous cases} 
+
+WORK ON PROGRESS!
 
 
 
@@ -516,5 +546,5 @@ edbDataSource( mDb, verbose = TRUE )
 
 
 
-\bibliography{easydb_vignette} % no .bib extension here
+% \bibliography{easydb_vignette} % no .bib extension here
 \end{document}
