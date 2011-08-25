@@ -3,6 +3,7 @@
 
 
 
+
   
   <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>easydb: simple database interface for SQLite, MS</title>
   
@@ -67,20 +68,19 @@ operations). More row constrains can be passed in list( ... )<br>
 
 <h1><a name="easydb_detailed"></a>&nbsp;easydb: detailed package
 description</h1>
-<h3>About easydb</h3>
-easydb has been created after I realised I was often performing the
-same operations on different types of databases, whatever the project I
-was working on. I found the connection / disconnection operations
-tedious and the different SQL dialects not so fun (especially when you
-learn SQL). So I gradually created a set of functions simplifying these
-operations, untill I got something close to a standalone package. I
+<h3>About easydb</h3>easydb is an R package providing functions to <span style="font-weight: bold;">easily read and write data from / to SQLite, MS Access and MySQL databases</span>, and perform a few other operations. easydb provide the <span style="font-weight: bold;">same interface </span>(set of functions) <span style="font-weight: bold;">for all these databases</span>. It is build on top of RSQLite and RODBC,&nbsp; but tries to <span style="font-weight: bold;">hide tedious operations</span>
+such as opening and closing database connections, or writing SQL
+queries. easydb provides S3 classes functions to manipulate databases <span style="font-weight: bold;">in a similar way as a data.frame</span>
+(single square brackets [ ] subsetting). Nonetheless it does not work
+exactly as a&nbsp; data.frame (because a data.frame have rows and
+columns, while a databases have tables, rows and columns. I
 lately realised that the idea has actually been already been
 implemented since 2009 by John Fox and Oswaldo Cruz in their <a href="http://r-forge.r-project.org/projects/dfdb-rodbc/" target="_blank">dfdb package</a>
 (very similar to easydb for some things). I hope you will find the
-package usefull and not too buggy (please report me any problem). <br>
+package usefull and not too buggy (please report me any problem). 
 <h3>Credit and license</h3>
 <ul>
-  <li>Author: Julien Moeys (<a href="http://www.slu.se/mark" target="_blank">Swedish University of Agricultural Sciences</a> / <a href="http://www.slu.se/ckb" target="_blank">CKB</a>);</li>
+  <li>Author: Julien Moeys (<a href="http://www.slu.se/mark" target="_blank">SLU</a> / <a href="http://www.slu.se/ckb" target="_blank">CKB</a>);</li>
   <li>Licence: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">GNU Affero General Public Licence (AGPL) version 3</a>;</li>
   <li>Contact: jules_m78-soiltexture @@AT@@ yahoo.fr</li>
 </ul>
