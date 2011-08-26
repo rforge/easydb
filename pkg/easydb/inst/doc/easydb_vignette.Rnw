@@ -75,7 +75,7 @@
 
 \usepackage{Sweave}
 \begin{document}
-% \bibliographystyle{plain}
+\bibliographystyle{plain}
 
 
 % \graphicspath{{INOUT/}} 
@@ -107,32 +107,6 @@ options(
 
 
 
-% <<echo=FALSE,results=hide,quiet=TRUE>>= 
-% old.wd  <- getwd() 
-
-% # setwd("C:/_RTOOLS/SWEAVE_WORK/SOIL_TEXTURES/rforge/pkg/soiltexture/inst/doc/INOUT") 
-
-% if( !("soiltexture" %in%  as.character( installed.packages()[,1] )) ) 
-% {   #
-%     suppressMessages( 
-%         install.packages( 
-%             pkgs  = "soiltexture"  
-%             # repos = "http://R-Forge.R-project.org" 
-%         )   #
-%     )   #
-% }   #
-
-% require( 
-%     package        = "soiltexture", 
-%     character.only = TRUE, 
-%     quietly        = TRUE 
-% )   #
-
-% # setwd(old.wd) 
-% @ 
-
-
-
 % +~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 % | Table of Content:
 \tableofcontents 
@@ -147,11 +121,13 @@ options(
 % +~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 \subsection{What is \texttt{easydb}?} 
 
-\texttt{easydb} is an R package providing functions to easily read 
+\texttt{easydb} is an R\cite{RDCT2011} package providing functions 
+to easily read 
 and write data from / to SQLite, MS Access and MySQL databases, and 
 perform a few other operations. \texttt{easydb} provide the same 
 interface (set of functions) for all these databases. It is build 
-on top of \texttt{RSQLite} and \texttt{RODBC}, but tries to hide 
+on top of \texttt{RSQLite}\cite{JAMESRSQLite} and \texttt{RODBC}
+\cite{RIPLEYRODBC}, but tries to hide 
 tedious operations such as opening and closing database connections, 
 or writing SQL queries. \texttt{easydb} provides S3 classes functions 
 to manipulate databases in a similar way as a \texttt{data.frame} 
@@ -231,10 +207,29 @@ library( "easydb" )
 
 
 % +~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+\subsection{SQLite and RSQLite} 
+
+To work with SQLite databases, you need to install the R package 
+RSQLite:
+
+<<echo=TRUE,eval=FALSE>>= 
+install.packages( "RSQLite" ) 
+library( "RSQLite" )
+@ 
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 \subsection{ODBC and Access} 
 
 If you want to use MS Access with \texttt{easydb}, you need a computer 
-with ODBC (installation not covered by this manual). 
+with ODBC (installation not covered by this manual), and the R 
+package RODBC.
+
+<<echo=TRUE,eval=FALSE>>= 
+install.packages( "RODBC" ) 
+library( "RODBC" )
+@ 
 
 
 
@@ -244,7 +239,13 @@ with ODBC (installation not covered by this manual).
 If you want to use MySQL with \texttt{easydb}, you need a computer 
 with ODBC (installation not covered by this manual). You also need 
 to install a MySQL driver for ODBC, that you can find here: 
-\url{http://dev.mysql.com/downloads/connector/odbc/}.
+\url{http://dev.mysql.com/downloads/connector/odbc/}. You also need 
+the R package RODBC:
+
+<<echo=TRUE,eval=FALSE>>= 
+install.packages( "RODBC" ) 
+library( "RODBC" )
+@ 
 
 
 
@@ -645,25 +646,142 @@ edbRead(
                       "NAME" = c("AL","AT","PL") ) ) 
 @ 
 
+
+
 It is of course possible to use both row and column subsetting.\\
 
-You can also add some SQL constrains in the sRow list (for instance 
-\texttt{sRow( "SQL" = "ABBREV LIKE 'Al\%'" )}).\\
+<<echo=TRUE,eval=TRUE>>= 
+sDb[ "WRB_SOIL_GROUP", list( "ID_WRB_SOIL_GROUP" = 1:10 ), 
+    c("ID_WRB_SOIL_GROUP","NAME") ] 
+@ 
+
+
+
+You can also add some SQL constrains in the sRow list, for instance:\\
+
+<<echo=TRUE,eval=TRUE>>= 
+sDb[ "WRB_SOIL_GROUP", list( "SQL" = "ABBREV LIKE 'Al%'" ) ] 
+@ 
+
+
 
 If you want to see how the arguments are internally translated into 
 SQL queries use the argument \texttt{verbose = TRUE}.\\
+
+<<echo=TRUE,eval=TRUE>>= 
+sDb[ "WRB_SOIL_GROUP", list( "ID_WRB_SOIL_GROUP" = 1:10 ), 
+    c("ID_WRB_SOIL_GROUP","NAME"), verbose = TRUE ] 
+@ 
+
+
 
 Finally, you can chose to combine row constrains with \textbf{OR} 
 instead of \textbf{AND} (the default), by using the argument 
 \texttt{sRowOp = "OR"}. Complex combinations of AND and OR are not 
 possible unfortunately (you have to use RSQLite or RODBC queries).
 
+<<echo=TRUE,eval=TRUE>>= 
+sDb[ "WRB_SOIL_GROUP", list( "ID_WRB_SOIL_GROUP" = 1:10, 
+    "NAME" = c("AL","AT","PL") ), sRowOp = "OR" ] 
+@ 
+
 
 
 % +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 \subsection{Write data} 
 
-WORK ON PROGRESS!
+First lets get some data we want to write in the database:
+
+<<echo=TRUE,eval=TRUE>>= 
+profileTbl <- sDb[ "PROFILE" ] 
+profileTbl 
+@ 
+
+
+
+\subsubsection{Append data to a table:}
+
+
+
+We will try to write back / add this table to the table "PROFILE", 
+as if it was new data. But we need first to change the field 
+"ID\_PROFILE", as it is a PRIMARY KEY in the database (no duplicates 
+allowed):
+
+<<echo=TRUE,eval=TRUE>>= 
+profileTbl[, "ID_PROFILE" ] <- 3:4 
+@ 
+
+
+
+Now the table can be written:
+
+<<echo=TRUE,eval=TRUE>>= 
+sDb[ "PROFILE" ] <- profileTbl 
+@ 
+
+
+
+This is the same as 
+\texttt{sDb[ "PROFILE", mode = "a" ] <- profileTbl}, which mean 
+we have *a*ppend the data at the end of the table.\\
+
+Another way to do the same operation is:
+
+<<echo=TRUE,eval=TRUE>>= 
+# First change the IDs:
+profileTbl[, "ID_PROFILE" ] <- 5:6 
+#
+edbWrite( edb = sDb, tableName = "PROFILE", data = profileTbl ) 
+@ 
+
+
+
+We can check that the data has been written:
+
+<<echo=TRUE,eval=TRUE>>= 
+sDb[ "PROFILE", , c("ID_PROFILE","NAME") ] 
+@ 
+
+
+
+\subsubsection{Update data in a table:}
+
+If we want to update data in a table, we need to use \texttt{edbWrite()} 
+(the square bracket method will not work). We have to set the 
+argument \texttt{mode = "u"} and also the argument 
+\texttt{pKey = "ID\_PROFILE"} to state that pKey must be used 
+as a key to identify the fields that must be updated (it does not 
+have to be a PRIMARY key in the database, but it is better if 
+it is a unique indentifier).\\
+
+But first lets modify the data we will write:
+
+<<echo=TRUE,eval=TRUE>>= 
+profileTbl[,"NAME"] <- c("My 5th profile","My 6th profile") 
+@ 
+
+
+
+Then we can update this in the database:
+
+<<echo=TRUE,eval=TRUE>>= 
+edbWrite( 
+    edb       = sDb, 
+    tableName = "PROFILE", 
+    data      = profileTbl, 
+    mode      = "u", 
+    pKey      = "ID_PROFILE" ) 
+@ 
+
+
+
+And check what has been written:
+
+<<echo=TRUE,eval=TRUE>>= 
+sDb[ "PROFILE", list( "ID_PROFILE" = 5:6 ), 
+    c("ID_PROFILE","NAME") ] 
+@ 
 
 
 
@@ -760,5 +878,5 @@ WORK ON PROGRESS!
 file.remove( sDb[["dbName"]] ) 
 @ 
 
-% \bibliography{easydb_vignette} % no .bib extension here
+\bibliography{easydb_vignette} % no .bib extension here
 \end{document}
