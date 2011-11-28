@@ -33,11 +33,18 @@ full details on the columns (see \code{onlyNames}).}
 \code{link{edbwrite.RODBC_Access}}, 
 \code{link{edbNames.RODBC_Access}}.}
 \examples{library( "easydb" ) 
+library( "RODBC" ) 
+
+
+
+# System check. Ingnore this or set 'testODBC' to TRUE 
+testODBC <- (class(try(odbcDataSources())) != "try-error") & 
+            (Sys.info()[[ "sysname" ]] == "Windows")
 
 
 
 ### Windows only:
-if( Sys.info()[[ "sysname" ]] == "Windows" ){ 
+if( testODBC ){ 
     ### Make a copy of SQLite example database:
     #   (a database of soil profile description) 
     file.copy( 

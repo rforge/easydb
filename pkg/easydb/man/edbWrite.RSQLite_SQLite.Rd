@@ -3,7 +3,7 @@
 \title{Write data in a SQLite table in a database (referenced by 'edb').}
 \description{Write data in a table in a SQLite database (referenced by 'edb'). }
 \usage{
-\method{edbWrite}{RSQLite_SQLite}(edb, tableName, data, mode = c("a", "u", "o")[1], pKey = NULL, getKey = NULL, testFiles = TRUE, verbose = FALSE, ...)
+\method{edbWrite}{RSQLite_SQLite}(edb, tableName, data, mode = c("a", "u", "o")[1], pKey = NULL, getKey = NULL, formatCol = NULL, posixFormat = "", dateFormat = "", testFiles = TRUE, verbose = FALSE, ...)
 }
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link{edb}}.}
@@ -22,6 +22,20 @@ the table is overwritten and \code{pKey} is ignored. }
 is PRIMARY KEY in the table.}
   \item{getKey}{Single logical. If TRUE, the latest attributed primary keys will be 
 retrieved.}
+  \item{formatCol}{If not NULL, a named list of functions to be applied to certain columns 
+before the data are written to the database. The name of each list 
+item gives the column to process, and the value of each item gives the 
+function that must be applied. For instance 
+formatCol = list("DATE"=as.Date) will apply the function 
+\link{as.Date} to the column "DATE".}
+  \item{posixFormat}{Single character string. 'format' argument of the functions 
+format.POSIXlt() or format.POSIXct() used to convert POSIX 
+date-time into character strings when writing into the database.
+Only used if getKey is not NULL or when mode == "u" in SQLite.}
+  \item{dateFormat}{Single character string. 'format' argument of the functions 
+format.Date() used to convert "Date" 
+dates into character strings when writing into the database.
+Only used if getKey is not NULL or when mode == "u" in SQLite.}
   \item{testFiles}{Single logical. Should the function test for the presence 
 (file.exist()) of the needed files in the folder before trying 
 to fetch information from the database? }
@@ -159,6 +173,55 @@ edbDelete(
 ## Drop tables
 edbDrop( edb = myDb, tableName = "PROFILE2" ) 
 edbDrop( edb = myDb, tableName = "PROFILE3" ) 
+
+
+
+# Dates and times can not be stored as DATES in sqlite databases.
+# They have been stored as integers (seconds or days since 1970-01-01)
+# Similarly, boolean have to be stored as integers
+
+myDb[ "MISCFORMAT" ]
+
+# So date variables have to be converted when written to the database.
+# The code below show how to do that.
+
+# Prepare a new record to be written:
+newRecord <- data.frame( 
+    "ID_RECORD"   = 2, 
+    "DAT_TIM_SEC" = as.POSIXct( "2011-12-15 12:00:00", tz = "GMT" ), 
+    "DAT_DAY"     = as.Date( "2011-12-15" ), 
+    "TEST_BOOL"   = FALSE 
+)   #
+newRecord 
+
+# Write the record:
+myDb[ "MISCFORMAT", formatCol = list( "DAT_TIM_SEC" = as.integer, 
+    "DAT_DAY" = as.integer, "TEST_BOOL" = as.integer ) ] <- newRecord 
+
+# The records have been written as integers:
+myDb[ "MISCFORMAT" ]
+
+# But we can convert them on-the-fly
+
+# Function to convert POSIX integer "seconds from 1970-01-01" into 
+# R POSIXct date format.
+formatDT <- function( x, tz = "GMT" ){ 
+    res <- ISOdatetime( year = 1970, month = 1, day = 1, 
+        hour = 0, min = 0, sec = 0, tz = tz ) 
+    res <- res + x 
+    return( res ) } 
+        
+
+# Function to convert integer "days from 1970-01-01" into 
+# R Date format.
+formatD <- function( x, tz = "GMT" ){ 
+    res <- ISOdate( year = 1970, month = 1, day = 1, tz = tz ) 
+    res <- res + (x * 24 * 60 * 60 ) 
+    res <- as.Date( res ) 
+    return( res ) } 
+
+myDb[ "MISCFORMAT", formatCol = list( "DAT_TIM_SEC" = formatDT, 
+    "DAT_DAY" = formatD, "TEST_BOOL" = as.logical ) ] 
 
 
 

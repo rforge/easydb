@@ -3,7 +3,7 @@
 \title{Write data in a MS Access table in a database (referenced by 'edb').}
 \description{Write data in a table in a MS Access database (referenced by 'edb'). }
 \usage{
-\method{edbWrite}{RODBC_Access}(edb, tableName, data, mode = c("a", "u", "o")[1], pKey = NULL, getKey = NULL, testFiles = TRUE, verbose = FALSE, ...)
+\method{edbWrite}{RODBC_Access}(edb, tableName, data, mode = c("a", "u", "o")[1], pKey = NULL, getKey = NULL, formatCol = NULL, posixFormat = "", dateFormat = "", testFiles = TRUE, verbose = FALSE, ...)
 }
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link{edb}}.}
@@ -22,6 +22,20 @@ the table is overwritten and \code{sRow} is ignored. }
 is PRIMARY KEY in the table.}
   \item{getKey}{Single logical. If TRUE, the latest attributed primary keys will be 
 retrieved.}
+  \item{formatCol}{If not NULL, a named list of functions to be applied to certain columns 
+before the data are written to the database. The name of each list 
+item gives the column to process, and the value of each item gives the 
+function that must be applied. For instance 
+formatCol = list("DATE"=as.Date) will apply the function 
+\link{as.Date} to the column "DATE".}
+  \item{posixFormat}{Single character string. 'format' argument of the functions 
+format.POSIXlt() or format.POSIXct() used to convert POSIX 
+date-time into character strings when writing into the database.
+Only used if getKey is not NULL.}
+  \item{dateFormat}{Single character string. 'format' argument of the functions 
+format.Date() used to convert "Date" 
+dates into character strings when writing into the database.
+Only used if getKey is not NULL.}
   \item{testFiles}{Single logical. Should the function test for the presence 
 (file.exist()) of the needed files in the folder before trying 
 to fetch information from the database? }
@@ -43,11 +57,18 @@ If an error message is detected the function stops.}
 \code{link{edbNames.RODBC_Access}}, 
 \code{link{edbColnames.RODBC_Access}}.}
 \examples{library( "easydb" ) 
+library( "RODBC" ) 
+
+
+
+# System check. Ingnore this or set 'testODBC' to TRUE 
+testODBC <- (class(try(odbcDataSources())) != "try-error") & 
+            (Sys.info()[[ "sysname" ]] == "Windows")
 
 
 
 ### Windows only:
-if( Sys.info()[[ "sysname" ]] == "Windows" ){ 
+if( testODBC ){ 
     ### Make a copy of SQLite example database:
     #   (a database of soil profile description) 
     file.copy( 
@@ -161,6 +182,75 @@ if( Sys.info()[[ "sysname" ]] == "Windows" ){
     ## Drop tables
     edbDrop( edb = myDb, tableName = "PROFILE2" ) 
     edbDrop( edb = myDb, tableName = "PROFILE3" ) 
+    
+    
+    
+    # It may be useful to transform some columns 'on-the-fly', before 
+    # they are written to the database. In the example below we 
+    # have some dates and times values, as well as some boolean stored 
+    # as integers (seconds or days since 1970-01-01 or 0/1 values, 
+    # respectively). We want to transform them when writing in the database.
+    
+    myDb[ "MISCFORMAT" ]
+    # NB: although Yes/No format, the last column is read as integer too...
+    
+    # So date variables have to be converted when written to the database.
+    # The code below show how to do that.
+    
+    # Prepare a new record to be written:
+    newRecord <- data.frame( 
+        "ID_RECORD"   = 2, 
+        "DAT_TIM_SEC" = as.POSIXct( "2011-12-15 12:00:00", tz = "GMT" ), 
+        "DAT_DAY"     = as.Date( "2011-12-15" ), 
+        "TEST_BOOL"   = FALSE, 
+        "DAT_TIM"     = as.POSIXct( "2011-12-15 12:00:00", tz = "GMT" ), 
+        "DAT"         = as.Date( "2011-12-15" ), 
+        "TEST_BOOL2"  = FALSE  
+    )   #
+    newRecord 
+    
+    # Write the record:
+    myDb[ "MISCFORMAT", formatCol = list( "DAT_TIM_SEC" = as.integer, 
+        "DAT_DAY" = as.integer, "TEST_BOOL" = as.integer, 
+        "TEST_BOOL2" = as.integer ) ] <- newRecord 
+    
+    # The records have been written as integers:
+    myDb[ "MISCFORMAT" ]
+    
+    # But we can convert them on-the-fly
+    
+    # Function to convert POSIX integer "seconds from 1970-01-01" into 
+    # R POSIXct date format.
+    formatDT <- function( x, tz = "GMT" ){ 
+        res <- ISOdatetime( year = 1970, month = 1, day = 1, 
+            hour = 0, min = 0, sec = 0, tz = tz ) 
+        res <- res + x 
+        return( res ) } 
+            
+    
+    # Function to convert integer "days from 1970-01-01" into 
+    # R Date format.
+    formatD <- function( x, tz = "GMT" ){ 
+        res <- ISOdate( year = 1970, month = 1, day = 1, tz = tz ) 
+        res <- res + (x * 24 * 60 * 60 ) 
+        res <- as.Date( res ) 
+        return( res ) } 
+    
+    myDb[ "MISCFORMAT", formatCol = list( "DAT_TIM_SEC" = formatDT, 
+        "DAT_DAY" = formatD, "TEST_BOOL" = as.logical ) ] 
+    
+    # Just to make sure that this works too:
+    edbWrite( 
+        edb       = myDb, 
+        tableName = "MISCFORMAT", 
+        data      = newRecord[, -1 ], 
+        mode      = "a", 
+        verbose   = TRUE,
+        getKey    = "ID_RECORD", 
+        formatCol = list( "DAT_TIM_SEC" = as.integer, 
+            "DAT_DAY" = as.integer, "TEST_BOOL" = as.integer, 
+            "TEST_BOOL2" = as.integer )
+    )   #    
     
     
     

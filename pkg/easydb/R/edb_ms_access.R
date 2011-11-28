@@ -1,5 +1,5 @@
 # source( "/media/JMOEYS_8G2/_R_PACKAGES/easydb/pkg/easydb/R/edb_ms_access.R" ) 
-# source( "D:/_R_PACKAGES/easydb/pkg/easydb/R/edb_ms_access.R" )
+# source( "C:/_R_PACKAGES/easydb/pkg/easydb/R/edb_ms_access.R" )
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
 # See the ../DESCRIPTION file for information on the package & 
@@ -235,12 +235,25 @@ edbRead.RODBC_Access <- function(# Read all or part of a table in a MS Access da
 ### (the default), all values are returned.
 
  sCol=NULL, 
-### A vector of character strings. Names of the columns to retrieve.
+### Either (1) a vector of character strings with the name of the 
+### columns to retrieve or (2) a vector of logical of the same 
+### length as the number of columns or (3) a vector of indexes / 
+### integers giving the indexes of the column to retrieve. If 
+### negative, then it indicates the indexes of the column to leave 
+### out.
 
  sRowOp=c("AND","OR")[1], 
 ### A single character string. Operator to be used to combine multiple 
 ### constrains in sRow. Possible values are "OR" or "AND". Default value 
 ### is "AND".
+
+ formatCol=NULL, 
+### If not NULL, a named list of functions to be applied to certain columns 
+### after the data has been extracted from the database. The name of each list 
+### item gives the column to process, and the value of each item gives the 
+### function that must be applied. For instance 
+### formatCol = list("DATE"=as.Date) will apply the function 
+### \link{as.Date} to the column "DATE".
 
  testFiles=TRUE,  
 ### Single logical. Should the function test for the presence 
@@ -261,11 +274,75 @@ edbRead.RODBC_Access <- function(# Read all or part of a table in a MS Access da
     }   #
     #
     # Prepare the list of columns to choose in the table:
+    # Prepare the list of columns to choose in the table:
     if( length(sCol) != 0 )
     {   #
-        selectWhat <- paste( sep="", "[", sCol, "]" ) 
-        #
-        selectWhat <- paste( sCol, collapse = ", " ) 
+        if( is.numeric( sCol ) ) # Index selection
+        {   #
+            sCol <- as.integer( sCol ) 
+            #
+            # Test that the sign ofcolums is homogeneous:
+            # (inspired by the package dfdb-rodbc)
+            signSCol <- sign( sCol )
+            testSign <- !(sum( signSCol ) %in% (c(1,-1)*length(sCol))) 
+            #
+            if( testSign )
+            {   #
+                stop( "When 'sCol' is integers/index, it must be either all positive or all negative" ) 
+            }   #
+            #
+            # Get column names:
+            colsList <- edbColnames( edb, tableName = tableName ) 
+            #
+            # Test that the range of values does not exceed the number of columns
+            testRange <- abs( sCol ) %in% 1:length( colsList ) 
+            #
+            if( !all(testRange) ) # Positive index
+            {   #
+                stop( "When 'sCol' is integers/index, it can't be 0 or bigger than the number of columns." ) 
+            }   #
+            #
+            # Transform indexes into column names
+            if( all(as.logical(signSCol)) == 1 ) # Positive index
+            {   #
+                sCol <- colsList[ sCol ] 
+            }else{ # Negative index
+                sCol <- colsList[ !(colsList %in% colsList[ sCol ]) ] 
+            }   #
+            #
+            # Wrap and concatenate column names for SQL
+            selectWhat <- paste( sep="", "[", sCol, "]" ) 
+            #
+            selectWhat <- paste( sCol, collapse = ", " ) 
+        }else{ 
+            if( is.logical( sCol ) )
+            {   #
+                # Get column names:
+                colsList <- edbColnames( edb, tableName = tableName ) 
+                #
+                if( length(sCol) != length(colsList) )
+                {   #
+                    stop( "When 'sCol' is logical, it must be the same length as the number of columns in the table." ) 
+                }   #
+                #
+                sCol <- colsList[ sCol ]
+                #
+                # Wrap and concatenate column names for SQL
+                selectWhat <- paste( sep="", "[", sCol, "]" ) 
+                #
+                selectWhat <- paste( sCol, collapse = ", " ) 
+            }else{ 
+                if( is.character( sCol ) )
+                {   #
+                    # Wrap and concatenate column names for SQL
+                    selectWhat <- paste( sep="", "[", sCol, "]" ) 
+                    #
+                    selectWhat <- paste( sCol, collapse = ", " ) 
+                }else{ 
+                    stop( "class(sCol) must be numerical/integer, logical or character." )
+                }   #
+            }   #
+        }   #
     }else{ 
         selectWhat <- "*"
     }   #
@@ -391,6 +468,11 @@ edbRead.RODBC_Access <- function(# Read all or part of a table in a MS Access da
         }   #
     }   #
     #
+    tbl <- .formatCol( 
+        x         = tbl, 
+        formatCol = formatCol 
+    )   #
+    #
     return( tbl ) 
 ### The function returns the requested table. 
 }   #
@@ -493,6 +575,14 @@ edbNames.RODBC_Access <- function(# Retrieve table names in a MS Access database
 ### constrains in sRow. Possible values are "OR" or "AND". Default value 
 ### is "AND".
 
+ formatCol=NULL, 
+### If not NULL, a named list of functions to be applied to certain columns 
+### after the data has been extracted from the database. The name of each list 
+### item gives the column to process, and the value of each item gives the 
+### function that must be applied. For instance 
+### formatCol = list("DATE"=as.Date) will apply the function 
+### \link{as.Date} to the column "DATE".
+
  verbose=FALSE, 
 ### Single logical. If TRUE, information on what is done are output 
 ### on screen.
@@ -508,6 +598,7 @@ edbNames.RODBC_Access <- function(# Retrieve table names in a MS Access database
         sCol      = sCol,
         sRowOp    = sRowOp,
         verbose   = verbose, 
+        formatCol = formatCol, 
         ...
     )   #
     #
@@ -606,6 +697,26 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
 # ### constrains in sRow. Possible values are "OR" or "AND". Default value 
 # ### is "AND".
 
+ formatCol=NULL, 
+### If not NULL, a named list of functions to be applied to certain columns 
+### before the data are written to the database. The name of each list 
+### item gives the column to process, and the value of each item gives the 
+### function that must be applied. For instance 
+### formatCol = list("DATE"=as.Date) will apply the function 
+### \link{as.Date} to the column "DATE".
+
+ posixFormat="", 
+### Single character string. 'format' argument of the functions 
+### format.POSIXlt() or format.POSIXct() used to convert POSIX 
+### date-time into character strings when writing into the database.
+### Only used if getKey is not NULL.
+
+ dateFormat="", 
+### Single character string. 'format' argument of the functions 
+### format.Date() used to convert "Date" 
+### dates into character strings when writing into the database.
+### Only used if getKey is not NULL.
+
  testFiles=TRUE,  
 ### Single logical. Should the function test for the presence 
 ### (file.exist()) of the needed files in the folder before trying 
@@ -614,6 +725,7 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
  verbose=FALSE, 
 ### Single logical. If TRUE, information on what is done are output 
 ### on screen.
+
 
  ...
 ### Additional parameters to be passed to class-specific method. See 
@@ -643,6 +755,12 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
     }else{ 
         old.warn <- list()  
     }   #
+    #
+    # Convert the format of some columns:
+    data <- .formatCol( 
+        x         = data, 
+        formatCol = formatCol 
+    )   #
     #
     if( mode != "u" ) 
     {   ### Case 1: mode != "u", append or overwrite mode.
@@ -691,55 +809,14 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
             options( "warn" = oldOptions ) 
         }else{ 
             #
-            dataCol <- colnames( data ) 
-            #
-            # Identify character or factor columns:
-            testDataCol <- unlist( 
-                lapply( 
-                    X   = 1:ncol(data), 
-                    FUN = function(X){ 
-                        is.character( data[,X] ) | is.factor( data[,X] ) 
-                    }   #
-                )   #
+            data <- .formatTable4Query( 
+                data        = data, 
+                del         = "'", 
+                posixFormat = posixFormat, 
+                dateFormat  = dateFormat  
             )   #
             #
-            # Wrap the character data into "" for the SQL statement
-            if( any(testDataCol) )
-            {   #
-                data[,testDataCol] <- do.call( 
-                    what = "cbind", 
-                    args = lapply( 
-                        X   = (1:ncol(data))[ testDataCol ], 
-                        FUN = function(X){ 
-                            tmp <- paste( "'", data[,X], "'", sep = "" ) 
-                            #
-                            tmp[ tmp == "NA" ] <- "''" 
-                            #
-                            tmp 
-                        }   #
-                    )   #
-                )   #
-            }   #
-            #
-            # Same for non character columns:
-            if( any(!testDataCol) )
-            {   #
-                data[,!testDataCol] <- do.call( 
-                    what = "cbind", 
-                    args = lapply( 
-                        X   = (1:ncol(data))[ !testDataCol ], 
-                        FUN = function(X){ 
-                            tmp <- data[,X]
-                            #
-                            tmp[ is.na(tmp) ] <- "''" # Mod
-                            #
-                            tmp 
-                        }   #
-                    )   #
-                )   #
-            }   #
-            #
-            data <- data[, dataCol, drop = FALSE ] 
+            dataCol <- colnames( data ) 
             #
             oldOptions <- options( "warn" )[[ 1 ]]  
             options( "warn" = 1 )  
@@ -911,7 +988,7 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
                     channel = dbCon, 
                     ... 
                 )   #
-            }),  #
+            }), #
             errorClasses = c("simpleError","error","condition"),  
             stopOnError  = TRUE, 
             errorMessage = msg, 
@@ -1054,6 +1131,26 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
 ### Single logical. If TRUE, the latest attributed primary keys will be 
 ### retrieved.
 
+ formatCol=NULL, 
+### If not NULL, a named list of functions to be applied to certain columns 
+### before the data are written to the database. The name of each list 
+### item gives the column to process, and the value of each item gives the 
+### function that must be applied. For instance 
+### formatCol = list("DATE"=as.Date) will apply the function 
+### \link{as.Date} to the column "DATE".
+
+ posixFormat="", 
+### Single character string. 'format' argument of the functions 
+### format.POSIXlt() or format.POSIXct() used to convert POSIX 
+### date-time into character strings when writing into the database.
+### Only used if getKey is not NULL.
+
+ dateFormat="", 
+### Single character string. 'format' argument of the functions 
+### format.Date() used to convert "Date" 
+### dates into character strings when writing into the database.
+### Only used if getKey is not NULL.
+
  verbose=FALSE, 
 ### Single logical. If TRUE, information on what is done are output 
 ### on screen.
@@ -1082,6 +1179,9 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
         pKey        = pKey, 
         getKey      = getKey, 
         verbose     = verbose, 
+        formatCol   = formatCol, 
+        posixFormat = posixFormat, 
+        dateFormat  = dateFormat, 
         ...
     )   #
     #

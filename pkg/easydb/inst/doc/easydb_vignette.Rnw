@@ -605,6 +605,20 @@ edbRead(
 
 
 
+You can also use vector of indexes (integers) or vector of logicals 
+to subset a table:
+
+<<echo=TRUE,eval=TRUE>>= 
+sDb[ "PROFILE", , c(1,2) ] 
+#
+sDb[ "PROFILE", , c(T,T,F,F,F,F,F) ] 
+@ 
+
+But indexes or logicals will not work for row subsetting (see 
+below).
+
+
+
 \subsubsection{Retrieve a table subset (row constrains)}
 
 In the table "WRB\_SOIL\_GROUP", if you only want the row whose 
@@ -624,7 +638,7 @@ You can add as many column constrains as you want:
 <<echo=TRUE,eval=TRUE>>= 
 sDb[ "WRB_SOIL_GROUP", 
     list( "ID_WRB_SOIL_GROUP" = 1:10, 
-          "NAME" = c("AL","AT","PL") ) ] 
+          "ABBREV" = c("AL","AT","PL") ) ] 
 @ 
 
 
@@ -643,7 +657,7 @@ edbRead(
     edb       = sDb, 
     tableName = "WRB_SOIL_GROUP", 
     sRow      = list( "ID_WRB_SOIL_GROUP" = 1:10, 
-                      "NAME" = c("AL","AT","PL") ) ) 
+                      "ABBREV" = c("AL","AT","PL") ) ) 
 @ 
 
 
@@ -660,7 +674,7 @@ sDb[ "WRB_SOIL_GROUP", list( "ID_WRB_SOIL_GROUP" = 1:10 ),
 You can also add some SQL constrains in the sRow list, for instance:\\
 
 <<echo=TRUE,eval=TRUE>>= 
-sDb[ "WRB_SOIL_GROUP", list( "SQL" = "ABBREV LIKE 'Al%'" ) ] 
+sDb[ "WRB_SOIL_GROUP", list( "SQL" = "NAME LIKE 'Al%'" ) ] 
 @ 
 
 
@@ -682,7 +696,7 @@ possible unfortunately (you have to use RSQLite or RODBC queries).
 
 <<echo=TRUE,eval=TRUE>>= 
 sDb[ "WRB_SOIL_GROUP", list( "ID_WRB_SOIL_GROUP" = 1:10, 
-    "NAME" = c("AL","AT","PL") ), sRowOp = "OR" ] 
+    "ABBREV" = c("AL","AT","PL") ), sRowOp = "OR" ] 
 @ 
 
 
@@ -786,7 +800,57 @@ sDb[ "PROFILE", list( "ID_PROFILE" = 5:6 ),
 
 
 % +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
-\subsection{Miscelaneous cases} 
+\section{Advanced usage} 
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+\subsection{Fetch AUTOINCREMENT primary keys attributed by the 
+    database} 
+
+When working with relational databases in which referential integrity 
+is important, tables are attributed a primary key, that has to be unique 
+for each record. You may decide yourself what is the value of this primary 
+key, but it is sometimes impossible (when several processes or computers 
+write at the same time on the table for instance). For this reason the 
+primary is often set as \texttt{AUTOINCREMENT} (or \texttt{AUTO\_INCREMENT}), 
+meaning that the database can attribute automatically a primary key if it 
+has not been provided by the user. When using that feature, it is important 
+be be able to know what primary key has been attributed to the record we just 
+wrote in the database (again, several processes may have written at the same 
+time on the database). SQL databases have special functions for this (like 
+\texttt{LAST\_INSERT\_ID()} in MySQL). These functions have been implemented 
+in \texttt{edbWrite()} to make it possible to retrieve the last inserted ID in 
+R, without typing complicated SQL code (it does it for you).\\
+
+The example below shows how to fetch the last inserted IDs. You need to specify 
+the primary key using \texttt{getKey}:
+
+
+% <<echo=TRUE,eval=TRUE>>= 
+% newId <- edbWrite( 
+%     edb       = myDb, 
+%     tableName = "PROFILE", 
+%     data      = profileTbl[, -1 ], 
+%     mode      = "a", 
+%     #verbose   = TRUE,
+%     getKey    = "ID_PROFILE" 
+% )   #
+% newId 
+@
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+\subsection{'On-the-fly' transformation of variables when reading 
+    from or writing to the database} 
+
+WORK ON PROGRESS!
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+\subsection{About dates and boolean in SQLite databases} 
 
 WORK ON PROGRESS!
 

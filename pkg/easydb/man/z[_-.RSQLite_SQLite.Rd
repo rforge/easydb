@@ -4,7 +4,7 @@
 \description{"[<-" method for SQLite databases. Write data in a table in a 
 SQLite database (referenced by 'edb'). }
 \usage{
-\method{[}{RSQLite_SQLite}(edb, tableName, mode = "a", pKey = NULL, getKey = NULL, testFiles = TRUE, verbose = FALSE, ...) <- value
+\method{[}{RSQLite_SQLite}(edb, tableName, mode = "a", pKey = NULL, getKey = NULL, formatCol = NULL, posixFormat = "", dateFormat = "", testFiles = TRUE, verbose = FALSE, ...) <- value
 }
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link{edb}}.}
@@ -18,6 +18,20 @@ the table is overwritten and \code{sRow} is ignored. }
 is PRIMARY KEY in the table.}
   \item{getKey}{Single logical. If TRUE, the latest attributed primary keys will be 
 retrieved.}
+  \item{formatCol}{If not NULL, a named list of functions to be applied to certain columns 
+before the data are written to the database. The name of each list 
+item gives the column to process, and the value of each item gives the 
+function that must be applied. For instance 
+formatCol = list("DATE"=as.Date) will apply the function 
+\link{as.Date} to the column "DATE".}
+  \item{posixFormat}{Single character string. 'format' argument of the functions 
+format.POSIXlt() or format.POSIXct() used to convert POSIX 
+date-time into character strings when writing into the database.
+Only used if getKey is not NULL or when mode == "u" in SQLite.}
+  \item{dateFormat}{Single character string. 'format' argument of the functions 
+format.Date() used to convert "Date" 
+dates into character strings when writing into the database.
+Only used if getKey is not NULL or when mode == "u" in SQLite.}
   \item{testFiles}{Single logical. Should the function test for the presence 
 (file.exist()) of the needed files in the folder before trying 
 to fetch information from the database? }

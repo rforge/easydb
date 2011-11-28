@@ -26,7 +26,7 @@ CREATE TABLE WRB_SOIL_GROUP(
     `ABBREV`              TEXT     NOT NULL  
 );  --
 
-INSERT INTO `WRB_SOIL_GROUP` (`ID_WRB_SOIL_GROUP`,`NAME`,`ABBREV`) VALUES
+INSERT INTO `WRB_SOIL_GROUP` (`ID_WRB_SOIL_GROUP`,`ABBREV`,`NAME`) VALUES
     (1,'AC','Acrisol'), 
     (2,'AB','Albeluvisol'),
     (3,'AL','Alisol'),
@@ -102,6 +102,24 @@ CREATE TABLE HORIZON(
 );  --
 
 -- TO DO: Create triggers like for SQLite
+
+
+
+
+CREATE TABLE MISCFORMAT( 
+    `ID_RECORD`         INTEGER  NOT NULL  PRIMARY KEY AUTO_INCREMENT, 
+    -- 
+    `DAT_TIM_SEC`       INTEGER,  -- Date and time in POSIX format (seconds since 1970-01-01)  
+    `DAT_DAY`           INTEGER,  -- Date in days since 1970-01-01 (like the R Date class) 
+    `TEST_BOOL`         INTEGER,  -- Pseudo Boolean format 
+    `DAT_TIM`           DATETIME, -- Date and time
+    `DAT`               DATE,     -- Date 
+    `TEST_BOOL2`        BOOLEAN,  -- Boolean format
+    CHECK ((`TEST_BOOL` >= 0) OR (`TEST_BOOL` <= 1)) 
+);  --
+
+INSERT INTO `MISCFORMAT` (`ID_RECORD`,`DAT_TIM_SEC`,`DAT_DAY`,`TEST_BOOL`,`DAT_TIM`,`DAT`,`TEST_BOOL2`) VALUES
+    (1,1325332800,15339,0,'2011-12-31 12:00:00','2011-12-31','FALSE'); 
 
 
 

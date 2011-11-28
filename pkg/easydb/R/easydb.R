@@ -1,5 +1,4 @@
 # source( "/media/1960-441A/_R_PACKAGES/easydb/pkg/easydb/R/easydb.R" ) 
-# source( "D:/_R_PACKAGES/easydb/pkg/easydb/R/easydb.R" ) 
 # source( "C:/_R_PACKAGES/easydb/pkg/easydb/R/easydb.R" )
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
@@ -115,6 +114,99 @@ edb <- function(# Create a database description (class 'edb'), to be used by oth
 
 
 
+.formatCol <- function(# Convert the columns of a data.frame 
+### Convert the columns of a data.frame.
+
+##seealso<<\link{edbRead} 
+
+ x, 
+### A data.frame
+
+ formatCol=NULL
+### If not NULL, a named list of functions to be applied to certain columns 
+### after the data has been extracted from the database. The name of each list 
+### item gives the column to process, and the value of each item gives the 
+### function that must be applied. For instance 
+### formatCol = list("DATE"=as.Date) will apply the function 
+### \link{as.Date} to the column "DATE".
+
+){  #
+    if( !is.null(formatCol) )
+    {   #
+        if( !is.list( formatCol ) ) # Test that it is a list 
+        {   #
+            stop( "'formatCol' must be a list." ) 
+        }   #
+        #
+        namez <- names( formatCol ) 
+        #
+        if( is.null( namez ) ) # Test that each item has a name
+        {   #
+            stop( "'formatCol' must be a named list. names(formatCol) can not be NULL." ) 
+        }   #
+        #
+        colz <- colnames(x) 
+        #
+        # Test that each name in formatCol is a column name:
+        testNamez <- namez %in% colz 
+        #
+        if( any( !testNamez ) )
+        {   #
+            stop( 
+                paste( 
+                    sep = "", 
+                    "Some names in 'formatCol' are not column names:", 
+                    paste( collapse = ", ", namez[ !testNamez ] ) 
+                )   #
+            )   #
+        }   #
+        #
+        # Test that all item in formatCol is a function:
+        testItems <- unlist( lapply( X = formatCol, FUN = class ) ) 
+        testItems <- testItems == "function" 
+        #
+        if( any( !testItems ) )
+        {   #
+            stop( "Values in 'formatCol' must be functions." ) 
+        }   #
+        #
+        res <- lapply( 
+            X   = 1:length(formatCol), 
+            FUN = function(X){ 
+                selCol <- namez[ X ] 
+                #
+                res <- formatCol[[ X ]]( x[, selCol ] ) 
+                #
+                return( res ) 
+            }   #
+        )   #
+        #
+        res <- do.call( 
+            what = "data.frame", 
+            args = c(res,"stringsAsFactors" = FALSE) 
+        )   #
+        #
+        colnames( res ) <- namez 
+        #
+        x <- data.frame( 
+            x[, !(colz %in% namez), drop = FALSE ], 
+            res, 
+            stringsAsFactors = FALSE 
+        )   #
+        #
+        x <- x[, colz ] 
+        #
+        names( x ) <- colz 
+    }   #
+    #
+    return( x ) 
+}   #
+
+
+
+
+
+
 edbRead <- function(# Read all or part of a table in a database (referenced by 'edb').
 ### Read all or part of a table in a database (referenced by 'edb'). 
 ### Generic function that call class-specific method corresponding 
@@ -144,6 +236,14 @@ edbRead <- function(# Read all or part of a table in a database (referenced by '
 ### A single character string. Operator to be used to combine multiple 
 ### constrains in sRow. Possible values are "OR" or "AND". Default value 
 ### is "AND".
+
+ formatCol=NULL, 
+### If not NULL, a named list of functions to be applied to certain columns 
+### after the data has been extracted from the database. The name of each list 
+### item gives the column to process, and the value of each item gives the 
+### function that must be applied. For instance 
+### formatCol = list("DATE"=as.Date) will apply the function 
+### \link{as.Date} to the column "DATE".
 
  ...
 ### Additional parameters to be passed to class-specific method. See 
@@ -458,12 +558,25 @@ edbRead.RSQLite_SQLite <- function(# Read all or part of a table in a SQLIte dat
 ### (the default), all values are returned.
 
  sCol=NULL, 
-### A vector of character strings. Names of the columns to retrieve.
+### Either (1) a vector of character strings with the name of the 
+### columns to retrieve or (2) a vector of logical of the same 
+### length as the number of columns or (3) a vector of indexes / 
+### integers giving the indexes of the column to retrieve. If 
+### negative, then it indicates the indexes of the column to leave 
+### out.
 
  sRowOp=c("AND","OR")[1], 
 ### A single character string. Operator to be used to combine multiple 
 ### constrains in sRow. Possible values are "OR" or "AND". Default value 
 ### is "AND".
+
+ formatCol=NULL, 
+### If not NULL, a named list of functions to be applied to certain columns 
+### after the data has been extracted from the database. The name of each list 
+### item gives the column to process, and the value of each item gives the 
+### function that must be applied. For instance 
+### formatCol = list("DATE"=as.Date) will apply the function 
+### \link{as.Date} to the column "DATE".
 
  testFiles=TRUE,  
 ### Single logical. Should the function test for the presence 
@@ -486,9 +599,72 @@ edbRead.RSQLite_SQLite <- function(# Read all or part of a table in a SQLIte dat
     # Prepare the list of columns to choose in the table:
     if( length(sCol) != 0 )
     {   #
-        selectWhat <- paste( sep="", "[", sCol, "]" ) 
-        #
-        selectWhat <- paste( sCol, collapse = ", " ) 
+        if( is.numeric( sCol ) ) # Index selection
+        {   #
+            sCol <- as.integer( sCol ) 
+            #
+            # Test that the sign ofcolums is homogeneous:
+            # (inspired by the package dfdb-rodbc)
+            signSCol <- sign( sCol )
+            testSign <- !(sum( signSCol ) %in% (c(1,-1)*length(sCol))) 
+            #
+            if( testSign )
+            {   #
+                stop( "When 'sCol' is integers/index, it must be either all positive or all negative" ) 
+            }   #
+            #
+            # Get column names:
+            colsList <- edbColnames( edb, tableName = tableName ) 
+            #
+            # Test that the range of values does not exceed the number of columns
+            testRange <- abs( sCol ) %in% 1:length( colsList ) 
+            #
+            if( !all(testRange) ) # Positive index
+            {   #
+                stop( "When 'sCol' is integers/index, it can't be 0 or bigger than the number of columns." ) 
+            }   #
+            #
+            # Transform indexes into column names
+            if( all(as.logical(signSCol)) == 1 ) # Positive index
+            {   #
+                sCol <- colsList[ sCol ] 
+            }else{ # Negative index
+                sCol <- colsList[ !(colsList %in% colsList[ sCol ]) ] 
+            }   #
+            #
+            # Wrap and concatenate column names for SQL
+            selectWhat <- paste( sep="", "[", sCol, "]" ) 
+            #
+            selectWhat <- paste( sCol, collapse = ", " ) 
+        }else{ 
+            if( is.logical( sCol ) )
+            {   #
+                # Get column names:
+                colsList <- edbColnames( edb, tableName = tableName ) 
+                #
+                if( length(sCol) != length(colsList) )
+                {   #
+                    stop( "When 'sCol' is logical, it must be the same length as the number of columns in the table." ) 
+                }   #
+                #
+                sCol <- colsList[ sCol ]
+                #
+                # Wrap and concatenate column names for SQL
+                selectWhat <- paste( sep="", "[", sCol, "]" ) 
+                #
+                selectWhat <- paste( sCol, collapse = ", " ) 
+            }else{ 
+                if( is.character( sCol ) )
+                {   #
+                    # Wrap and concatenate column names for SQL
+                    selectWhat <- paste( sep="", "[", sCol, "]" ) 
+                    #
+                    selectWhat <- paste( sCol, collapse = ", " ) 
+                }else{ 
+                    stop( "class(sCol) must be numerical/integer, logical or character." )
+                }   #
+            }   #
+        }   #
     }else{ 
         selectWhat <- "*"
     }   #
@@ -529,7 +705,6 @@ edbRead.RSQLite_SQLite <- function(# Read all or part of a table in a SQLIte dat
                         const, ")" 
                     )   #
                     #
-
                     const <- paste( const, collapse = " OR " )
                     #
                     const <- paste( "(", const, ")", sep = "" )  
@@ -619,6 +794,11 @@ edbRead.RSQLite_SQLite <- function(# Read all or part of a table in a SQLIte dat
         }   #
     }   #
     #
+    tbl <- .formatCol( 
+        x         = tbl, 
+        formatCol = formatCol 
+    )   #
+    #
     return( tbl ) 
 ### The function returns the requested table. 
 }   #
@@ -662,7 +842,6 @@ edbNames.RSQLite_SQLite <- function(# Retrieve table names in a SQLIte database 
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
-
 
  testFiles=TRUE,  
 ### Single logical. Should the function test for the presence 
@@ -787,12 +966,25 @@ edbNames.RSQLite_SQLite <- function(# Retrieve table names in a SQLIte database 
 ### (the default), all values are returned.
 
  sCol=NULL, 
-### A vector of character strings. Names of the columns to retrieve.
+### Either (1) a vector of character strings with the name of the 
+### columns to retrieve or (2) a vector of logical of the same 
+### length as the number of columns or (3) a vector of indexes / 
+### integers giving the indexes of the column to retrieve. If 
+### negative, then it indicates the indexes of the column to leave 
+### out.
 
  sRowOp=c("AND","OR")[1], 
 ### A single character string. Operator to be used to combine multiple 
 ### constrains in sRow. Possible values are "OR" or "AND". Default value 
 ### is "AND".
+
+ formatCol=NULL, 
+### If not NULL, a named list of functions to be applied to certain columns 
+### after the data has been extracted from the database. The name of each list 
+### item gives the column to process, and the value of each item gives the 
+### function that must be applied. For instance 
+### formatCol = list("DATE"=as.Date) will apply the function 
+### \link{as.Date} to the column "DATE".
 
  testFiles=TRUE,  
 ### Single logical. Should the function test for the presence 
@@ -815,6 +1007,7 @@ edbNames.RSQLite_SQLite <- function(# Retrieve table names in a SQLIte database 
         sRowOp    = sRowOp,
         testFiles = testFiles,  
         verbose   = verbose, 
+        formatCol = formatCol, 
         ...
     )   #
     #
@@ -871,6 +1064,28 @@ edbWrite <- function(# Write data in a table in a database (referenced by 'edb')
 ### Single logical. If TRUE, the latest attributed primary keys will be 
 ### retrieved.
 
+ formatCol=NULL, 
+### If not NULL, a named list of functions to be applied to certain columns 
+### before the data are written to the database. The name of each list 
+### item gives the column to process, and the value of each item gives the 
+### function that must be applied. For instance 
+### formatCol = list("DATE"=as.Date) will apply the function 
+### \link{as.Date} to the column "DATE".
+
+ posixFormat="", 
+### Single character string. 'format' argument of the functions 
+### format.POSIXlt() or format.POSIXct() used to convert POSIX 
+### date-time into character strings when writing into the database.
+### Only used if getKey is not NULL or when mode == "u" in SQLite or 
+### MySQL.
+
+ dateFormat="", 
+### Single character string. 'format' argument of the functions 
+### format.Date() used to convert "Date" 
+### dates into character strings when writing into the database.
+### Only used if getKey is not NULL or when mode == "u" in SQLite or 
+### MySQL.
+
  ...
 ### Additional parameters to be passed to class-specific method. See 
 ### \code{methods("edbWrite")}
@@ -909,6 +1124,156 @@ edbWrite <- function(# Write data in a table in a database (referenced by 'edb')
     #
     return( exprOut ) 
 ### Returns the output of dbGetQuery().
+}   #
+
+
+
+
+
+
+.formatTable4Query <- function(# Format data in a data.frame so it is ready to be send in a query (format conversion).
+### Format data in a data.frame so it is ready to be send in a query (format conversion).
+
+ data, 
+### A data.frame 
+
+ del="\"", 
+### A single character. Type of delimiter to be used for character strings: 
+### Either "\"" or "'" or "`" 
+
+ posixFormat="", 
+### Single character string. 'format' argument of the functions 
+### format.POSIXlt() or format.POSIXct() used to convert POSIX 
+### date-time into character strings when writing into the database.
+
+ dateFormat=""  
+### Single character string. 'format' argument of the functions 
+### format.Date() used to convert "Date" 
+### dates into character strings when writing into the database.
+
+){  #
+    dataCol <- colnames( data ) 
+    #
+    # Identify character or factor columns:
+    testDataCol <- unlist( 
+        lapply( 
+            X   = 1:ncol(data), 
+            FUN = function(X){ 
+                is.character( data[,X] ) | is.factor( data[,X] ) 
+            }   #
+        )   #
+    )   #
+    #
+    tNA  <- paste( del, "NA", del, sep = "" ) 
+    tNA2 <- paste( del, del, sep = "" ) 
+    #
+    #
+    # Wrap the character data into "" for the SQL statement
+    if( any(testDataCol) )
+    {   #
+        data[,testDataCol] <- do.call( 
+            what = "cbind", 
+            args = lapply( 
+                X   = (1:ncol(data))[ testDataCol ], 
+                FUN = function(X){ 
+                    tmp <- paste( del, data[,X], del, sep = "" ) 
+                    #
+                    tmp[ tmp == tNA ] <- tNA2 
+                    #
+                    tmp 
+                }   #
+            )   #
+        )   #
+    }   #
+    #
+    # NEW NEW: Identify character or factor columns:
+    testDateCol <- unlist( 
+        lapply( 
+            X   = 1:ncol(data), 
+            FUN = function(X){ 
+                any( class( data[,X] ) %in% c("POSIXlt","POSIXct") )
+            }   #
+        )   #
+    )   #
+    #
+    # Wrap the character data into "" for the SQL statement
+    if( any(testDateCol) )
+    {   #
+        data[,testDateCol] <- do.call( 
+            what = "cbind", 
+            args = lapply( 
+                X   = (1:ncol(data))[ testDateCol ], 
+                FUN = function(X){ 
+                    tmp <- paste( 
+                        del, 
+                        format( data[,X], format = posixFormat ), 
+                        del, 
+                        sep = ""
+                    )   # 
+                    #
+                    tmp[ tmp == tNA ] <- tNA2 
+                    #
+                    tmp 
+                }   #
+            )   #
+        )   #
+    }   #
+    #
+    testDateCol2 <- unlist( 
+        lapply( 
+            X   = 1:ncol(data), 
+            FUN = function(X){ 
+                class( data[,X] ) == "Date" 
+            }   #
+        )   #
+    )   #
+    #
+    # Wrap the character data into "" for the SQL statement
+    if( any(testDateCol2) )
+    {   #
+        data[,testDateCol2] <- do.call( 
+            what = "cbind", 
+            args = lapply( 
+                X   = (1:ncol(data))[ testDateCol2 ], 
+                FUN = function(X){ 
+                    tmp <- paste( 
+                        del, 
+                        format( data[,X], format = dateFormat ), 
+                        del, 
+                        sep = ""
+                    )   # 
+                    #
+                    tmp[ tmp == tNA ] <- tNA2 
+                    #
+                    tmp 
+                }   #
+            )   #
+        )   #
+    }   #
+    #
+    selCol <- !(testDataCol | testDateCol | testDateCol2) 
+    #
+    # Same for non character columns:
+    if( any( selCol ) )
+    {   #
+        data[,selCol] <- do.call( 
+            what = "cbind", 
+            args = lapply( 
+                X   = (1:ncol(data))[ selCol ], 
+                FUN = function(X){ 
+                    tmp <- data[,X]
+                    #
+                    tmp[ is.na(tmp) ] <- tNA2 
+                    #
+                    tmp 
+                }   #
+            )   #
+        )   #
+    }   #
+    #
+    data <- data[, dataCol, drop = FALSE ] 
+    #
+    return( data ) 
 }   #
 
 
@@ -962,6 +1327,26 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
 # ### constrains in sRow. Possible values are "OR" or "AND". Default value 
 # ### is "AND".
 
+ formatCol=NULL, 
+### If not NULL, a named list of functions to be applied to certain columns 
+### before the data are written to the database. The name of each list 
+### item gives the column to process, and the value of each item gives the 
+### function that must be applied. For instance 
+### formatCol = list("DATE"=as.Date) will apply the function 
+### \link{as.Date} to the column "DATE".
+
+ posixFormat="", 
+### Single character string. 'format' argument of the functions 
+### format.POSIXlt() or format.POSIXct() used to convert POSIX 
+### date-time into character strings when writing into the database.
+### Only used if getKey is not NULL or when mode == "u" in SQLite.
+
+ dateFormat="", 
+### Single character string. 'format' argument of the functions 
+### format.Date() used to convert "Date" 
+### dates into character strings when writing into the database.
+### Only used if getKey is not NULL or when mode == "u" in SQLite.
+
  testFiles=TRUE,  
 ### Single logical. Should the function test for the presence 
 ### (file.exist()) of the needed files in the folder before trying 
@@ -970,6 +1355,7 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
  verbose=FALSE, 
 ### Single logical. If TRUE, information on what is done are output 
 ### on screen.
+
 
  ...
 ### Additional parameters to be passed to class-specific method. See 
@@ -1002,6 +1388,12 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
     }else{ 
         old.warn <- list()  
     }   #
+    #
+    # Convert the format of some columns:
+    data <- .formatCol( 
+        x         = data, 
+        formatCol = formatCol 
+    )   #
     #
     if( mode != "u" ) 
     {   ### Case 1: mode != "u", append or overwrite mode.
@@ -1052,55 +1444,14 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
             options( "warn" = oldOptions ) 
         }else{ 
             #
-            dataCol <- colnames( data ) 
-            #
-            # Identify character or factor columns:
-            testDataCol <- unlist( 
-                lapply( 
-                    X   = 1:ncol(data), 
-                    FUN = function(X){ 
-                        is.character( data[,X] ) | is.factor( data[,X] ) 
-                    }   #
-                )   #
+            data <- .formatTable4Query( 
+                data        = data, 
+                del         = "\"", 
+                posixFormat = posixFormat, 
+                dateFormat  = dateFormat  
             )   #
             #
-            # Wrap the character data into "" for the SQL statement
-            if( any(testDataCol) )
-            {   #
-                data[,testDataCol] <- do.call( 
-                    what = "cbind", 
-                    args = lapply( 
-                        X   = (1:ncol(data))[ testDataCol ], 
-                        FUN = function(X){ 
-                            tmp <- paste( "\"", data[,X], "\"", sep = "" ) 
-                            #
-                            tmp[ tmp == "NA" ] <- "" 
-                            #
-                            tmp 
-                        }   #
-                    )   #
-                )   #
-            }   #
-            #
-            # Same for non character columns:
-            if( any(!testDataCol) )
-            {   #
-                data[,!testDataCol] <- do.call( 
-                    what = "cbind", 
-                    args = lapply( 
-                        X   = (1:ncol(data))[ !testDataCol ], 
-                        FUN = function(X){ 
-                            tmp <- data[,X]
-                            #
-                            tmp[ is.na(tmp) ] <- "\"\"" 
-                            #
-                            tmp 
-                        }   #
-                    )   #
-                )   #
-            }   #
-            #
-            data <- data[, dataCol, drop = FALSE ] 
+            dataCol <- colnames( data ) 
             #
             oldOptions <- options( "warn" )[[ 1 ]]  
             options( "warn" = 1 )  
@@ -1167,53 +1518,14 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
         }   #    
     }else{ ### mode == "u", update mode.
         #
-        dataCol <- colnames( data ) 
-        #
-        # Identify character or factor columns:
-        testDataCol <- unlist( 
-            lapply( 
-                X   = 1:ncol(data), 
-                FUN = function(X){ 
-                    is.character( data[,X] ) | is.factor( data[,X] ) 
-                }   #
-            )   #
+        data <- .formatTable4Query( 
+            data        = data, 
+            del         = "\"", 
+            posixFormat = posixFormat, 
+            dateFormat  = dateFormat  
         )   #
         #
-        # Wrap the character data into "" for the SQL statement
-        if( any(testDataCol) )
-        {   #
-            data[,testDataCol] <- do.call( 
-                what = "cbind", 
-                args = lapply( 
-                    X   = (1:ncol(data))[ testDataCol ], 
-                    FUN = function(X){ 
-                        tmp <- paste( "\"", data[,X], "\"", sep = "" ) 
-                        #
-                        tmp[ tmp == "NA" ] <- "" 
-                        #
-                        tmp 
-                    }   #
-                )   #
-            )   #
-        }   #
-        #
-        # Same for non character columns:
-        if( any(!testDataCol) )
-        {   #
-            data[,!testDataCol] <- do.call( 
-                what = "cbind", 
-                args = lapply( 
-                    X   = (1:ncol(data))[ !testDataCol ], 
-                    FUN = function(X){ 
-                        tmp <- data[,X]
-                        #
-                        tmp[ is.na(tmp) ] <- "\"\"" 
-                        #
-                        tmp 
-                    }   #
-                )   #
-            )   #
-        }   #
+        dataCol <- colnames( data ) 
         #
         if( is.null(pKey) ){ # NEW NEW
             stop( "When mode = 'u', pKey must be a non-null character string." )
@@ -1479,6 +1791,26 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
 # ### constrains in sRow. Possible values are "OR" or "AND". Default value 
 # ### is "AND".
 
+ formatCol=NULL, 
+### If not NULL, a named list of functions to be applied to certain columns 
+### before the data are written to the database. The name of each list 
+### item gives the column to process, and the value of each item gives the 
+### function that must be applied. For instance 
+### formatCol = list("DATE"=as.Date) will apply the function 
+### \link{as.Date} to the column "DATE".
+
+ posixFormat="", 
+### Single character string. 'format' argument of the functions 
+### format.POSIXlt() or format.POSIXct() used to convert POSIX 
+### date-time into character strings when writing into the database.
+### Only used if getKey is not NULL or when mode == "u" in SQLite.
+
+ dateFormat="", 
+### Single character string. 'format' argument of the functions 
+### format.Date() used to convert "Date" 
+### dates into character strings when writing into the database.
+### Only used if getKey is not NULL or when mode == "u" in SQLite.
+
  testFiles=TRUE,  
 ### Single logical. Should the function test for the presence 
 ### (file.exist()) of the needed files in the folder before trying 
@@ -1513,6 +1845,9 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
         getKey      = getKey, 
         testFiles   = testFiles,  
         verbose     = verbose, 
+        formatCol   = formatCol, 
+        posixFormat = posixFormat, 
+        dateFormat  = dateFormat, 
         ...
     )   #
     #

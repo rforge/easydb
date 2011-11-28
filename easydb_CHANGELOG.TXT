@@ -1,3 +1,7 @@
+- 2011/11/26 Improved handling of POSIX and Date formats
+- 2011/11/26 Added argument to convert columns before writing them 
+             or after reading them. Useful for writing and reading 
+             dates to and from SQLite database (as integers)
 - 2011/07/07 Added support for MS Access (via RODBC).
 - 2011/07/01 Finished edbDelete and edbDrop for MySQL and SQLite.
 - 2011/06/10 Added support to MySQL. edbWrite still to be done.

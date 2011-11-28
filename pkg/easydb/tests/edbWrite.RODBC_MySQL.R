@@ -112,6 +112,84 @@ if( (Sys.info()[[ "sysname" ]] == "Windows") & testMySQL ){
     
     
     
+    # It may be useful to transform some columns 'on-the-fly', before 
+    # they are written to the database. In the example below we 
+    # have some dates and times values, as well as some boolean stored 
+    # as integers (seconds or days since 1970-01-01 or 0/1 values, 
+    # respectively). We want to transform them when writing in the database.
+    
+    myDb[ "MISCFORMAT" ]
+    # NB: although Yes/No format, the last column is read as integer too...
+    
+    # So date variables have to be converted when written to the database.
+    # The code below show how to do that.
+    
+    # Prepare a new record to be written:
+    newRecord <- data.frame( 
+        "ID_RECORD"   = 2, 
+        "DAT_TIM_SEC" = as.POSIXct( "2011-12-15 12:00:00", tz = "GMT" ), 
+        "DAT_DAY"     = as.Date( "2011-12-15" ), 
+        "TEST_BOOL"   = FALSE, 
+        "DAT_TIM"     = as.POSIXct( "2011-12-15 12:00:00", tz = "GMT" ), 
+        "DAT"         = as.Date( "2011-12-15" ), 
+        "TEST_BOOL2"  = FALSE  
+    )   #
+    newRecord 
+    
+    # Write the record:
+    myDb[ "MISCFORMAT", formatCol = list( "DAT_TIM_SEC" = as.integer, 
+        "DAT_DAY" = as.integer, "TEST_BOOL" = as.integer, 
+        "TEST_BOOL2" = as.integer ) ] <- newRecord 
+    
+    # The records have been written as integers:
+    myDb[ "MISCFORMAT" ]
+    
+    # But we can convert them on-the-fly
+    
+    # Function to convert POSIX integer "seconds from 1970-01-01" into 
+    # R POSIXct date format.
+    formatDT <- function( x, tz = "GMT" ){ 
+        res <- ISOdatetime( year = 1970, month = 1, day = 1, 
+            hour = 0, min = 0, sec = 0, tz = tz ) 
+        res <- res + x 
+        return( res ) } 
+            
+    
+    # Function to convert integer "days from 1970-01-01" into 
+    # R Date format.
+    formatD <- function( x, tz = "GMT" ){ 
+        res <- ISOdate( year = 1970, month = 1, day = 1, tz = tz ) 
+        res <- res + (x * 24 * 60 * 60 ) 
+        res <- as.Date( res ) 
+        return( res ) } 
+    
+    myDb[ "MISCFORMAT", formatCol = list( "DAT_TIM_SEC" = formatDT, 
+        "DAT_DAY" = formatD, "TEST_BOOL" = as.logical ) ] 
+    
+    # Just to make sure that this works too:
+    edbWrite( 
+        edb       = myDb, 
+        tableName = "MISCFORMAT", 
+        data      = newRecord[, -1 ], 
+        mode      = "a", 
+        verbose   = TRUE,
+        getKey    = "ID_RECORD", 
+        formatCol = list( "DAT_TIM_SEC" = as.integer, 
+            "DAT_DAY" = as.integer, "TEST_BOOL" = as.integer, 
+            "TEST_BOOL2" = as.integer )
+    )   #    
+    
+    
+    
+    # Clean-up a bit:
+    edbDelete( 
+        edb       = myDb, 
+        tableName = "MISCFORMAT", 
+        sRow      = list("SQL" = "ID_RECORD > 1")
+    )   #
+    
+    
+    
     ### Un-register the data source in ODBC (windows only)
     edbDataSource( myDb, trash = TRUE ) 
 }   # 

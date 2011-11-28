@@ -1,3 +1,0 @@
-DROP DATABASE edb_test;
-CREATE DATABASE edb_test;
-grant all on edb_test.* to 'edbtestuser'@'77.235.%.%' identified by 'NdfzYcHtiosHlplTR6xS';

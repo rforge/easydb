@@ -1,5 +1,12 @@
-- Finished implementing MySQL support (v 0.2) 
-- Test edbDrop and edbDelete for MySQL;
+- Implement POSIX and Date formatting when mode == "u"
+  (make that a separate function).
+- Add examples with dates in MySQL
+- Testthat (run & complete with dates)
+- Complete the vignette
+  - Retrieve IDs
+  - "About dates in SQLite and columns conversion"
+  - Push to CRAN
+
 - Implement edbJoin for JOIN queries (unschedule);
 - Implement MS Excel support;
 

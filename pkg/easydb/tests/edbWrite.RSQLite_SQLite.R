@@ -118,6 +118,55 @@ edbDrop( edb = myDb, tableName = "PROFILE3" )
 
 
 
+# Dates and times can not be stored as DATES in sqlite databases.
+# They have been stored as integers (seconds or days since 1970-01-01)
+# Similarly, boolean have to be stored as integers
+
+myDb[ "MISCFORMAT" ]
+
+# So date variables have to be converted when written to the database.
+# The code below show how to do that.
+
+# Prepare a new record to be written:
+newRecord <- data.frame( 
+    "ID_RECORD"   = 2, 
+    "DAT_TIM_SEC" = as.POSIXct( "2011-12-15 12:00:00", tz = "GMT" ), 
+    "DAT_DAY"     = as.Date( "2011-12-15" ), 
+    "TEST_BOOL"   = FALSE 
+)   #
+newRecord 
+
+# Write the record:
+myDb[ "MISCFORMAT", formatCol = list( "DAT_TIM_SEC" = as.integer, 
+    "DAT_DAY" = as.integer, "TEST_BOOL" = as.integer ) ] <- newRecord 
+
+# The records have been written as integers:
+myDb[ "MISCFORMAT" ]
+
+# But we can convert them on-the-fly
+
+# Function to convert POSIX integer "seconds from 1970-01-01" into 
+# R POSIXct date format.
+formatDT <- function( x, tz = "GMT" ){ 
+    res <- ISOdatetime( year = 1970, month = 1, day = 1, 
+        hour = 0, min = 0, sec = 0, tz = tz ) 
+    res <- res + x 
+    return( res ) } 
+        
+
+# Function to convert integer "days from 1970-01-01" into 
+# R Date format.
+formatD <- function( x, tz = "GMT" ){ 
+    res <- ISOdate( year = 1970, month = 1, day = 1, tz = tz ) 
+    res <- res + (x * 24 * 60 * 60 ) 
+    res <- as.Date( res ) 
+    return( res ) } 
+
+myDb[ "MISCFORMAT", formatCol = list( "DAT_TIM_SEC" = formatDT, 
+    "DAT_DAY" = formatD, "TEST_BOOL" = as.logical ) ] 
+
+
+
 ### Clean-up
 file.remove( "soils.db" ) 
 

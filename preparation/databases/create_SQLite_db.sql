@@ -22,8 +22,8 @@
 CREATE TABLE WRB_SOIL_GROUP( 
     ID_WRB_SOIL_GROUP   INTEGER  NOT NULL  PRIMARY KEY AUTOINCREMENT, 
     --
-    NAME                TEXT     NOT NULL, 
-    ABBREV              TEXT     NOT NULL  
+    ABBREV              TEXT     NOT NULL, 
+    NAME                TEXT     NOT NULL  
 );  --
 
 INSERT INTO "WRB_SOIL_GROUP" VALUES(1,'AC','Acrisol');
@@ -125,4 +125,20 @@ END;
 
 
 
+
+CREATE TABLE MISCFORMAT( 
+    ID_RECORD         INTEGER  NOT NULL  PRIMARY KEY AUTOINCREMENT, 
+    -- 
+    DAT_TIM_SEC       INTEGER,  -- Date and time in POSIX format (seconds since 1970-01-01)  
+    DAT_DAY           INTEGER,  -- Date in days since 1970-01-01 (like the R Date class) 
+    TEST_BOOL         INTEGER,  -- Pseudo Boolean format 
+    CHECK ((TEST_BOOL >= 0) OR (TEST_BOOL <= 1)) 
+);  --
+-- Explanation http://code.google.com/p/sqldf/#4._How_does_sqldf_work_with_%22Date%22_class_variables?
+
+INSERT INTO "MISCFORMAT" VALUES(1,1325332800,15339,0); 
+
+
+
 -- End of the SQL commands
+
