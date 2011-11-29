@@ -800,6 +800,31 @@ sDb[ "PROFILE", list( "ID_PROFILE" = 5:6 ),
 
 
 % +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+\subsection{Delete records and drop tables} 
+
+
+\subsubsection{Delete records in a table}
+
+The function \texttt{edbDelete()} allows to delete all or a selection 
+of records in a given table. See \texttt{?edbWrite} help page 
+for an example and \texttt{?edbDelete} for the list of possible 
+arguments for this function.\\
+
+WORK ON PROGRESS!
+
+
+
+\subsubsection{Drop a table in a database}
+
+The function \texttt{edbDrop()} allows to drop / delete tables in 
+a database. See \texttt{?edbWrite} help page for an example and 
+\texttt{?edbDrop} for the list of possible arguments for this function.\\
+
+WORK ON PROGRESS!
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 \section{Advanced usage} 
 
 
@@ -824,7 +849,7 @@ in \texttt{edbWrite()} to make it possible to retrieve the last inserted ID in
 R, without typing complicated SQL code (it does it for you).\\
 
 The example below shows how to fetch the last inserted IDs. You need to specify 
-the primary key using \texttt{getKey}:
+the primary key using \texttt{getKey}:\\
 
 WORK ON PROGRESS!
 
@@ -847,7 +872,7 @@ WORK ON PROGRESS!
 \subsection{'On-the-fly' transformation of variables when reading 
     from or writing to the database} 
 
-See the argument \texttt{formatCol} in \texttt{edbWrite()}...
+See the argument \texttt{formatCol} in \texttt{edbWrite()}...\\
 
 WORK ON PROGRESS!
 
@@ -857,7 +882,7 @@ WORK ON PROGRESS!
 \subsection{About dates and boolean in SQLite databases} 
 
 See the argument \texttt{formatCol} in 
-\texttt{edbWrite.RSQLite_SQLite()}...
+\texttt{edbWrite.RSQLite\_SQLite()}...\\
 
 WORK ON PROGRESS!
 
@@ -867,7 +892,7 @@ WORK ON PROGRESS!
 \subsection{Database operation log table} 
 
 See the argument \texttt{logOp} and \texttt{logMsg} 
-in \texttt{edbWrite()}, \texttt{edbDelete()} and \texttt{edbDrop()}...
+in \texttt{edbWrite()}, \texttt{edbDelete()} and \texttt{edbDrop()}...\\
 
 WORK ON PROGRESS!
 
