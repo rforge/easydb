@@ -5,8 +5,8 @@
 \description{Simple database interface for SQLite, MySQL and MS Access. easydb is build on top of RSQLite and RODBC. It provides functions for reading, writing, listing and subsetting tables in SQLite, MySQL and MS Access. easydb allow to retrieve, write and subset database's tables in a similar way as data.frame's, using single square brackets db[,,,]. easydb internalise many database operations (otherwise tedious) such as rows and columns subsetting (no SQL needed) and connection and disconnection to / from databases.}
 \details{
 \tabular{ll}{Package: \tab easydb\cr
-Version: \tab 0.4.0\cr
-Date: \tab 2011-11-28\cr
+Version: \tab 0.5.0\cr
+Date: \tab 2011-11-29\cr
 Title: \tab Simple database interface for SQLite, MySQL and MS Access.\cr
 Author: \tab Julien MOEYS <Julien.Moeys@mark.slu.se>\cr
 Maintainer: \tab Julien MOEYS <Julien.Moeys@mark.slu.se>\cr

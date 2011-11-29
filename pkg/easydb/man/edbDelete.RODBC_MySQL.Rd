@@ -3,7 +3,7 @@
 \title{Delete all or some rows in a table in a MySQL database (referenced by 'edb').}
 \description{Delete all or some rows in a table in a MySQL database (referenced by 'edb'). }
 \usage{
-\method{edbDelete}{RODBC_MySQL}(edb, tableName, sRow = NULL, sRowOp = c("AND", "OR")[1], testFiles = TRUE, verbose = FALSE, ...)
+\method{edbDelete}{RODBC_MySQL}(edb, tableName, sRow = NULL, sRowOp = c("AND", "OR")[1], logOp = FALSE, logRandId = rnorm(1), logMsg = as.character(NA), logTableName = "edbLog", logCreateTableIfNotExist = TRUE, testFiles = TRUE, verbose = FALSE, ...)
 }
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link{edb}}.}
@@ -17,6 +17,13 @@ that can be retrieved. Values can be character or numeric. If NULL
   \item{sRowOp}{A single character string. Operator to be used to combine multiple 
 constrains in sRow. Possible values are "OR" or "AND". Default value 
 is "AND".}
+  \item{logOp}{Single logical. If TRUE, then a log of the operation is written 
+into the database, using the function \code{\link{edbLog}}. 
+See the arguments below and \code{\link{edbLog}} for more details.}
+  \item{logRandId}{Single numerical. See \code{\link{edbLog}}.}
+  \item{logMsg}{Single character string. See \code{\link{edbLog}}.}
+  \item{logTableName}{Single character string. See \code{\link{edbLog}}.}
+  \item{logCreateTableIfNotExist}{Single logical. See \code{\link{edbLog}}.}
   \item{testFiles}{Single logical. Should the function test for the presence 
 (file.exist()) of the needed files in the folder before trying 
 to fetch information from the database? }

@@ -872,6 +872,23 @@ edbWrite.RODBC_MySQL <- function(# Write data in a MySQL table in a database (re
 ### Only used if getKey is not NULL or when mode == "u" in SQLite or 
 ### MySQL.
 
+ logOp=FALSE, 
+### Single logical. If TRUE, then a log of the operation is written 
+### into the database, using the function \code{\link{edbLog}}. 
+### See the arguments below and \code{\link{edbLog}} for more details.
+
+ logRandId=rnorm(1), 
+### Single numerical. See \code{\link{edbLog}}.
+
+ logMsg=as.character(NA), 
+### Single character string. See \code{\link{edbLog}}.
+
+ logTableName="edbLog", 
+### Single character string. See \code{\link{edbLog}}.
+
+ logCreateTableIfNotExist=TRUE, 
+### Single logical. See \code{\link{edbLog}}.
+
  testFiles=TRUE,  
 ### Single logical. Should the function test for the presence 
 ### (file.exist()) of the needed files in the folder before trying 
@@ -1135,7 +1152,7 @@ edbWrite.RODBC_MySQL <- function(# Write data in a MySQL table in a database (re
                     stopOnError  = TRUE, 
                     errorMessage = msg, 
                     # ... options for expr:
-                    statement       = sqlUpdate,    
+                    query        = sqlUpdate,    
                     ... 
                 )   #
                 #
@@ -1176,6 +1193,25 @@ edbWrite.RODBC_MySQL <- function(# Write data in a MySQL table in a database (re
                 envir = baseenv() 
             )   #
         }   #
+    }   #
+    #
+    if( logOp )
+    {   #
+        tmp <- edbLog(
+            edb             = edb,
+            tableName       = tableName, 
+            fun             = "edbWrite.RODBC_MySQL", 
+            date            = date(), 
+            R.version       = R.version.string, 
+            nodename        = Sys.info()[["nodename"]], 
+            edbVersion      = NULL, 
+            mode            = mode, 
+            getKey          = getKey, 
+            logRandId       = logRandId, 
+            logMsg          = logMsg, 
+            logTableName    = logTableName, 
+            logCreateTableIfNotExist=TRUE  
+        )   #
     }   #
     #
     if( exists( "newId" ) ){ 
@@ -1317,6 +1353,23 @@ edbDelete.RODBC_MySQL <- function(# Delete all or some rows in a table in a MySQ
 ### constrains in sRow. Possible values are "OR" or "AND". Default value 
 ### is "AND".
 
+ logOp=FALSE, 
+### Single logical. If TRUE, then a log of the operation is written 
+### into the database, using the function \code{\link{edbLog}}. 
+### See the arguments below and \code{\link{edbLog}} for more details.
+
+ logRandId=rnorm(1), 
+### Single numerical. See \code{\link{edbLog}}.
+
+ logMsg=as.character(NA), 
+### Single character string. See \code{\link{edbLog}}.
+
+ logTableName="edbLog", 
+### Single character string. See \code{\link{edbLog}}.
+
+ logCreateTableIfNotExist=TRUE, 
+### Single logical. See \code{\link{edbLog}}.
+
  testFiles=TRUE,  
 ### Single logical. Should the function test for the presence 
 ### (file.exist()) of the needed files in the folder before trying 
@@ -1428,6 +1481,25 @@ edbDelete.RODBC_MySQL <- function(# Delete all or some rows in a table in a MySQ
         ... 
     )   #
     #
+    if( logOp )
+    {   #
+        tmp <- edbLog(
+            edb             = edb,
+            tableName       = tableName, 
+            fun             = "edbDelete.RODBC_Access", 
+            date            = date(), 
+            R.version       = R.version.string, 
+            nodename        = Sys.info()[["nodename"]], 
+            edbVersion      = NULL, 
+            mode            = as.character(NA), 
+            getKey          = as.character(NA), 
+            logRandId       = logRandId, 
+            logMsg          = logMsg, 
+            logTableName    = logTableName, 
+            logCreateTableIfNotExist=TRUE  
+        )   #
+    }   #
+    #
     return( out ) 
 ### The function returns the requested table. 
 }   #
@@ -1449,6 +1521,23 @@ edbDrop.RODBC_MySQL <- function(# Drop a table in a MySQL database (referenced b
 
  tableName, 
 ### Single character string. Name of the table to read in 'edb'.
+
+ logOp=FALSE, 
+### Single logical. If TRUE, then a log of the operation is written 
+### into the database, using the function \code{\link{edbLog}}. 
+### See the arguments below and \code{\link{edbLog}} for more details.
+
+ logRandId=rnorm(1), 
+### Single numerical. See \code{\link{edbLog}}.
+
+ logMsg=as.character(NA), 
+### Single character string. See \code{\link{edbLog}}.
+
+ logTableName="edbLog", 
+### Single character string. See \code{\link{edbLog}}.
+
+ logCreateTableIfNotExist=TRUE, 
+### Single logical. See \code{\link{edbLog}}.
 
  testFiles=TRUE,  
 ### Single logical. Should the function test for the presence 
@@ -1496,6 +1585,25 @@ edbDrop.RODBC_MySQL <- function(# Drop a table in a MySQL database (referenced b
         #case        = "nochange", 
         ... 
     )   #
+    #
+    if( logOp )
+    {   #
+        tmp <- edbLog(
+            edb             = edb,
+            tableName       = tableName, 
+            fun             = "edbDrop.RODBC_MySQL", 
+            date            = date(), 
+            R.version       = R.version.string, 
+            nodename        = Sys.info()[["nodename"]], 
+            edbVersion      = NULL, 
+            mode            = as.character(NA), 
+            getKey          = as.character(NA), 
+            logRandId       = logRandId, 
+            logMsg          = logMsg, 
+            logTableName    = logTableName, 
+            logCreateTableIfNotExist=TRUE 
+        )   #
+    }   #
     #
     return( out ) 
 ### The function returns the requested table. 

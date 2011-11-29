@@ -717,6 +717,23 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
 ### dates into character strings when writing into the database.
 ### Only used if getKey is not NULL.
 
+ logOp=FALSE, 
+### Single logical. If TRUE, then a log of the operation is written 
+### into the database, using the function \code{\link{edbLog}}. 
+### See the arguments below and \code{\link{edbLog}} for more details.
+
+ logRandId=rnorm(1), 
+### Single numerical. See \code{\link{edbLog}}.
+
+ logMsg=as.character(NA), 
+### Single character string. See \code{\link{edbLog}}.
+
+ logTableName="edbLog", 
+### Single character string. See \code{\link{edbLog}}.
+
+ logCreateTableIfNotExist=TRUE, 
+### Single logical. See \code{\link{edbLog}}.
+
  testFiles=TRUE,  
 ### Single logical. Should the function test for the presence 
 ### (file.exist()) of the needed files in the folder before trying 
@@ -725,7 +742,6 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
  verbose=FALSE, 
 ### Single logical. If TRUE, information on what is done are output 
 ### on screen.
-
 
  ...
 ### Additional parameters to be passed to class-specific method. See 
@@ -981,6 +997,11 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
         oldOptions <- options( "warn" )[[ 1 ]]  
         options( "warn" = 1 )  
         #
+        msg <- sprintf( 
+            fmt = "Error detected in .edbOperation.RODBC_Access() in edbWrite.RODBC_Access() (database: %s; table: %s), update mode. Database connection closed.\n", 
+            edb[["dbName"]], tableName 
+        )   #
+        #
         res <- .edbOperation.RODBC_Access(
             edb          = edb, 
             expr         = expression({ 
@@ -1080,6 +1101,25 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
                 envir = baseenv() 
             )   #
         }   #
+    }   #
+    #
+    if( logOp )
+    {   #
+        tmp <- edbLog(
+            edb             = edb,
+            tableName       = tableName, 
+            fun             = "edbWrite.RODBC_Access", 
+            date            = date(), 
+            R.version       = R.version.string, 
+            nodename        = Sys.info()[["nodename"]], 
+            edbVersion      = NULL, 
+            mode            = mode, 
+            getKey          = getKey, 
+            logRandId       = logRandId, 
+            logMsg          = logMsg, 
+            logTableName    = logTableName, 
+            logCreateTableIfNotExist=TRUE  
+        )   #
     }   #
     #
     if( exists( "newId" ) ){ 
@@ -1219,6 +1259,23 @@ edbDelete.RODBC_Access <- function(# Delete all or some rows in a table in a MS 
 ### constrains in sRow. Possible values are "OR" or "AND". Default value 
 ### is "AND".
 
+ logOp=FALSE, 
+### Single logical. If TRUE, then a log of the operation is written 
+### into the database, using the function \code{\link{edbLog}}. 
+### See the arguments below and \code{\link{edbLog}} for more details.
+
+ logRandId=rnorm(1), 
+### Single numerical. See \code{\link{edbLog}}.
+
+ logMsg=as.character(NA), 
+### Single character string. See \code{\link{edbLog}}.
+
+ logTableName="edbLog", 
+### Single character string. See \code{\link{edbLog}}.
+
+ logCreateTableIfNotExist=TRUE, 
+### Single logical. See \code{\link{edbLog}}.
+
  testFiles=TRUE,  
 ### Single logical. Should the function test for the presence 
 ### (file.exist()) of the needed files in the folder before trying 
@@ -1334,6 +1391,25 @@ edbDelete.RODBC_Access <- function(# Delete all or some rows in a table in a MS 
         ... 
     )   #
     #
+    if( logOp )
+    {   #
+        tmp <- edbLog(
+            edb             = edb,
+            tableName       = tableName, 
+            fun             = "edbDelete.RODBC_Access", 
+            date            = date(), 
+            R.version       = R.version.string, 
+            nodename        = Sys.info()[["nodename"]], 
+            edbVersion      = NULL, 
+            mode            = as.character(NA), 
+            getKey          = as.character(NA), 
+            logRandId       = logRandId, 
+            logMsg          = logMsg, 
+            logTableName    = logTableName, 
+            logCreateTableIfNotExist=TRUE 
+        )   #
+    }   #
+    #
     return( out ) 
 ### The function returns the requested table. 
 }   #
@@ -1355,6 +1431,23 @@ edbDrop.RODBC_Access <- function(# Drop a table in a MS Access database (referen
 
  tableName, 
 ### Single character string. Name of the table to read in 'edb'.
+
+ logOp=FALSE, 
+### Single logical. If TRUE, then a log of the operation is written 
+### into the database, using the function \code{\link{edbLog}}. 
+### See the arguments below and \code{\link{edbLog}} for more details.
+
+ logRandId=rnorm(1), 
+### Single numerical. See \code{\link{edbLog}}.
+
+ logMsg=as.character(NA), 
+### Single character string. See \code{\link{edbLog}}.
+
+ logTableName="edbLog", 
+### Single character string. See \code{\link{edbLog}}.
+
+ logCreateTableIfNotExist=TRUE, 
+### Single logical. See \code{\link{edbLog}}.
 
  testFiles=TRUE,  
 ### Single logical. Should the function test for the presence 
@@ -1406,6 +1499,25 @@ edbDrop.RODBC_Access <- function(# Drop a table in a MS Access database (referen
         #case        = "nochange", 
         ... 
     )   #
+    #
+    if( logOp )
+    {   #
+        tmp <- edbLog(
+            edb             = edb,
+            tableName       = tableName, 
+            fun             = "edbDrop.RODBC_Access", 
+            date            = date(), 
+            R.version       = R.version.string, 
+            nodename        = Sys.info()[["nodename"]], 
+            edbVersion      = NULL, 
+            mode            = as.character(NA), 
+            getKey          = as.character(NA), 
+            logRandId       = logRandId, 
+            logMsg          = logMsg, 
+            logTableName    = logTableName, 
+            logCreateTableIfNotExist=TRUE 
+        )   #
+    }   #
     #
     return( out ) 
 ### The function returns the requested table. 

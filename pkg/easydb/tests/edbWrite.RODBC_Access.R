@@ -181,7 +181,7 @@ if( testODBC ){
     myDb[ "MISCFORMAT", formatCol = list( "DAT_TIM_SEC" = formatDT, 
         "DAT_DAY" = formatD, "TEST_BOOL" = as.logical ) ] 
     
-    # Just to make sure that this works too:
+    # Misc test: just to make sure that this works too:
     edbWrite( 
         edb       = myDb, 
         tableName = "MISCFORMAT", 
@@ -193,6 +193,24 @@ if( testODBC ){
             "DAT_DAY" = as.integer, "TEST_BOOL" = as.integer, 
             "TEST_BOOL2" = as.integer )
     )   #    
+    
+
+
+    # It is possible to write an operation "log" every time edbWrite() 
+    # is used (or edbDelete() or edbDrop()). The exact operation is 
+    # not logged, but rather the function name, the table concerned, 
+    # the version of R and easydb, the date, an eventual log message, 
+    # etc. Set the argument 'logOp' to TRUE to log operations:
+    
+    # - Fetch some data
+    profileTbl <- myDb[ "PROFILE", sRow = list( "ID_PROFILE" = 1 ) ] 
+    
+    # - Write it back, with a log
+    myDb[ "PROFILE", mode = "u", pKey = "ID_PROFILE", logOp = TRUE, 
+        logMsg = "Some log message" ] <- profileTbl 
+    
+    # Now check the log:
+    myDb[ "edbLog" ]
     
     
     

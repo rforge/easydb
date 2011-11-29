@@ -826,6 +826,8 @@ R, without typing complicated SQL code (it does it for you).\\
 The example below shows how to fetch the last inserted IDs. You need to specify 
 the primary key using \texttt{getKey}:
 
+WORK ON PROGRESS!
+
 
 % <<echo=TRUE,eval=TRUE>>= 
 % newId <- edbWrite( 
@@ -837,13 +839,15 @@ the primary key using \texttt{getKey}:
 %     getKey    = "ID_PROFILE" 
 % )   #
 % newId 
-@
+%@
 
 
 
 % +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 \subsection{'On-the-fly' transformation of variables when reading 
     from or writing to the database} 
+
+See the argument \texttt{formatCol} in \texttt{edbWrite()}...
 
 WORK ON PROGRESS!
 
@@ -852,88 +856,20 @@ WORK ON PROGRESS!
 % +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 \subsection{About dates and boolean in SQLite databases} 
 
+See the argument \texttt{formatCol} in 
+\texttt{edbWrite.RSQLite_SQLite()}...
+
 WORK ON PROGRESS!
 
 
 
-%(2000$\mu$m)
-% \cite{RICHER2008INRA}
-%\pageref{ISSSTRIANGLE} 
-% \label{ISSSSIZE}
-% \footnote{% 
-% Food and Agriculture Organization of the United Nations 
-% (\texttt{www.fao.org})}
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+\subsection{Database operation log table} 
 
+See the argument \texttt{logOp} and \texttt{logMsg} 
+in \texttt{edbWrite()}, \texttt{edbDelete()} and \texttt{edbDrop()}...
 
-
-% \SweaveOpts{width=14,height=4,keep.source=TRUE}
-% <<echo=FALSE,fig=TRUE,include=TRUE>>= 
-% bornes <- c(0,2,20,50,200,2e3,20e3)
-% noms   <- c("Cl","FiSi","CoSi","FiSa","CoSa","Gr","St")
-% txt.b  <- expression( 0*mu*m, 2*mu*m, 20*mu*m, 50*mu*m, 200*mu*m, 2*'mm', 2*'cm')
-
-% tmp <- data.frame(bornes,noms) # ,txt.b
-% #tmp$"txt.b" <- as.character(tmp$"txt.b")
-
-% par(  "mar"=c(4,1,1,1)+0.1  )  #  c(bottom, left, top, right)
-
-% plot( 
-% 	x		= tmp$"bornes"[-1],  
-% 	y		= rep(1,dim(tmp[-1,])[1]),  
-% 	type	= "n",  
-% 	main	= "",  
-% 	xlab	= "Soil particule sizes",  
-% 	ylab	= "",  
-% 	yaxt	= "n",  xaxt = "n",  
-% 	log		= "x",  
-% 	xlim	= c(0.2,75e3), 
-% 	bty		= "n", 
-% 	cex.lab = 2  
-% )	#
-
-% abline(v=tmp$"bornes",lty=3,lwd=c(2,4,2,4,2,4,2))
-% abline(h=par("usr")[3:4],lty=1,lwd=4)
-
-% mtext( 
-%     text    = txt.b[-1], 
-%     side    = 1, 
-%     line    = rep( 
-%         c(0.5,1.25), 
-%         (dim(tmp)[1]-1)/2
-%     ),  #
-%     at  = tmp$"bornes"[-1], 
-%     cex = 2  
-% )   #
-
-% xtxt <- (tmp$"bornes"[1:(length(tmp$"bornes"))]+c(tmp$"bornes"[2:length(tmp$"bornes")],75e3))/2
-
-% text(x=xtxt,y=rep(1,length(xtxt)),labels=tmp$"noms",cex=2) 
-% @ 
-% \SweaveOpts{width=14,height=14,keep.source=TRUE}
-
-
-
-% \begin{itemize}
-%     \item Soil's fine earth is generally (but not always) divided 
-%         into 3 soil texture classes: 
-% \end{itemize}
-
-
-
-% <<echo=TRUE,eval=FALSE>>= 
-% install.packages( 
-%     pkgs  = "soiltexture", 
-%     repos = "http://R-Forge.R-project.org" 
-% )   #
-% @ 
-
-
-% <<echo=TRUE>>= 
-% require( soiltexture ) 
-% @ 
-
-
-
+WORK ON PROGRESS!
 
 
 

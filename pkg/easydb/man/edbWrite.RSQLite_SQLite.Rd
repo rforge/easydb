@@ -3,7 +3,7 @@
 \title{Write data in a SQLite table in a database (referenced by 'edb').}
 \description{Write data in a table in a SQLite database (referenced by 'edb'). }
 \usage{
-\method{edbWrite}{RSQLite_SQLite}(edb, tableName, data, mode = c("a", "u", "o")[1], pKey = NULL, getKey = NULL, formatCol = NULL, posixFormat = "", dateFormat = "", testFiles = TRUE, verbose = FALSE, ...)
+\method{edbWrite}{RSQLite_SQLite}(edb, tableName, data, mode = c("a", "u", "o")[1], pKey = NULL, getKey = NULL, formatCol = NULL, posixFormat = "", dateFormat = "", logOp = FALSE, logRandId = rnorm(1), logMsg = as.character(NA), logTableName = "edbLog", logCreateTableIfNotExist = TRUE, testFiles = TRUE, verbose = FALSE, ...)
 }
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link{edb}}.}
@@ -36,6 +36,13 @@ Only used if getKey is not NULL or when mode == "u" in SQLite.}
 format.Date() used to convert "Date" 
 dates into character strings when writing into the database.
 Only used if getKey is not NULL or when mode == "u" in SQLite.}
+  \item{logOp}{Single logical. If TRUE, then a log of the operation is written 
+into the database, using the function \code{\link{edbLog}}. 
+See the arguments below and \code{\link{edbLog}} for more details.}
+  \item{logRandId}{Single numerical. See \code{\link{edbLog}}.}
+  \item{logMsg}{Single character string. See \code{\link{edbLog}}.}
+  \item{logTableName}{Single character string. See \code{\link{edbLog}}.}
+  \item{logCreateTableIfNotExist}{Single logical. See \code{\link{edbLog}}.}
   \item{testFiles}{Single logical. Should the function test for the presence 
 (file.exist()) of the needed files in the folder before trying 
 to fetch information from the database? }
@@ -222,6 +229,24 @@ formatD <- function( x, tz = "GMT" ){
 
 myDb[ "MISCFORMAT", formatCol = list( "DAT_TIM_SEC" = formatDT, 
     "DAT_DAY" = formatD, "TEST_BOOL" = as.logical ) ] 
+
+
+
+# It is possible to write an operation "log" every time edbWrite() 
+# is used (or edbDelete() or edbDrop()). The exact operation is 
+# not logged, but rather the function name, the table concerned, 
+# the version of R and easydb, the date, an eventual log message, 
+# etc. Set the argument 'logOp' to TRUE to log operations:
+
+# - Fetch some data
+profileTbl <- myDb[ "PROFILE", sRow = list( "ID_PROFILE" = 1 ) ] 
+
+# - Write it back, with a log
+myDb[ "PROFILE", mode = "u", pKey = "ID_PROFILE", logOp = TRUE, 
+    logMsg = "Some log message" ] <- profileTbl 
+
+# Now check the log:
+myDb[ "edbLog" ]
 
 
 

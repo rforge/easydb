@@ -1,3 +1,5 @@
+- 2011/11/28 Added an operation log system for edbWrite, edbDelete 
+             and edbDrop.
 - 2011/11/26 Improved handling of POSIX and Date formats
 - 2011/11/26 Added argument to convert columns before writing them 
              or after reading them. Useful for writing and reading 

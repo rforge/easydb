@@ -1,4 +1,4 @@
-# source( "/media/1960-441A/_R_PACKAGES/easydb/pkg/easydb/R/easydb.R" ) 
+# source( "/media/JMOEYS_8G2/_R_PACKAGES/easydb/pkg/easydb/R/easydb.R" ) 
 # source( "C:/_R_PACKAGES/easydb/pkg/easydb/R/easydb.R" )
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
@@ -1025,8 +1025,7 @@ edbWrite <- function(# Write data in a table in a database (referenced by 'edb')
 ### to the class of the \code{edb} object provided.
 
 ##seealso<< \code{link{edb}}, \code{link{edbRead}}, 
-## \code{link{edbNames}}, 
-## \code{link{edbColnames}}.
+## \code{link{edbNames}}, \code{link{edbColnames}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -1085,6 +1084,23 @@ edbWrite <- function(# Write data in a table in a database (referenced by 'edb')
 ### dates into character strings when writing into the database.
 ### Only used if getKey is not NULL or when mode == "u" in SQLite or 
 ### MySQL.
+
+ logOp=FALSE, 
+### Single logical. If TRUE, then a log of the operation is written 
+### into the database, using the function \code{\link{edbLog}}. 
+### See the arguments below and \code{\link{edbLog}} for more details.
+
+ logRandId=rnorm(1), 
+### Single numerical. See \code{\link{edbLog}}.
+
+ logMsg=as.character(NA), 
+### Single character string. See \code{\link{edbLog}}.
+
+ logTableName="edbLog", 
+### Single character string. See \code{\link{edbLog}}.
+
+ logCreateTableIfNotExist=TRUE, 
+### Single logical. See \code{\link{edbLog}}.
 
  ...
 ### Additional parameters to be passed to class-specific method. See 
@@ -1347,6 +1363,23 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
 ### dates into character strings when writing into the database.
 ### Only used if getKey is not NULL or when mode == "u" in SQLite.
 
+ logOp=FALSE, 
+### Single logical. If TRUE, then a log of the operation is written 
+### into the database, using the function \code{\link{edbLog}}. 
+### See the arguments below and \code{\link{edbLog}} for more details.
+
+ logRandId=rnorm(1), 
+### Single numerical. See \code{\link{edbLog}}.
+
+ logMsg=as.character(NA), 
+### Single character string. See \code{\link{edbLog}}.
+
+ logTableName="edbLog", 
+### Single character string. See \code{\link{edbLog}}.
+
+ logCreateTableIfNotExist=TRUE, 
+### Single logical. See \code{\link{edbLog}}.
+
  testFiles=TRUE,  
 ### Single logical. Should the function test for the presence 
 ### (file.exist()) of the needed files in the folder before trying 
@@ -1355,7 +1388,6 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
  verbose=FALSE, 
 ### Single logical. If TRUE, information on what is done are output 
 ### on screen.
-
 
  ...
 ### Additional parameters to be passed to class-specific method. See 
@@ -1668,6 +1700,25 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
         }   #
     }   #
     #
+    if( logOp )
+    {   #
+        tmp <- edbLog(
+            edb             = edb,
+            tableName       = tableName, 
+            fun             = "edbWrite.RSQLite_SQLite", 
+            date            = date(), 
+            R.version       = R.version.string, 
+            nodename        = Sys.info()[["nodename"]], 
+            edbVersion      = NULL, 
+            mode            = mode, 
+            getKey          = getKey, 
+            logRandId       = logRandId, 
+            logMsg          = logMsg, 
+            logTableName    = logTableName, 
+            logCreateTableIfNotExist=TRUE  
+        )   #
+    }   #
+    #
     if( exists( "newId" ) ){ 
         return( newId )
     }else{ 
@@ -1887,6 +1938,23 @@ edbDelete <- function(# Delete all or some rows in a table in a database (refere
 ### constrains in sRow. Possible values are "OR" or "AND". Default value 
 ### is "AND".
 
+ logOp=FALSE, 
+### Single logical. If TRUE, then a log of the operation is written 
+### into the database, using the function \code{\link{edbLog}}. 
+### See the arguments below and \code{\link{edbLog}} for more details.
+
+ logRandId=rnorm(1), 
+### Single numerical. See \code{\link{edbLog}}.
+
+ logMsg=as.character(NA), 
+### Single character string. See \code{\link{edbLog}}.
+
+ logTableName="edbLog", 
+### Single character string. See \code{\link{edbLog}}.
+
+ logCreateTableIfNotExist=TRUE, 
+### Single logical. See \code{\link{edbLog}}.
+
  ...
 ### Additional parameters to be passed to class-specific method. See 
 ### \code{methods("edbDelete")}
@@ -1925,6 +1993,23 @@ edbDelete.RSQLite_SQLite <- function(# Delete all or some rows in a table in a S
 ### A single character string. Operator to be used to combine multiple 
 ### constrains in sRow. Possible values are "OR" or "AND". Default value 
 ### is "AND".
+
+ logOp=FALSE, 
+### Single logical. If TRUE, then a log of the operation is written 
+### into the database, using the function \code{\link{edbLog}}. 
+### See the arguments below and \code{\link{edbLog}} for more details.
+
+ logRandId=rnorm(1), 
+### Single numerical. See \code{\link{edbLog}}.
+
+ logMsg=as.character(NA), 
+### Single character string. See \code{\link{edbLog}}.
+
+ logTableName="edbLog", 
+### Single character string. See \code{\link{edbLog}}.
+
+ logCreateTableIfNotExist=TRUE, 
+### Single logical. See \code{\link{edbLog}}.
 
  testFiles=TRUE,  
 ### Single logical. Should the function test for the presence 
@@ -2044,6 +2129,25 @@ edbDelete.RSQLite_SQLite <- function(# Delete all or some rows in a table in a S
         ... 
     )   #
     #
+    if( logOp )
+    {   #
+        tmp <- edbLog(
+            edb             = edb,
+            tableName       = tableName, 
+            fun             = "edbDelete.RSQLite_SQLite", 
+            date            = date(), 
+            R.version       = R.version.string, 
+            nodename        = Sys.info()[["nodename"]], 
+            edbVersion      = NULL, 
+            mode            = as.character(NA), 
+            getKey          = as.character(NA), 
+            logRandId       = logRandId, 
+            logMsg          = logMsg, 
+            logTableName    = logTableName, 
+            logCreateTableIfNotExist=TRUE 
+        )   #
+    }   #
+    #
     return( out ) 
 ### The function returns the requested table. 
 }   #
@@ -2067,6 +2171,23 @@ edbDrop <- function(# Drop a table in a database (referenced by 'edb').
 
  tableName, 
 ### Single character string. Name of the table to read in 'edb'.
+
+ logOp=FALSE, 
+### Single logical. If TRUE, then a log of the operation is written 
+### into the database, using the function \code{\link{edbLog}}. 
+### See the arguments below and \code{\link{edbLog}} for more details.
+
+ logRandId=rnorm(1), 
+### Single numerical. See \code{\link{edbLog}}.
+
+ logMsg=as.character(NA), 
+### Single character string. See \code{\link{edbLog}}.
+
+ logTableName="edbLog", 
+### Single character string. See \code{\link{edbLog}}.
+
+ logCreateTableIfNotExist=TRUE, 
+### Single logical. See \code{\link{edbLog}}.
 
  ...
 ### Additional parameters to be passed to class-specific method. See 
@@ -2093,6 +2214,24 @@ edbDrop.RSQLite_SQLite <- function(# Delete all or some rows in a table in a SQL
 
  tableName, 
 ### Single character string. Name of the table to read in 'edb'.
+
+ logOp=FALSE, 
+### Single logical. If TRUE, then a log of the operation is written 
+### into the database, using the function \code{\link{edbLog}}. 
+### See the arguments below and \code{\link{edbLog}} for more details.
+
+ logRandId=rnorm(1), 
+### Single numerical. See \code{\link{edbLog}}.
+
+ logMsg=as.character(NA), 
+### Single character string. See \code{\link{edbLog}}.
+
+ logTableName="edbLog", 
+### Single character string. See \code{\link{edbLog}}.
+
+
+ logCreateTableIfNotExist=TRUE, 
+### Single logical. See \code{\link{edbLog}}.
 
  testFiles=TRUE,  
 ### Single logical. Should the function test for the presence 
@@ -2148,6 +2287,25 @@ edbDrop.RSQLite_SQLite <- function(# Delete all or some rows in a table in a SQL
         statement    = statement, 
         ... 
     )   #
+    #
+    if( logOp )
+    {   #
+        tmp <- edbLog(
+            edb             = edb,
+            tableName       = tableName, 
+            fun             = "edbDrop.RSQLite_SQLite", 
+            date            = date(), 
+            R.version       = R.version.string, 
+            nodename        = Sys.info()[["nodename"]], 
+            edbVersion      = NULL, 
+            mode            = as.character(NA), 
+            getKey          = as.character(NA), 
+            logRandId       = logRandId, 
+            logMsg          = logMsg, 
+            logTableName    = logTableName, 
+            logCreateTableIfNotExist=TRUE  
+        )   #
+    }   #
     #
     return( out ) 
 ### The function returns the requested table. 
@@ -2264,6 +2422,129 @@ edbNCol <- function(# Retrieve the number of columns of a table in a database (r
     )   #
     #
     return( tblDim[ 2 ] ) 
+}   #
+
+
+
+
+
+
+edbLog <- function(# Write an operation "log" (used when modifying the database)
+### Write an operation "log" (to be used when modifying the 
+### database). An operation log consists in information about (a) the function 
+### used, (b) the table modified, (c) the operation date, (d) R version, (e) 
+### easydb version, (f) the option useds ('mode' and 'getKey' if used with 
+### edbWrite()). This is not version control, and this is not comprehensive 
+### operation log.
+
+##seealso<<\code{link{edb}}, \code{link{edbWrite}}, \code{link{edbDelete}}, 
+## \code{link{edbDrop}}.
+
+ edb,
+### An object of class 'edb', such as returned by \code{\link{edb}}.
+### Database in which the log has to be written.
+
+ tableName=as.character(NA), 
+### Single character string. The name of the table that was modified.
+### Not to be confused with 'logTableName'.
+
+ fun=as.character(NA), 
+### Single character string. The name of the function that did the modification. 
+
+ date=date(), 
+### Single character string. The date and time of the operation.
+
+ R.version=R.version.string, 
+### Single character string. R version
+
+ nodename=Sys.info()[["nodename"]], 
+### Single character string. Name of the computer (node). 
+
+ edbVersion=NULL, 
+### Single character string. Version of easydb. If NULL, the version is 
+### fetched using 'installed.packages()'.
+
+ mode=as.character(NA), 
+### Single character string. Value of the argument 'mode', if fun is 
+### edbWrite().
+  
+ getKey=as.character(NA), 
+### Single character string. Value of the argument 'getKey', if fun is 
+### edbWrite().
+
+ logRandId=rnorm(1), 
+### Single numerical. Some number, hopefully unique, that can be used 
+### to identify the log record, as a complement to the log date.
+
+ logMsg=as.character(NA), 
+### Single character string. Aditional log message to be written in the 
+### log table (same record as the rest).
+
+ logTableName="edbLog", 
+### Single character string. Name of the log table. If that table does not 
+### exist, it will be created.
+
+ logCreateTableIfNotExist=TRUE  
+### Single logical. If TRUE (the default), then the table is created if it 
+### does not exist yet. Please notice that this option is not multi-thread 
+### safe.
+
+){  #
+    if( is.null( edbVersion ) )
+    {   #
+        edbVersion <- installed.packages()[,c("Package","Version")] 
+        #
+        selRow <- edbVersion[, "Package" ] == "easydb" 
+        #
+        edbVersion <- edbVersion[ selRow, "Version" ] 
+    }   #
+    #
+    if( is.null(getKey) ){ getKey <- "" }
+    #
+    tbl <- data.frame( 
+        "TABLE_NAME"   = tableName, 
+        "FUN"          = fun, 
+        "DATE_LOG"     = date, 
+        "R_VERSION"    = R.version, 
+        "NODE_NAME"    = nodename, 
+        "EDB_VERSION"  = edbVersion, 
+        "MODE"         = mode, 
+        "GETKEY"       = getKey, 
+        "RAND_ID"      = logRandId, 
+        "LOG_MESSAGE"  = logMsg, 
+        stringsAsFactors = FALSE 
+    )   #
+    #
+    if( logCreateTableIfNotExist )
+    {   #
+        tableList <- edbNames( edb ) 
+        #
+        if( !(logTableName %in% tableList) )
+        {   #
+            mode2 <- "o" 
+        }else{ 
+            mode2 <- "a" 
+        }   #
+    }   #
+    #
+    res <- edbWrite(
+        edb         = edb,
+        tableName   = logTableName, 
+        data        = tbl, 
+        mode        = mode2, 
+        #pKey        = NULL, # NEW NEW
+        #getKey      = NULL, 
+        #formatCol   = NULL, 
+        #posixFormat = "", 
+        #dateFormat  = "", 
+        logOp       = FALSE  # DO NOT SET TO TRUE!!
+        #logRandId   =rnorm(1), 
+        #logMsg      =as.character(NA), 
+        #logTableName="edbLog", 
+        #logCreateTableIfNotExist=TRUE, 
+    )   #
+    #
+    return( res ) 
 }   #
 
 

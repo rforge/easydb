@@ -3,13 +3,18 @@ rm(list=ls(all=TRUE))
 pkg.dir.win  <- "C:/_R_PACKAGES/easydb/pkg" 
 # pkg.dir.lin  <- "/media/JMOEYS_8G2/_R_PACKAGES/easydb/pkg" 
 pkg.name     <- "easydb" 
-pkg.version  <- "0.4.0" # 0.2 = MySQL finshed; 0.3 = Access finished; 0.4 = POSIX, Date and Boolean data handling
+pkg.version  <- "0.5.0" 
 pkg.depends  <- NULL 
 pkg.suggests <- c("RODBC","RSQLite") 
 RVersion     <- "R (>= 2.10.0)" 
 # r.path       <- "C:/Program Files/_SCIENCE/R_PROJECT_2-4-1/bin" 
 r.path       <- ""  #  Use curent R version
 
+# Version history
+#       0.2.x = MySQL finshed; 
+#       0.3.x = Access finished; 
+#       0.4.x = POSIX, Date and Boolean data handling
+#       0.5.x = Build-in operation-log system
 
 
 
