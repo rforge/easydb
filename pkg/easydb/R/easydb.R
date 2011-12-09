@@ -33,7 +33,7 @@
 ### See help(".onLoad")
 
 ){  #
-    cat( "\n 'easydb' package loaded. Type ?edb or help(package='easydb') for examples or help.\n" ) 
+    packageStartupMessage( "'easydb' package loaded. Type ?edb or help(package='easydb') for examples or help." ) 
 ### Does not return anything.
 }   #
 

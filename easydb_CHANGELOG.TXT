@@ -1,3 +1,4 @@
+- 2011/12/08 Added examples and tests for Access 2007 databases.
 - 2011/11/28 Added an operation log system for edbWrite, edbDelete 
              and edbDrop.
 - 2011/11/26 Improved handling of POSIX and Date formats

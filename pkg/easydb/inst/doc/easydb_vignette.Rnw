@@ -289,7 +289,7 @@ system.file( "soils.db", package = "easydb" )
 
 
 
-\subsubsection{MS Access (< 2008)} 
+\subsubsection{MS Access (< 2007)} 
 
 The example MS Access database is:
 
@@ -297,8 +297,15 @@ The example MS Access database is:
 system.file( "soils.mdb", package = "easydb" ) 
 @ 
 
-Notice that this example database is not a MS Access 2008 database 
-(to be done later).
+
+
+\subsubsection{MS Access (2007)} 
+
+The example MS Access database is:
+
+<<echo=TRUE,eval=TRUE>>= 
+system.file( "soils.accdb", package = "easydb" ) 
+@ 
 
 
 
@@ -333,12 +340,23 @@ file.exists( "soils.db" )
 
 
 
-For an MS Access database you would do:
+For an MS Access (< 2007) database you would do:
 
 <<echo=TRUE,eval=FALSE>>= 
 file.copy( 
     from      = system.file( "soils.mdb", package = "easydb" ), 
     to        = "soils.mdb", 
+    overwrite = TRUE ) 
+@ 
+
+
+
+For an MS Access 2007 database you would do:
+
+<<echo=TRUE,eval=FALSE>>= 
+file.copy( 
+    from      = system.file( "soils.accdb", package = "easydb" ), 
+    to        = "soils.accdb", 
     overwrite = TRUE ) 
 @ 
 
@@ -392,7 +410,7 @@ class( sDb )
 
 
 
-\subsubsection{MS Access (< 2008)} 
+\subsubsection{MS Access (< 2007)} 
 
 To describe an MS Access database (here the example database), type:
 
@@ -415,6 +433,37 @@ our database operations.
 <<echo=TRUE,eval=TRUE>>= 
 # Object class:
 class( aDb )
+@ 
+
+
+
+\subsubsection{MS Access (2007)} 
+
+To describe an MS Access 2007 database (here the example database), type:
+
+<<echo=TRUE,eval=TRUE>>= 
+aDb2 <- edb( dbName = "soils.accdb", dbType = "RSQLite_SQLite", 
+    accessVersion = 2007 ) 
+@ 
+
+\texttt{edb()} arguments are:
+\begin{itemize}
+    \item \texttt{dbName}: Name and path of the database, as a text 
+        string;
+    \item \texttt{dbType}: Database type. Here the string 
+        \texttt{RODBC\_Access} should be understood as 
+        "An Access database managed (internally) by the RODBC package";
+    \item \texttt{accessVersion}: Single integer. Access version. 
+        Must be set to \texttt{2007} for MS Access 2007. Can be 
+        ignored for earlier versions of MS Access.
+\end{itemize}
+
+We now have an object called \texttt{aDb2} that can be used for all 
+our database operations.
+
+<<echo=TRUE,eval=TRUE>>= 
+# Object class:
+class( aDb2 )
 @ 
 
 
