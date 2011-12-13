@@ -269,6 +269,19 @@ edbDataSource.RODBC_MySQL <- function(# Create an RODBC MySQL data source (from 
     #
     require( "RODBC" ) 
     #
+    # Test that the ODBC datasource has been set:
+    sourceTest <- edb[[ "dbSourceName" ]] %in% names( odbcDataSources() ) 
+    if( !sourceTest ) 
+    {   #
+        stop( paste(
+            sep = "", 
+            "The ODBC data source demanded (edb$'dbSourceName' = '", 
+            edb[[ "dbSourceName" ]], 
+            "') could not be found in the list of ODBC data sources ", 
+            "(odbcDataSources()).\nRun edbDataSource(edb) or fix the source manually in ODBC." 
+        ) ) #
+    }   #
+    #
     dbCon <- odbcConnect( 
         dsn  = edb[[ "dbSourceName" ]], 
         uid  = edb[[ "dbLogin" ]], 
