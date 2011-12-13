@@ -8,6 +8,4 @@
   - Push to CRAN
 
 - Implement edbJoin for JOIN queries (unschedule);
-- Implement MS Excel support;
-
 

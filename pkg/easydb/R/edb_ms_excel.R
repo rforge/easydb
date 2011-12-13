@@ -1,5 +1,4 @@
-# source( "/media/JMOEYS_8G2/_R_PACKAGES/easydb/pkg/easydb/R/edb_ms_access.R" ) 
-# source( "C:/_R_PACKAGES/easydb/pkg/easydb/R/edb_ms_access.R" )
+# source( "C:/_R_PACKAGES/easydb/pkg/easydb/R/edb_ms_excel.R" )
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
 # See the ../DESCRIPTION file for information on the package & 
@@ -23,7 +22,7 @@
 
 
 
-.edbOperation.RODBC_Access <- function(# Connect to a MS Access database (referenced by 'edb'), do some operation and close the database.
+.edbOperation.RODBC_Excel <- function(# Connect to a MS Excel file (referenced by 'edb'), do some operation and close the database.
 ### Connect to a database (referenced by 'edb'), do some 
 ### operation and close the database. Generic function 
 ### that call class-specific method corresponding to the 
@@ -58,6 +57,10 @@
 ### Error message to be send if an error is detected. Either as 
 ### stop message if \code{stopOnError = TRUE} or as a warning 
 
+ readOnly=TRUE, 
+### Single logical. See \code{\link[RODBC]{odbcConnectExcel}} or 
+### \code{\link[RODBC]{odbcConnectExcel2007}}.
+
  ...
 ### Additional parameters to be passed to some function in \code{expr}.
 
@@ -66,42 +69,39 @@
     #
     require( "RODBC" ) 
     #
-    if( "dbLogin" %in% names(edb) ){ 
-        uid <- edb[[ "dbLogin" ]] 
-    }else{ 
-        uid <- "" 
-    }   #
+#     if( "dbLogin" %in% names(edb) ){ 
+#         uid <- edb[[ "dbLogin" ]] 
+#     }else{ 
+#         uid <- "" 
+#     }   #
+#     #
+#     if( "dbPwd" %in% names(edb) ){ 
+#         pwd <- edb[[ "dbPwd" ]] 
+#     }else{ 
+#         pwd <- "" 
+#     }   #
     #
-    if( "dbPwd" %in% names(edb) ){ 
-        pwd <- edb[[ "dbPwd" ]] 
-    }else{ 
-        pwd <- "" 
-    }   #
-    #
-    if( "accessVersion" %in% names(edb) ){ 
-        if( edb[[ "accessVersion" ]] == 2007 ){ 
-            dbCon <- odbcConnectAccess2007( 
-                access.file = edb[[ "dbName" ]], 
-                uid         = uid, 
-                pwd         = pwd 
+    if( "excelVersion" %in% names(edb) ){ 
+        if( edb[[ "excelVersion" ]] == 2007 ){ 
+            dbCon <- odbcConnectExcel2007( 
+                xls.file = edb[[ "dbName" ]], 
+                readOnly = readOnly 
             )   #
         }else{ 
-            dbCon <- odbcConnectAccess( 
-                access.file = edb[[ "dbName" ]], 
-                uid         = uid, 
-                pwd         = pwd 
+            dbCon <- odbcConnectExcel( 
+                xls.file = edb[[ "dbName" ]], 
+                readOnly = readOnly 
             )   #
         }   #
     }else{ 
-        dbCon <- odbcConnectAccess( 
-            access.file = edb[[ "dbName" ]], 
-            uid         = uid, 
-            pwd         = pwd 
+        dbCon <- odbcConnectExcel( 
+            xls.file = edb[[ "dbName" ]], 
+            readOnly = readOnly 
         )   #
     }   #
     #
     if( any( dbCon == -1 ) ){ 
-        stop( sprintf( "Connexion to MS Access database %s failed.", edb[[ "dbName" ]] ) ) 
+        stop( sprintf( "Connexion to MS Excel database %s failed.", edb[[ "dbName" ]] ) ) 
     }   #
     #
     # Initiate the error catching object:
@@ -141,15 +141,15 @@
 
 
 
-edbColnames.RODBC_Access <- function(# Retrieve column names of a table in a MS Access database (referenced by 'edb').
-### Retrieve column names of a table in a MS Access database 
+edbColnames.RODBC_Excel <- function(# Retrieve column names of a table in a MS Excel file (referenced by 'edb').
+### Retrieve column names of a table in a MS Excel file 
 ### (referenced by 'edb'). Wrapper around RODBC::sqlColumns().
 ### Notice that the method does NOT retrieve the full table to 
 ### get its column names (so it should work even if the table is big).
 
-##seealso<< \code{link{edb}}, \code{link{edbRead.RODBC_Access}}, 
-## \code{link{edbwrite.RODBC_Access}}, 
-## \code{link{edbNames.RODBC_Access}}.
+##seealso<< \code{link{edb}}, \code{link{edbRead.RODBC_Excel}}, 
+## \code{link{edbwrite.RODBC_Excel}}, 
+## \code{link{edbNames.RODBC_Excel}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -178,11 +178,11 @@ edbColnames.RODBC_Access <- function(# Retrieve column names of a table in a MS 
     }   #
     # 
     msg <- sprintf( 
-        fmt = "Error detected in sqlColumns() in edbColnames.RODBC_Access() (database: %s; table: %s). Database connection closed.\n", 
+        fmt = "Error detected in sqlColumns() in edbColnames.RODBC_Excel() (database: %s; table: %s). Database connection closed.\n", 
         edb[["dbName"]], tableName 
     )   #
     #
-    tbl <- .edbOperation.RODBC_Access(
+    tbl <- .edbOperation.RODBC_Excel(
         edb          = edb, 
         expr         = expression({ 
             exprOut <- sqlColumns(
@@ -195,6 +195,7 @@ edbColnames.RODBC_Access <- function(# Retrieve column names of a table in a MS 
         errorMessage = msg, 
         # ... options for expr:
         sqtable      = tableName, 
+        readOnly     = TRUE, 
         ... 
     )   #
     #
@@ -204,7 +205,7 @@ edbColnames.RODBC_Access <- function(# Retrieve column names of a table in a MS 
     #
     return( tbl ) 
 ### The function returns a vector of character strings with the 
-### columns / fields of the original MS Access table, or a table with 
+### columns / fields of the original MS Excel table, or a table with 
 ### full details on the columns (see \code{onlyNames}).
 }   #
 
@@ -213,12 +214,12 @@ edbColnames.RODBC_Access <- function(# Retrieve column names of a table in a MS 
 
 
 
-edbRead.RODBC_Access <- function(# Read all or part of a table in a MS Access database (referenced by 'edb').
-### Read all or part of a table in a MS Access database (referenced by 'edb'). 
+edbRead.RODBC_Excel <- function(# Read all or part of a table in a MS Excel file (referenced by 'edb').
+### Read all or part of a table in a MS Excel file (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbWrite.RODBC_Access}}, 
-## \code{link{edbNames.RODBC_Access}}, 
-## \code{link{edbColnames.RODBC_Access}}.
+##seealso<< \code{link{edb}}, \code{link{edbWrite.RODBC_Excel}}, 
+## \code{link{edbNames.RODBC_Excel}}, 
+## \code{link{edbColnames.RODBC_Excel}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -424,11 +425,11 @@ edbRead.RODBC_Access <- function(# Read all or part of a table in a MS Access da
     }   #
     #
     msg <- sprintf( 
-        fmt = "Error detected in sqlQuery() in edbRead.RODBC_Access() (database: %s; table: %s). Database connection closed.\n", 
+        fmt = "Error detected in sqlQuery() in edbRead.RODBC_Excel() (database: %s; table: %s). Database connection closed.\n", 
         edb[["dbName"]], tableName 
     )   #
     #
-    tbl <- .edbOperation.RODBC_Access(
+    tbl <- .edbOperation.RODBC_Excel(
         edb          = edb, 
         expr         = expression({ 
             exprOut <- sqlQuery( 
@@ -442,12 +443,13 @@ edbRead.RODBC_Access <- function(# Read all or part of a table in a MS Access da
         # ... options for expr:
         query        = statement, 
         #case        = "nochange", 
+        readOnly     = TRUE, 
         ... 
     )   #
     #
     if( dim(tbl)[2] == 0 ) 
     {   #
-        fieldsRes <- edbColnames.RODBC_Access( 
+        fieldsRes <- edbColnames.RODBC_Excel( 
             edb       = edb,
             tableName = tableName 
         )   #
@@ -482,12 +484,12 @@ edbRead.RODBC_Access <- function(# Read all or part of a table in a MS Access da
 
 
 
-edbNames.RODBC_Access <- function(# Retrieve table names in a MS Access database (referenced by 'edb').
-### Retrieve table names in a MS Access database (referenced by 'edb'). 
+edbNames.RODBC_Excel <- function(# Retrieve table names in a MS Excel file (referenced by 'edb').
+### Retrieve table names in a MS Excel file (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbRead.RODBC_Access}}, 
-## \code{link{edbWrite.RODBC_Access}}, 
-## \code{link{edbColnames.RRODBC_Access}}.
+##seealso<< \code{link{edb}}, \code{link{edbRead.RODBC_Excel}}, 
+## \code{link{edbWrite.RODBC_Excel}}, 
+## \code{link{edbColnames.RRODBC_Excel}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -512,11 +514,11 @@ edbNames.RODBC_Access <- function(# Retrieve table names in a MS Access database
     }   #
     #
     msg <- sprintf( 
-        fmt = "Error detected in sqlTables() in edbNames.RODBC_Access() (database: %s). Database connection closed.\n", 
+        fmt = "Error detected in sqlTables() in edbNames.RODBC_Excel() (database: %s). Database connection closed.\n", 
         edb[["dbName"]] 
     )   #
     #
-    tbl <- .edbOperation.RODBC_Access(
+    tbl <- .edbOperation.RODBC_Excel(
         edb          = edb, 
         expr         = expression({ 
             exprOut <- sqlTables(
@@ -527,6 +529,7 @@ edbNames.RODBC_Access <- function(# Retrieve table names in a MS Access database
         errorClasses = c("simpleError","error","condition"),  
         stopOnError  = TRUE, 
         errorMessage = msg, 
+        readOnly     = TRUE, 
         # ... options for expr:
         ... 
     )   #
@@ -544,14 +547,14 @@ edbNames.RODBC_Access <- function(# Retrieve table names in a MS Access database
 
 
 
-"[.RODBC_Access" <- function(# "[" method for reading all or part of a table in a MS Access database (referenced by 'edb').
-### "[" method for reading all or part of a table in a MS Access 
+"[.RODBC_Excel" <- function(# "[" method for reading all or part of a table in a MS Excel file (referenced by 'edb').
+### "[" method for reading all or part of a table in a MS Excel 
 ### database (referenced by 'edb'). Wrapper for 
-### \code{\link{edbRead.RODBC_Access}}. 
+### \code{\link{edbRead.RODBC_Excel}}. 
 
-##seealso<< \code{link{edb}}, \code{link{edbRead.RODBC_Access}}, 
-## \code{link{edbNames.RODBC_Access}}, 
-## \code{link{edbColnames.RODBC_Access}}.
+##seealso<< \code{link{edb}}, \code{link{edbRead.RODBC_Excel}}, 
+## \code{link{edbNames.RODBC_Excel}}, 
+## \code{link{edbColnames.RODBC_Excel}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -591,7 +594,7 @@ edbNames.RODBC_Access <- function(# Retrieve table names in a MS Access database
 ### Additional parameters to be passed to \code{dbGetQuery}.
 
 ){  #
-    tbl <- edbRead.RODBC_Access(       
+    tbl <- edbRead.RODBC_Excel(       
         edb       = edb, 
         tableName = tableName, 
         sRow      = sRow,
@@ -610,7 +613,7 @@ edbNames.RODBC_Access <- function(# Retrieve table names in a MS Access database
 
 
 
-.edbSendGetQuery.RODBC_Access <- function(# Internal. Mixes dbSendQuery() and dbGetQuery()
+.edbSendGetQuery.RODBC_Excel <- function(# Internal. Mixes dbSendQuery() and dbGetQuery()
 ### Internal. Mixes dbSendQuery() and dbGetQuery() 
 
  channel,
@@ -651,12 +654,12 @@ edbNames.RODBC_Access <- function(# Retrieve table names in a MS Access database
 
 
 
-edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a database (referenced by 'edb').
-### Write data in a table in a MS Access database (referenced by 'edb'). 
+edbWrite.RODBC_Excel <- function(# Write data in a MS Excel table in a database (referenced by 'edb').
+### Write data in a table in a MS Excel file (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbRead.RODBC_Access}}, 
-## \code{link{edbNames.RODBC_Access}}, 
-## \code{link{edbColnames.RODBC_Access}}.
+##seealso<< \code{link{edb}}, \code{link{edbRead.RODBC_Excel}}, 
+## \code{link{edbNames.RODBC_Excel}}, 
+## \code{link{edbColnames.RODBC_Excel}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -665,11 +668,9 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
 ### Single character string. Name of the table to read in 'edb'.
 
  data, 
-### data.frame. Data to be writen in \code{tableName}. If the table 
-### has a PRIMARY KEY, and if it is AUTOINCREMENT, then the column 
-### can be omitted, and the attributed ID's will be retrieved if 
-### \code{getKey = TRUE} (not the default). If \code{sRow} is not 
-### NULL, then data must contain the column names given in \code{sRow}.
+### data.frame. Data to be writen in \code{tableName}. If \code{sRow} 
+### is not NULL, then data must contain the column names given in 
+### \code{sRow}.
 
  mode=c("a","u","o")[1], 
 ### Single character string. If \code{"a"} (default), the data are 
@@ -689,8 +690,8 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
 # ### \code{mode} is not \code{"u"}.
 
  getKey=NULL, 
-### Single logical. If TRUE, the latest attributed primary keys will be 
-### retrieved.
+### Single logical. NOT usable with Excel. Will produce a warning 
+### message if set to TRUE.
 
 #  sRowOp=c("AND","OR")[1], 
 # ### A single character string. Operator to be used to combine multiple 
@@ -793,17 +794,17 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
             }   #
         }   #
         #
-        if( is.null( getKey ) )
+        if( is.null( getKey ) ) 
         {   # 
             msg <- sprintf( 
-                fmt = "Error detected in dbWriteTable() in edbWrite.RODBC_Access() (database: %s; table: %s). Database connection closed.\n", 
+                fmt = "Error detected in dbWriteTable() in edbWrite.RODBC_Excel() (database: %s; table: %s). Database connection closed.\n", 
                 edb[["dbName"]], tableName 
             )   #
             #
             oldOptions <- options( "warn" )[[ 1 ]] 
             options( "warn" = 1 )  
             #
-            res <- .edbOperation.RODBC_Access(
+            res <- .edbOperation.RODBC_Excel(
                 edb          = edb, 
                 expr         = expression({ 
                     exprOut <- sqlSave( 
@@ -814,6 +815,7 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
                 errorClasses = c("simpleError","error","condition"),  
                 stopOnError  = TRUE, 
                 errorMessage = msg, 
+                readOnly     = FALSE, 
                 # ... options for expr:
                 tablename    = tableName, 
                 dat          = data, 
@@ -824,6 +826,8 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
             #
             options( "warn" = oldOptions ) 
         }else{ 
+            #
+            warning( "Primary key are not supported by Excel, so retrieving autoincrement primary key is not possible (getKey = TRUE)" )
             #
             data <- .formatTable4Query( 
                 data        = data, 
@@ -864,18 +868,19 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
                     }    # 
                     #
                     msg <- sprintf( 
-                        fmt = "Error detected in .edbSendGetQuery.RODBC_Access() in edbWrite.RODBC_Access() (database: %s; table: %s; row: %s). Database connection closed.\n", 
+                        fmt = "Error detected in .edbSendGetQuery.RODBC_Excel() in edbWrite.RODBC_Excel() (database: %s; table: %s; row: %s). Database connection closed.\n", 
                         edb[["dbName"]], tableName, as.character(X) 
                     )   #
                     #
-                    newId <- .edbOperation.RODBC_Access(
+                    newId <- .edbOperation.RODBC_Excel(
                         edb          = edb, 
                         expr         = expression({ 
-                            exprOut <- .edbSendGetQuery.RODBC_Access( channel = dbCon, ... )
+                            exprOut <- .edbSendGetQuery.RODBC_Excel( channel = dbCon, ... )
                         }), #
                         errorClasses = c("simpleError","error","condition"),  
                         stopOnError  = TRUE, 
                         errorMessage = msg, 
+                        readOnly     = FALSE, 
                         # ... options for expr:
                         query        = c(sqlUpdate,sqlUpdate2), 
                         ... 
@@ -998,11 +1003,11 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
         options( "warn" = 1 )  
         #
         msg <- sprintf( 
-            fmt = "Error detected in .edbOperation.RODBC_Access() in edbWrite.RODBC_Access() (database: %s; table: %s), update mode. Database connection closed.\n", 
+            fmt = "Error detected in .edbOperation.RODBC_Excel() in edbWrite.RODBC_Excel() (database: %s; table: %s), update mode. Database connection closed.\n", 
             edb[["dbName"]], tableName 
         )   #
         #
-        res <- .edbOperation.RODBC_Access(
+        res <- .edbOperation.RODBC_Excel(
             edb          = edb, 
             expr         = expression({ 
                 exprOut <- sqlUpdate( 
@@ -1013,6 +1018,7 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
             errorClasses = c("simpleError","error","condition"),  
             stopOnError  = TRUE, 
             errorMessage = msg, 
+            readOnly     = FALSE, 
             # ... options for expr:
             dat          = data, 
             tablename    = tableName, 
@@ -1043,11 +1049,11 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
         #         }    # 
         #         #
         #         msg <- sprintf( 
-        #             fmt = "Error detected in dbGetQuery() in edbWrite.RODBC_Access() (database: %s; table: %s; row: %s). Database connection closed.\n", 
+        #             fmt = "Error detected in dbGetQuery() in edbWrite.RODBC_Excel() (database: %s; table: %s; row: %s). Database connection closed.\n", 
         #             edb[["dbName"]], tableName, as.character(X) 
         #         )   #
         #         #
-        #         res <- .edbOperation.RODBC_Access(
+        #         res <- .edbOperation.RODBC_Excel(
         #             edb          = edb, 
         #             expr         = expression({ 
         #                 exprOut <- sqlQuery( 
@@ -1090,7 +1096,7 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
                 envir = baseenv() 
             )   #
             #
-            stop( "Warning(s) detected in MS Access transaction. type warnings() to see it/them." ) 
+            stop( "Warning(s) detected in MS Excel transaction. type warnings() to see it/them." ) 
         }   #
     }else{ 
         if( last.warning.exist ) 
@@ -1108,7 +1114,7 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
         tmp <- edbLog(
             edb             = edb,
             tableName       = tableName, 
-            fun             = "edbWrite.RODBC_Access", 
+            fun             = "edbWrite.RODBC_Excel", 
             date            = date(), 
             R.version       = R.version.string, 
             nodename        = Sys.info()[["nodename"]], 
@@ -1137,12 +1143,12 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
 
 
 
-"[<-.RODBC_Access" <- function(# "[<-" method for MS Access databases. Write data in a MS Access table in a database (referenced by 'edb').
-### "[<-" method for MS Access databases. Write data in a table in a 
-### MS Access database (referenced by 'edb'). 
+"[<-.RODBC_Excel" <- function(# "[<-" method for MS Excel files. Write data in a MS Excel table in a database (referenced by 'edb').
+### "[<-" method for MS Excel files. Write data in a table in a 
+### MS Excel file (referenced by 'edb'). 
 
-##seealso<< \code{\link{edb}}, \code{\link{edbWrite.RODBC_Access}}, 
-## \code{\link{edbRead.RODBC_Access}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbWrite.RODBC_Excel}}, 
+## \code{\link{edbRead.RODBC_Excel}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -1168,8 +1174,8 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
 # ### \code{mode} is not \code{"u"}.
 
  getKey=NULL, 
-### Single logical. If TRUE, the latest attributed primary keys will be 
-### retrieved.
+### Single logical. NOT usable with Excel. Will produce a warning 
+### message if set to TRUE.
 
  formatCol=NULL, 
 ### If not NULL, a named list of functions to be applied to certain columns 
@@ -1200,18 +1206,16 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
 ### \code{methods("edbWrite")}
 
  value 
-### data.frame. Data to be writen in \code{tableName}. If the table 
-### has a PRIMARY KEY, and if it is AUTOINCREMENT, then the column 
-### can be omitted, and the attributed ID's will be retrieved if 
-### \code{getKey = TRUE} (not the default). If \code{sRow} is not 
-### NULL, then data must contain the column names given in \code{sRow}.
+### data.frame. Data to be writen in \code{tableName}. If \code{sRow} 
+### is not NULL, then data must contain the column names given in 
+### \code{sRow}.
 
 ){  #
     if( !is.null(getKey) ){ 
          stop( "'getKey' must be NULL to use '[<-' methods." )
     }   #
     #
-    res <- edbWrite.RODBC_Access( 
+    res <- edbWrite.RODBC_Excel( 
         edb         = edb,
         tableName   = tableName, 
         data        = value, 
@@ -1233,12 +1237,13 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
 
 
 
-edbDelete.RODBC_Access <- function(# Delete all or some rows in a table in a MS Access database (referenced by 'edb').
-### Delete all or some rows in a table in a MS Access database (referenced by 'edb'). 
+edbDelete.RODBC_Excel <- function(# NOT SUPORTED FOR EXCEL. Delete all or some rows in a table in a MS Excel file (referenced by 'edb').
+### NOT SUPORTED FOR EXCEL. Delete all or some rows in a table 
+### in a MS Excel file (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbWrite.RODBC_Access}}, 
-## \code{link{edbNames.RODBC_Access}}, 
-## \code{link{edbColnames.RODBC_Access}}.
+##seealso<< \code{link{edb}}, \code{link{edbWrite.RODBC_Excel}}, 
+## \code{link{edbNames.RODBC_Excel}}, 
+## \code{link{edbColnames.RODBC_Excel}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -1289,129 +1294,9 @@ edbDelete.RODBC_Access <- function(# Delete all or some rows in a table in a MS 
 ### Additional parameters to be passed to \code{dbGetQuery}.
 
 ){  # 
-    if( testFiles ) 
-    {   # Check if the database files is present:
-        .edbFileExists( edb[[ "dbName" ]] ) 
-    }   #
+    stop( "SQL DELETE operation is not supported by (RODBC) Excel, so edbDelete() is not supported on Excel files." ) 
     #
-    # Prepare the 1st series of constrains:
-    if( length(sRow) != 0 ) 
-    {   #
-        if( class(sRow) != "list" ){ 
-            stop("'sRow' must be a list.")
-        }   #
-        #
-        sRowLength <- length( sRow ) 
-        sRowNames  <- names( sRow ) 
-        #
-        if( length( sRowNames ) != sRowLength )
-        {   #
-            stop( "(column) names are missing in 'sRow'." ) 
-        }   #
-        #
-        selSQL  <- names(sRow) == "SQL"
-        sRowSQL <- sRow[ selSQL ]  
-        sRow    <- sRow[ !selSQL ] 
-        #
-        if( length(sRow) > 0 ){ 
-            sRow <- lapply( 
-                X   = 1:length(sRow), 
-                FUN = function(X){ 
-                    const <- sRow[[ X ]] 
-                    #
-                    if( class(const) == "character" ) 
-                    {   #
-                        const <- paste( "'", const, "'", sep = "" ) 
-                    }   #
-                    #
-                    const <- paste( 
-                        sep = "", 
-                        "([", sRowNames[ X ], "] = ", 
-                        const, ")" 
-                    )   #
-                    #
-                    const <- paste( const, collapse = " OR " )
-                    #
-                    const <- paste( "(", const, ")", sep = "" )  
-                    #
-                    return( const ) 
-                 }  #
-            )   #
-        }else{ 
-            sRow <- NULL 
-        }   #
-        #
-        if( length(sRowSQL) ){
-            sRowSQL <- paste( "(", sRowSQL, ")", sep = "" )
-        }   # 
-        #
-        sRowOp <- paste( " ", sRowOp, " ", sep = "" ) 
-        #
-        sRow <- c( unlist(sRow), sRowSQL ) 
-        #
-        sRow <- paste( unlist( sRow ), collapse = sRowOp ) 
-        #
-        sRow <- paste( "WHERE", sRow, sep = " " ) 
-    }else{ 
-        sRow <- NULL 
-    }   #
-    #
-    # Create the full querry statement:
-    statement <- paste( 
-            sep = "", 
-            "DELETE FROM [", tableName, "]\n", 
-            sRow, "\n", 
-            ";\n" 
-        )   #
-    #
-    if( verbose ){ 
-        cat( "SQL statement:\n" ) 
-        cat( statement, sep = "\n" )
-    }   #
-    #
-    msg <- sprintf( 
-        fmt = "Error detected in sqlQuery() in edbDelete.RODBC_Access() (database: %s; table: %s). Database connection closed.\n", 
-        edb[["dbName"]], tableName 
-    )   #
-    #
-    out <- .edbOperation.RODBC_Access(
-        edb          = edb, 
-        expr         = expression({ 
-            exprOut <- sqlQuery( 
-                channel = dbCon, 
-                ...  
-            )   #
-        }),  #
-        errorClasses = c("simpleError","error","condition"),  
-        stopOnError  = TRUE, 
-        errorMessage = msg, 
-        # ... options for expr:
-        query        = statement, 
-        #case        = "nochange", 
-        ... 
-    )   #
-    #
-    if( logOp )
-    {   #
-        tmp <- edbLog(
-            edb             = edb,
-            tableName       = tableName, 
-            fun             = "edbDelete.RODBC_Access", 
-            date            = date(), 
-            R.version       = R.version.string, 
-            nodename        = Sys.info()[["nodename"]], 
-            edbVersion      = NULL, 
-            mode            = as.character(NA), 
-            getKey          = as.character(NA), 
-            logRandId       = logRandId, 
-            logMsg          = logMsg, 
-            logTableName    = logTableName, 
-            logCreateTableIfNotExist=TRUE 
-        )   #
-    }   #
-    #
-    return( out ) 
-### The function returns the requested table. 
+### The function returns an error message.
 }   #
 
 
@@ -1419,12 +1304,12 @@ edbDelete.RODBC_Access <- function(# Delete all or some rows in a table in a MS 
 
 
 
-edbDrop.RODBC_Access <- function(# Drop a table in a MS Access database (referenced by 'edb').
-### Drop a table in a MS Access database (referenced by 'edb'). 
+edbDrop.RODBC_Excel <- function(# Drop a table in a MS Excel file (referenced by 'edb').
+### Drop a table in a MS Excel file (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbWrite.RODBC_Access}}, 
-## \code{link{edbNames.RODBC_Access}}, 
-## \code{link{edbColnames.RODBC_Access}}.
+##seealso<< \code{link{edb}}, \code{link{edbWrite.RODBC_Excel}}, 
+## \code{link{edbNames.RODBC_Excel}}, 
+## \code{link{edbColnames.RODBC_Excel}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -1479,11 +1364,11 @@ edbDrop.RODBC_Access <- function(# Drop a table in a MS Access database (referen
     }   #
     #
     msg <- sprintf( 
-        fmt = "Error detected in sqlQuery() in edbDrop.RODBC_Access() (database: %s; table: %s). Database connection closed.\n", 
+        fmt = "Error detected in sqlQuery() in edbDrop.RODBC_Excel() (database: %s; table: %s). Database connection closed.\n", 
         edb[["dbName"]], tableName 
     )   #
     #
-    out <- .edbOperation.RODBC_Access(
+    out <- .edbOperation.RODBC_Excel(
         edb          = edb, 
         expr         = expression({ 
             exprOut <- sqlQuery( 
@@ -1494,18 +1379,21 @@ edbDrop.RODBC_Access <- function(# Drop a table in a MS Access database (referen
         errorClasses = c("simpleError","error","condition"),  
         stopOnError  = TRUE, 
         errorMessage = msg, 
+        readOnly     = FALSE, 
         # ... options for expr:
         query        = statement, 
         #case        = "nochange", 
         ... 
     )   #
     #
+    message( "On Excel files, edbDrop() only delete the table content, not the table itself." )
+    #
     if( logOp )
     {   #
         tmp <- edbLog(
             edb             = edb,
             tableName       = tableName, 
-            fun             = "edbDrop.RODBC_Access", 
+            fun             = "edbDrop.RODBC_Excel", 
             date            = date(), 
             R.version       = R.version.string, 
             nodename        = Sys.info()[["nodename"]], 

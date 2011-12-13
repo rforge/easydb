@@ -11,7 +11,7 @@ testODBC <- (class(try(odbcDataSources())) != "try-error") &
 
 ### Windows only:
 if( testODBC ){ 
-    ### Make a copy of SQLite example database:
+    ### Make a copy of MS Access example database:
     #   (a database of soil profile description) 
     file.copy( 
         from = system.file( "soils.mdb", package = "easydb" ), 
@@ -43,7 +43,7 @@ if( testODBC ){
     
     
     
-    ### Access 2008 ---------------------------------------------
+    ### Access 2007 ---------------------------------------------
     file.copy( 
         from = system.file( "soils.accdb", package = "easydb" ), 
         to   = "soils.accdb" 

@@ -1,9 +1,9 @@
-\name{edbWrite.RODBC_Access}
-\alias{edbWrite.RODBC_Access}
-\title{Write data in a MS Access table in a database (referenced by 'edb').}
-\description{Write data in a table in a MS Access database (referenced by 'edb'). }
+\name{edbWrite.RODBC_Excel}
+\alias{edbWrite.RODBC_Excel}
+\title{Write data in a MS Excel table in a database (referenced by 'edb').}
+\description{Write data in a table in a MS Excel file (referenced by 'edb'). }
 \usage{
-\method{edbWrite}{RODBC_Access}(edb,
+\method{edbWrite}{RODBC_Excel}(edb,
 tableName,
 data,
 mode = c("a",
@@ -26,11 +26,9 @@ verbose = FALSE,
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link{edb}}.}
   \item{tableName}{Single character string. Name of the table to read in 'edb'.}
-  \item{data}{data.frame. Data to be writen in \code{tableName}. If the table 
-has a PRIMARY KEY, and if it is AUTOINCREMENT, then the column 
-can be omitted, and the attributed ID's will be retrieved if 
-\code{getKey = TRUE} (not the default). If \code{sRow} is not 
-NULL, then data must contain the column names given in \code{sRow}.}
+  \item{data}{data.frame. Data to be writen in \code{tableName}. If \code{sRow} 
+is not NULL, then data must contain the column names given in 
+\code{sRow}.}
   \item{mode}{Single character string. If \code{"a"} (default), the data are 
 appened to the table (added after the last row), and \code{sRow} 
 is ignored. If \code{"u"}, the data are updated according to some 
@@ -38,8 +36,8 @@ critearia in \code{sRow} (that can't be NULL). If \code{"o"},
 the table is overwritten and \code{sRow} is ignored. }
   \item{pKey}{Single character string (if mode == "u") or NULL. Column name that 
 is PRIMARY KEY in the table.}
-  \item{getKey}{Single logical. If TRUE, the latest attributed primary keys will be 
-retrieved.}
+  \item{getKey}{Single logical. NOT usable with Excel. Will produce a warning 
+message if set to TRUE.}
   \item{formatCol}{If not NULL, a named list of functions to be applied to certain columns 
 before the data are written to the database. The name of each list 
 item gives the column to process, and the value of each item gives the 
@@ -78,9 +76,9 @@ If an error message is detected the function stops.}
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbRead.RODBC_Access}}, 
-\code{link{edbNames.RODBC_Access}}, 
-\code{link{edbColnames.RODBC_Access}}.}
+\seealso{\code{link{edb}}, \code{link{edbRead.RODBC_Excel}}, 
+\code{link{edbNames.RODBC_Excel}}, 
+\code{link{edbColnames.RODBC_Excel}}.}
 \examples{library( "easydb" ) 
 library( "RODBC" ) 
 
@@ -94,14 +92,14 @@ testODBC <- (class(try(odbcDataSources())) != "try-error") &
 
 ### Windows only:
 if( testODBC ){ 
-    ### Make a copy of MS Access example database:
+    ### Make a copy of Excel example file:
     #   (a database of soil profile description) 
     file.copy( 
-        from = system.file( "soils.mdb", package = "easydb" ), 
-        to   = "soils.mdb" 
+        from = system.file( "soils.xls", package = "easydb" ), 
+        to   = "soils.xls" 
     )   
     
-    # soils.db is now in your working directory.
+    # soils.xls is now in your working directory.
     
     
     
@@ -110,7 +108,7 @@ if( testODBC ){
     
     
     ### Describe the database (NB: this is not a connection)
-    myDb <- edb( dbType = "RODBC_Access", dbName = "soils.mdb" ) 
+    myDb <- edb( dbType = "RODBC_Excel", dbName = "soils.xls" ) 
     
     
     
@@ -138,27 +136,16 @@ if( testODBC ){
     
     myDb[ "PROFILE" ] # Look at the result
     
-    # This would not work, because one column is missing:
-    # (because the underlying function use dbWriteTable)
-    try( 
-        edbWrite( 
-            edb       = myDb, 
-            tableName = "PROFILE", 
-            data      = profileTbl[, -1 ], 
-            mode      = "a"  
-        )   
-    )   # Error
-    
-    # But as "ID_PROFILE" is a primary key, it can be omittted 
-    # if 'getKey' is specified:
-    edbWrite( 
-        edb       = myDb, 
-        tableName = "PROFILE", 
-        data      = profileTbl[, -1 ], 
-        mode      = "a", 
-        #verbose   = TRUE,
-        getKey    = "ID_PROFILE" 
-    )   #
+    # Retrieving AUTOINCREMENT PRIMARY KEY is not possible in Excel
+    # as primary key don't exist in Excel.
+    # edbWrite( 
+    #     edb       = myDb, 
+    #     tableName = "PROFILE", 
+    #     data      = profileTbl[, -1 ], 
+    #     mode      = "a", 
+    #     #verbose   = TRUE,
+    #     getKey    = "ID_PROFILE" 
+    # )   #
     
     ## Create a new table:
     
@@ -195,12 +182,12 @@ if( testODBC ){
     myDb[ "PROFILE" ]
     
     
-    ## Delete some rows
-    edbDelete( 
-        edb       = myDb, 
-        tableName = "PROFILE", 
-        sRow      = list("SQL" = "ID_PROFILE > 2")
-    )   #
+    ## Delete some rows: NOT SUPPORTED IN EXCEL!
+    # edbDelete( 
+    #     edb       = myDb, 
+    #     tableName = "PROFILE", 
+    #     sRow      = list("SQL" = "ID_PROFILE > 2")
+    # )   #
     
     
     
@@ -224,7 +211,7 @@ if( testODBC ){
     
     # Prepare a new record to be written:
     newRecord <- data.frame( 
-        "ID_RECORD"   = 2, 
+        "ID_RECORD"   = 3, 
         "DAT_TIM_SEC" = as.POSIXct( "2011-12-15 12:00:00", tz = "GMT" ), 
         "DAT_DAY"     = as.Date( "2011-12-15" ), 
         "TEST_BOOL"   = FALSE, 
@@ -264,14 +251,15 @@ if( testODBC ){
     myDb[ "MISCFORMAT", formatCol = list( "DAT_TIM_SEC" = formatDT, 
         "DAT_DAY" = formatD, "TEST_BOOL" = as.logical ) ] 
     
+    newRecord[,"ID_RECORD"] <- 4 
+    
     # Misc test: just to make sure that this works too:
     edbWrite( 
         edb       = myDb, 
         tableName = "MISCFORMAT", 
-        data      = newRecord[, -1 ], 
+        data      = newRecord, 
         mode      = "a", 
         verbose   = TRUE,
-        getKey    = "ID_RECORD", 
         formatCol = list( "DAT_TIM_SEC" = as.integer, 
             "DAT_DAY" = as.integer, "TEST_BOOL" = as.integer, 
             "TEST_BOOL2" = as.integer )
@@ -298,14 +286,14 @@ if( testODBC ){
     
     
     ### Clean-up
-    file.remove( "soils.mdb" ) 
+    file.remove( "soils.xls" ) 
     
     
     
     ### Access 2007 ---------------------------------------------
     file.copy( 
-        from = system.file( "soils.accdb", package = "easydb" ), 
-        to   = "soils.accdb" 
+        from = system.file( "soils.xlsx", package = "easydb" ), 
+        to   = "soils.xlsx" 
     )   
     
     # soils.db is now in your working directory.
@@ -317,8 +305,8 @@ if( testODBC ){
     
     
     ### Describe the database (NB: this is not a connection)
-    myDb2 <- edb( dbType = "RODBC_Access", dbName = "soils.accdb", 
-        accessVersion = 2007 ) 
+    myDb2 <- edb( dbType = "RODBC_Excel", dbName = "soils.xlsx", 
+        excelVersion = 2007 ) 
     
     
     
@@ -346,27 +334,18 @@ if( testODBC ){
     
     myDb2[ "PROFILE" ] # Look at the result
     
-    # This would not work, because one column is missing:
-    # (because the underlying function use dbWriteTable)
-    try( 
-        edbWrite( 
-            edb       = myDb2, 
-            tableName = "PROFILE", 
-            data      = profileTbl[, -1 ], 
-            mode      = "a"  
-        )   
-    )   # Error
     
-    # But as "ID_PROFILE" is a primary key, it can be omittted 
-    # if 'getKey' is specified:
-    edbWrite( 
-        edb       = myDb2, 
-        tableName = "PROFILE", 
-        data      = profileTbl[, -1 ], 
-        mode      = "a", 
-        #verbose   = TRUE,
-        getKey    = "ID_PROFILE" 
-    )   #
+    
+    # Retrieving AUTOINCREMENT PRIMARY KEY is not possible in Excel
+    # as primary key don't exist in Excel.
+    # edbWrite( 
+    #     edb       = myDb2, 
+    #     tableName = "PROFILE", 
+    #     data      = profileTbl[, -1 ], 
+    #     mode      = "a", 
+    #     #verbose   = TRUE,
+    #     getKey    = "ID_PROFILE" 
+    # )   #
     
     ## Create a new table:
     
@@ -403,12 +382,12 @@ if( testODBC ){
     myDb2[ "PROFILE" ]
     
     
-    ## Delete some rows
-    edbDelete( 
-        edb       = myDb2, 
-        tableName = "PROFILE", 
-        sRow      = list("SQL" = "ID_PROFILE > 2")
-    )   #
+    ## Delete some rows: NOT SUPPORTED IN EXCEL!
+    # edbDelete( 
+    #     edb       = myDb, 
+    #     tableName = "PROFILE", 
+    #     sRow      = list("SQL" = "ID_PROFILE > 2")
+    # )   #
     
     
     
@@ -432,7 +411,7 @@ if( testODBC ){
     
     # Prepare a new record to be written:
     newRecord <- data.frame( 
-        "ID_RECORD"   = 2, 
+        "ID_RECORD"   = 3, 
         "DAT_TIM_SEC" = as.POSIXct( "2011-12-15 12:00:00", tz = "GMT" ), 
         "DAT_DAY"     = as.Date( "2011-12-15" ), 
         "TEST_BOOL"   = FALSE, 
@@ -472,14 +451,15 @@ if( testODBC ){
     myDb2[ "MISCFORMAT", formatCol = list( "DAT_TIM_SEC" = formatDT, 
         "DAT_DAY" = formatD, "TEST_BOOL" = as.logical ) ] 
     
+    newRecord[,"ID_RECORD"] <- 4 
+    
     # Misc test: just to make sure that this works too:
     edbWrite( 
         edb       = myDb2, 
         tableName = "MISCFORMAT", 
-        data      = newRecord[, -1 ], 
+        data      = newRecord, 
         mode      = "a", 
         verbose   = TRUE,
-        getKey    = "ID_RECORD", 
         formatCol = list( "DAT_TIM_SEC" = as.integer, 
             "DAT_DAY" = as.integer, "TEST_BOOL" = as.integer, 
             "TEST_BOOL2" = as.integer )
@@ -506,5 +486,5 @@ if( testODBC ){
     
     
     ### Clean-up
-    file.remove( "soils.accdb" ) 
+    file.remove( "soils.xlsx" ) 
 }   #}

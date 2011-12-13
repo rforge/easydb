@@ -1,12 +1,12 @@
-\name{edbColnames.RODBC_Access}
-\alias{edbColnames.RODBC_Access}
-\title{Retrieve column names of a table in a MS Access database (referenced by 'edb').}
-\description{Retrieve column names of a table in a MS Access database 
+\name{edbColnames.RODBC_Excel}
+\alias{edbColnames.RODBC_Excel}
+\title{Retrieve column names of a table in a MS Excel file (referenced by 'edb').}
+\description{Retrieve column names of a table in a MS Excel file 
 (referenced by 'edb'). Wrapper around RODBC::sqlColumns().
 Notice that the method does NOT retrieve the full table to 
 get its column names (so it should work even if the table is big).}
 \usage{
-\method{edbColnames}{RODBC_Access}(edb,
+\method{edbColnames}{RODBC_Excel}(edb,
 tableName,
 onlyNames = TRUE,
 testFiles = TRUE,
@@ -26,16 +26,16 @@ to fetch information from the database? }
 }
 
 \value{The function returns a vector of character strings with the 
-columns / fields of the original MS Access table, or a table with 
+columns / fields of the original MS Excel table, or a table with 
 full details on the columns (see \code{onlyNames}).}
 
 \author{Julien MOEYS <Julien.Moeys@mark.slu.se>}
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbRead.RODBC_Access}}, 
-\code{link{edbwrite.RODBC_Access}}, 
-\code{link{edbNames.RODBC_Access}}.}
+\seealso{\code{link{edb}}, \code{link{edbRead.RODBC_Excel}}, 
+\code{link{edbwrite.RODBC_Excel}}, 
+\code{link{edbNames.RODBC_Excel}}.}
 \examples{library( "easydb" ) 
 library( "RODBC" ) 
 
@@ -49,14 +49,14 @@ testODBC <- (class(try(odbcDataSources())) != "try-error") &
 
 ### Windows only:
 if( testODBC ){ 
-    ### Make a copy of MS Access example database:
+    ### Make a copy of Excel example file:
     #   (a database of soil profile description) 
     file.copy( 
-        from = system.file( "soils.mdb", package = "easydb" ), 
-        to   = "soils.mdb" 
+        from = system.file( "soils.xls", package = "easydb" ), 
+        to   = "soils.xls" 
     )   
     
-    # soils.db is now in your working directory.
+    # soils.xls is now in your working directory.
     
     
     
@@ -65,7 +65,7 @@ if( testODBC ){
     
     
     ### Describe the database (NB: this is not a connection)
-    myDb <- edb( dbType = "RODBC_Access", dbName = "soils.mdb" ) 
+    myDb <- edb( dbType = "RODBC_Excel", dbName = "soils.xls" ) 
     
     
     
@@ -77,14 +77,14 @@ if( testODBC ){
     
     
     ### Clean-up
-    file.remove( "soils.mdb" ) 
+    file.remove( "soils.xls" ) 
     
     
     
     ### Access 2007 ---------------------------------------------
     file.copy( 
-        from = system.file( "soils.accdb", package = "easydb" ), 
-        to   = "soils.accdb" 
+        from = system.file( "soils.xlsx", package = "easydb" ), 
+        to   = "soils.xlsx" 
     )   
     
     # soils.db is now in your working directory.
@@ -96,8 +96,8 @@ if( testODBC ){
     
     
     ### Describe the database (NB: this is not a connection)
-    myDb2 <- edb( dbType = "RODBC_Access", dbName = "soils.accdb", 
-        accessVersion = 2007 ) 
+    myDb2 <- edb( dbType = "RODBC_Excel", dbName = "soils.xlsx", 
+        excelVersion = 2007 ) 
     
     
     
@@ -109,5 +109,5 @@ if( testODBC ){
     
     
     ### Clean-up
-    file.remove( "soils.accdb" ) 
+    file.remove( "soils.xlsx" ) 
 }   #}

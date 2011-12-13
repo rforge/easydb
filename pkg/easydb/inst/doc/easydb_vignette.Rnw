@@ -5,7 +5,7 @@
 \documentclass[a4paper]{article}
 
 \title{\texttt{easydb}, a simple database interface for %
-    SQLite, MS Access and MySQL} 
+    SQLite, MS Access, MS Excel and MySQL} 
 
 \author{Julien Moeys}
 % In case of changes, also change the 'PDF setup' and 
@@ -29,6 +29,7 @@
 % \VignetteKeyword{database} 
 % \VignetteKeyword{SQLite} 
 % \VignetteKeyword{MS Access} 
+% \VignetteKeyword{MS Excel} 
 % \VignetteKeyword{MySQL} 
 % \VignetteKeyword{data.frame} 
 
@@ -123,11 +124,11 @@ options(
 
 \texttt{easydb} is an R\cite{RDCT2011} package providing functions 
 to easily read 
-and write data from / to SQLite, MS Access and MySQL databases, and 
-perform a few other operations. \texttt{easydb} provide the same 
-interface (set of functions) for all these databases. It is build 
-on top of \texttt{RSQLite}\cite{JAMESRSQLite} and \texttt{RODBC}
-\cite{RIPLEYRODBC}, but tries to hide 
+and write data from / to SQLite, MS Access, MS Excel and MySQL 
+databases, and perform a few other operations. \texttt{easydb} 
+provide the same interface (set of functions) for all these databases. 
+It is build on top of \texttt{RSQLite}\cite{JAMESRSQLite} and 
+\texttt{RODBC}\cite{RIPLEYRODBC}, but tries to hide 
 tedious operations such as opening and closing database connections, 
 or writing SQL queries. \texttt{easydb} provides S3 classes functions 
 to manipulate databases in a similar way as a \texttt{data.frame} 
@@ -222,9 +223,23 @@ library( "RSQLite" )
 % +~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 \subsection{ODBC and Access} 
 
-If you want to use MS Access with \texttt{easydb}, you need a computer 
-with ODBC (installation not covered by this manual), and the R 
-package RODBC.
+If you want to use MS Access databases with \texttt{easydb}, you 
+need a computer with ODBC (installation not covered by this manual), 
+and the R package RODBC.
+
+<<echo=TRUE,eval=FALSE>>= 
+install.packages( "RODBC" ) 
+library( "RODBC" )
+@ 
+
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+\subsection{ODBC and Excel} 
+
+If you want to use MS Excel files with \texttt{easydb}, you need 
+a computer with ODBC (installation not covered by this manual), 
+and the R package RODBC.
 
 <<echo=TRUE,eval=FALSE>>= 
 install.packages( "RODBC" ) 
@@ -309,6 +324,26 @@ system.file( "soils.accdb", package = "easydb" )
 
 
 
+\subsubsection{MS Excel (< 2007)} 
+
+The example MS Excel file is:
+
+<<echo=TRUE,eval=TRUE>>= 
+system.file( "soils.xls", package = "easydb" ) 
+@ 
+
+
+
+\subsubsection{MS Excel (2007)} 
+
+The example MS Excel file is:
+
+<<echo=TRUE,eval=TRUE>>= 
+system.file( "soils.xlsx", package = "easydb" ) 
+@ 
+
+
+
 \subsubsection{MySQL} 
 
 The example MySQL database can be created using the following SQL
@@ -357,6 +392,28 @@ For an MS Access 2007 database you would do:
 file.copy( 
     from      = system.file( "soils.accdb", package = "easydb" ), 
     to        = "soils.accdb", 
+    overwrite = TRUE ) 
+@ 
+
+
+
+For an MS Excel (< 2007) file you would do:
+
+<<echo=TRUE,eval=FALSE>>= 
+file.copy( 
+    from      = system.file( "soils.xls", package = "easydb" ), 
+    to        = "soils.xls", 
+    overwrite = TRUE ) 
+@ 
+
+
+
+For an MS Excel 2007 file you would do:
+
+<<echo=TRUE,eval=FALSE>>= 
+file.copy( 
+    from      = system.file( "soils.xlsx", package = "easydb" ), 
+    to        = "soils.xlsx", 
     overwrite = TRUE ) 
 @ 
 
@@ -415,7 +472,7 @@ class( sDb )
 To describe an MS Access database (here the example database), type:
 
 <<echo=TRUE,eval=TRUE>>= 
-aDb <- edb( dbName = "soils.mdb", dbType = "RSQLite_SQLite" ) 
+aDb <- edb( dbName = "soils.mdb", dbType = "RODBC_Access" ) 
 @ 
 
 \texttt{edb()} arguments are:
@@ -442,7 +499,7 @@ class( aDb )
 To describe an MS Access 2007 database (here the example database), type:
 
 <<echo=TRUE,eval=TRUE>>= 
-aDb2 <- edb( dbName = "soils.accdb", dbType = "RSQLite_SQLite", 
+aDb2 <- edb( dbName = "soils.accdb", dbType = "RODBC_Access", 
     accessVersion = 2007 ) 
 @ 
 
@@ -464,6 +521,64 @@ our database operations.
 <<echo=TRUE,eval=TRUE>>= 
 # Object class:
 class( aDb2 )
+@ 
+
+
+
+\subsubsection{MS Excel (< 2007)} 
+
+To describe an MS Excel file (here the example database), type:
+
+<<echo=TRUE,eval=TRUE>>= 
+eDb <- edb( dbName = "soils.xls", dbType = "RODBC_Excel" ) 
+@ 
+
+\texttt{edb()} arguments are:
+\begin{itemize}
+    \item \texttt{dbName}: Name and path of the database, as a text 
+        string;
+    \item \texttt{dbType}: Database type. Here the string 
+        \texttt{RODBC\_Excel} should be understood as 
+        "An Excel file managed (internally) by the RODBC package";
+\end{itemize}
+
+We now have an object called \texttt{eDb} that can be used for all 
+our database operations.
+
+<<echo=TRUE,eval=TRUE>>= 
+# Object class:
+class( eDb )
+@ 
+
+
+
+\subsubsection{MS Excel (2007)} 
+
+To describe an MS Excel 2007 database (here the example database), type:
+
+<<echo=TRUE,eval=TRUE>>= 
+eDb2 <- edb( dbName = "soils.xlsx", dbType = "RODBC_Excel", 
+    excelVersion = 2007 ) 
+@ 
+
+\texttt{edb()} arguments are:
+\begin{itemize}
+    \item \texttt{dbName}: Name and path of the database, as a text 
+        string;
+    \item \texttt{dbType}: Database type. Here the string 
+        \texttt{RODBC\_Excel} should be understood as 
+        "An Excel file managed (internally) by the RODBC package";
+    \item \texttt{excelVersion}: Single integer. Excel version. 
+        Must be set to \texttt{2007} for MS Excel 2007. Can be 
+        ignored for earlier versions of MS Excel.
+\end{itemize}
+
+We now have an object called \texttt{eDb2} that can be used for all 
+our database operations.
+
+<<echo=TRUE,eval=TRUE>>= 
+# Object class:
+class( eDb2 )
 @ 
 
 
@@ -493,8 +608,8 @@ mDb <- edb(
     \item \texttt{dbName}: Name of the database in the MySQL 
         system (not in ODBC);
     \item \texttt{dbType}: Database type. Here the string 
-        \texttt{RODBC\_Access} should be understood as 
-        "An Access database managed (internally) by the RODBC package";
+        \texttt{RODBC\_MySQL} should be understood as 
+        "A MySQL database managed (internally) by the RODBC package";
     \item \texttt{...}: Replace all the login, password and IP/Host 
     values by values relevant for your database;
 \end{itemize}
@@ -525,7 +640,8 @@ class( mDb )
 
 Notice: From this part of the tutorial, the examples will be given 
 for the SQLite database only. Nonetheless, the R code would be 
-exactly the same for other database type (MS Access, MySQL).
+exactly the same for other database type (MS Access, MS Excel, 
+MySQL).
 
 
 
@@ -540,7 +656,8 @@ edbNames( edb = sDb )
 
 
 You can get more details, set the argument \texttt{onlyNames = TRUE}, 
-but that only works with MS Access and MySQL, not with SQLite.\\
+but that only works with MS Access, MS Excel and MySQL, not with 
+SQLite.\\
 
 
 
@@ -859,6 +976,9 @@ of records in a given table. See \texttt{?edbWrite} help page
 for an example and \texttt{?edbDelete} for the list of possible 
 arguments for this function.\\
 
+The function \texttt{edbDelete()} is not supported by (RODBC) MS 
+Excel.\\
+
 WORK ON PROGRESS!
 
 
@@ -868,6 +988,9 @@ WORK ON PROGRESS!
 The function \texttt{edbDrop()} allows to drop / delete tables in 
 a database. See \texttt{?edbWrite} help page for an example and 
 \texttt{?edbDrop} for the list of possible arguments for this function.\\
+
+The function \texttt{edbDrop()} is partially supported by (RODBC) 
+MS Excel: All rows are deleted, but not the table!.\\
 
 WORK ON PROGRESS!
 
@@ -896,6 +1019,9 @@ time on the database). SQL databases have special functions for this (like
 \texttt{LAST\_INSERT\_ID()} in MySQL). These functions have been implemented 
 in \texttt{edbWrite()} to make it possible to retrieve the last inserted ID in 
 R, without typing complicated SQL code (it does it for you).\\
+
+This function is not supported by MS Excel (as Excel does not have 
+primary keys).\\
 
 The example below shows how to fetch the last inserted IDs. You need to specify 
 the primary key using \texttt{getKey}:\\

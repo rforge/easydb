@@ -1,9 +1,9 @@
-\name{edbRead.RODBC_Access}
-\alias{edbRead.RODBC_Access}
-\title{Read all or part of a table in a MS Access database (referenced by 'edb').}
-\description{Read all or part of a table in a MS Access database (referenced by 'edb'). }
+\name{edbRead.RODBC_Excel}
+\alias{edbRead.RODBC_Excel}
+\title{Read all or part of a table in a MS Excel file (referenced by 'edb').}
+\description{Read all or part of a table in a MS Excel file (referenced by 'edb'). }
 \usage{
-\method{edbRead}{RODBC_Access}(edb,
+\method{edbRead}{RODBC_Excel}(edb,
 tableName,
 sRow = NULL,
 sCol = NULL,
@@ -52,9 +52,9 @@ on screen.}
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbWrite.RODBC_Access}}, 
-\code{link{edbNames.RODBC_Access}}, 
-\code{link{edbColnames.RODBC_Access}}.}
+\seealso{\code{link{edb}}, \code{link{edbWrite.RODBC_Excel}}, 
+\code{link{edbNames.RODBC_Excel}}, 
+\code{link{edbColnames.RODBC_Excel}}.}
 \examples{library( "easydb" ) 
 library( "RODBC" ) 
 
@@ -68,14 +68,14 @@ testODBC <- (class(try(odbcDataSources())) != "try-error") &
 
 ### Windows only:
 if( testODBC ){ 
-    ### Make a copy of MS Access example database:
+    ### Make a copy of Excel example file:
     #   (a database of soil profile description) 
     file.copy( 
-        from = system.file( "soils.mdb", package = "easydb" ), 
-        to   = "soils.mdb" 
+        from = system.file( "soils.xls", package = "easydb" ), 
+        to   = "soils.xls" 
     )   
     
-    # soils.db is now in your working directory.
+    # soils.xls is now in your working directory.
     
     
     
@@ -84,7 +84,7 @@ if( testODBC ){
     
     
     ### Describe the database (NB: this is not a connection)
-    myDb <- edb( dbType = "RODBC_Access", dbName = "soils.mdb" ) 
+    myDb <- edb( dbType = "RODBC_Excel", dbName = "soils.xls" ) 
     
     
     
@@ -203,14 +203,14 @@ if( testODBC ){
     
     
     ### Clean-up
-    file.remove( "soils.mdb" ) 
+    file.remove( "soils.xls" ) 
     
     
     
     ### Access 2007 ---------------------------------------------
     file.copy( 
-        from = system.file( "soils.accdb", package = "easydb" ), 
-        to   = "soils.accdb" 
+        from = system.file( "soils.xlsx", package = "easydb" ), 
+        to   = "soils.xlsx" 
     )   
     
     # soils.db is now in your working directory.
@@ -222,8 +222,8 @@ if( testODBC ){
     
     
     ### Describe the database (NB: this is not a connection)
-    myDb2 <- edb( dbType = "RODBC_Access", dbName = "soils.accdb", 
-        accessVersion = 2007 ) 
+    myDb2 <- edb( dbType = "RODBC_Excel", dbName = "soils.xlsx", 
+        excelVersion = 2007 ) 
     
     
     
@@ -342,5 +342,5 @@ if( testODBC ){
     
     
     ### Clean-up
-    file.remove( "soils.accdb" ) 
+    file.remove( "soils.xlsx" ) 
 }   #}
