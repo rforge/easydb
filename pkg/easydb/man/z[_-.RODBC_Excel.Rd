@@ -12,6 +12,7 @@ getKey = NULL,
 formatCol = NULL,
 posixFormat = "",
 dateFormat = "",
+parano = TRUE,
 verbose = FALSE,
 ...) <- 
 value
@@ -26,8 +27,9 @@ critearia in \code{sRow} (that can't be NULL). If \code{"o"},
 the table is overwritten and \code{sRow} is ignored. }
   \item{pKey}{Single character string (if mode == "u") or NULL. Column name that 
 is PRIMARY KEY in the table.}
-  \item{getKey}{Single logical. NOT usable with Excel. Will produce a warning 
-message if set to TRUE.}
+  \item{getKey}{Single character string or NULL. If non NULL, name of the PRIMARY 
+KEY whose latest attributed values should be retrieved. NOT 
+usable with Excel. Will produce a warning message if non NULL.}
   \item{formatCol}{If not NULL, a named list of functions to be applied to certain columns 
 before the data are written to the database. The name of each list 
 item gives the column to process, and the value of each item gives the 
@@ -42,6 +44,10 @@ Only used if getKey is not NULL.}
 format.Date() used to convert "Date" 
 dates into character strings when writing into the database.
 Only used if getKey is not NULL.}
+  \item{parano}{Single logical. If set to TRUE (the default), the function is 
+run on "paranoia mode", that is additional tests are performed 
+before the data are written into the database. This slows down 
+a bit (more) the function, but it may avoid some mistakes.}
   \item{verbose}{Single logical. If TRUE, information on what is done are output 
 on screen.}
   \item{\dots}{Additional parameters to be passed to class-specific method. See 

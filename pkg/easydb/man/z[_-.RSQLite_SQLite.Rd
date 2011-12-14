@@ -12,6 +12,7 @@ getKey = NULL,
 formatCol = NULL,
 posixFormat = "",
 dateFormat = "",
+parano = TRUE,
 testFiles = TRUE,
 verbose = FALSE,
 ...) <- 
@@ -27,8 +28,8 @@ critearia in \code{sRow} (that can't be NULL). If \code{"o"},
 the table is overwritten and \code{sRow} is ignored. }
   \item{pKey}{Single character string (if mode == "u") or NULL. Column name that 
 is PRIMARY KEY in the table.}
-  \item{getKey}{Single logical. If TRUE, the latest attributed primary keys will be 
-retrieved.}
+  \item{getKey}{Single character string or NULL. If non NULL, name of the PRIMARY 
+KEY whose latest attributed values should be retrieved.}
   \item{formatCol}{If not NULL, a named list of functions to be applied to certain columns 
 before the data are written to the database. The name of each list 
 item gives the column to process, and the value of each item gives the 
@@ -43,6 +44,10 @@ Only used if getKey is not NULL or when mode == "u" in SQLite.}
 format.Date() used to convert "Date" 
 dates into character strings when writing into the database.
 Only used if getKey is not NULL or when mode == "u" in SQLite.}
+  \item{parano}{Single logical. If set to TRUE (the default), the function is 
+run on "paranoia mode", that is additional tests are performed 
+before the data are written into the database. This slows down 
+a bit (more) the function, but it may avoid some mistakes.}
   \item{testFiles}{Single logical. Should the function test for the presence 
 (file.exist()) of the needed files in the folder before trying 
 to fetch information from the database? }

@@ -2,11 +2,11 @@
 \alias{easydb-package}
 \docType{package}
 \title{Simple database interface for SQLite, MySQL and MS Access.}
-\description{Simple database interface for SQLite, MySQL and MS Access. easydb is build on top of RSQLite and RODBC. It provides functions for reading, writing, listing and subsetting tables in SQLite, MySQL and MS Access. easydb allow to retrieve, write and subset database's tables in a similar way as data.frame's, using single square brackets db[,,,]. easydb internalise many database operations (otherwise tedious) such as rows and columns subsetting (no SQL needed) and connection and disconnection to / from databases.}
+\description{Simple database interface for SQLite, MySQL, MS Access and MS Excel. easydb is build on top of RSQLite and RODBC. It provides functions for reading, writing, listing and subsetting tables in SQLite, MySQL and MS Access. easydb allow to retrieve, write and subset database's tables in a similar way as data.frame's, using single square brackets db[,,,]. easydb internalise many database operations (otherwise tedious) such as rows and columns subsetting (no SQL needed) and connection and disconnection to / from databases.}
 \details{
 \tabular{ll}{Package: \tab easydb\cr
-Version: \tab 0.6.0\cr
-Date: \tab 2011-12-13\cr
+Version: \tab 0.6.1\cr
+Date: \tab 2011-12-14\cr
 Title: \tab Simple database interface for SQLite, MySQL and MS Access.\cr
 Author: \tab Julien MOEYS <Julien.Moeys@mark.slu.se>\cr
 Maintainer: \tab Julien MOEYS <Julien.Moeys@mark.slu.se>\cr

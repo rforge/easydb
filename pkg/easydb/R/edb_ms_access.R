@@ -668,7 +668,7 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
 ### data.frame. Data to be writen in \code{tableName}. If the table 
 ### has a PRIMARY KEY, and if it is AUTOINCREMENT, then the column 
 ### can be omitted, and the attributed ID's will be retrieved if 
-### \code{getKey = TRUE} (not the default). If \code{sRow} is not 
+### \code{!is.null(getKey)} (not the default). If \code{sRow} is not 
 ### NULL, then data must contain the column names given in \code{sRow}.
 
  mode=c("a","u","o")[1], 
@@ -689,8 +689,8 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
 # ### \code{mode} is not \code{"u"}.
 
  getKey=NULL, 
-### Single logical. If TRUE, the latest attributed primary keys will be 
-### retrieved.
+### Single character string or NULL. If non NULL, name of the PRIMARY 
+### KEY whose latest attributed values should be retrieved.
 
 #  sRowOp=c("AND","OR")[1], 
 # ### A single character string. Operator to be used to combine multiple 
@@ -733,6 +733,12 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
 
  logCreateTableIfNotExist=TRUE, 
 ### Single logical. See \code{\link{edbLog}}.
+
+ parano=TRUE, 
+### Single logical. If set to TRUE (the default), the function is 
+### run on "paranoia mode", that is additional tests are performed 
+### before the data are written into the database. This slows down 
+### a bit (more) the function, but it may avoid some mistakes.
 
  testFiles=TRUE,  
 ### Single logical. Should the function test for the presence 
@@ -795,6 +801,42 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
         #
         if( is.null( getKey ) )
         {   # 
+            if( parano & (mode != "o") ) 
+            {   #
+                colNamez <- edbColnames( edb = edb, tableName = tableName ) 
+                #
+                # 1 - Check that all columns in data are present in tableName:
+                testCol1 <- colnames( data ) %in% colNamez 
+                #
+                if( !all( testCol1 ) ) 
+                {   #
+                    stop( paste(
+                        sep = "", 
+                        "Some columns in input 'data' could not be found in the table '", 
+                        tableName,"' (", 
+                        paste( colnames( data )[!testCol1], collapse = ", " ), 
+                        ")." 
+                    ) ) #
+                }   #
+                #
+                # 2 - Check that all columns in tableName are present in data:
+                testCol2 <- colNamez %in% colnames( data ) 
+                #
+                if( !all( testCol2 ) ) 
+                {   #
+                    stop( paste(
+                        sep = "", 
+                        "Some columns in the table '", 
+                        tableName, "' could not be found in input 'data' (", 
+                        paste( colNamez[!testCol2], collapse = ", " ), 
+                        ")." 
+                    ) ) #
+                }   #
+                #
+                # 3 - Put the columns in the right order:
+                data <- data[, colNamez ] 
+            }   #
+            # 
             msg <- sprintf( 
                 fmt = "Error detected in dbWriteTable() in edbWrite.RODBC_Access() (database: %s; table: %s). Database connection closed.\n", 
                 edb[["dbName"]], tableName 
@@ -1168,8 +1210,8 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
 # ### \code{mode} is not \code{"u"}.
 
  getKey=NULL, 
-### Single logical. If TRUE, the latest attributed primary keys will be 
-### retrieved.
+### Single character string or NULL. If non NULL, name of the PRIMARY 
+### KEY whose latest attributed values should be retrieved.
 
  formatCol=NULL, 
 ### If not NULL, a named list of functions to be applied to certain columns 
@@ -1191,6 +1233,29 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
 ### dates into character strings when writing into the database.
 ### Only used if getKey is not NULL.
 
+#  logOp=FALSE, 
+# ### Single logical. If TRUE, then a log of the operation is written 
+# ### into the database, using the function \code{\link{edbLog}}. 
+# ### See the arguments below and \code{\link{edbLog}} for more details.
+
+#  logRandId=rnorm(1), 
+# ### Single numerical. See \code{\link{edbLog}}.
+
+#  logMsg=as.character(NA), 
+# ### Single character string. See \code{\link{edbLog}}.
+
+#  logTableName="edbLog", 
+# ### Single character string. See \code{\link{edbLog}}.
+
+#  logCreateTableIfNotExist=TRUE, 
+# ### Single logical. See \code{\link{edbLog}}.
+
+ parano=TRUE, 
+### Single logical. If set to TRUE (the default), the function is 
+### run on "paranoia mode", that is additional tests are performed 
+### before the data are written into the database. This slows down 
+### a bit (more) the function, but it may avoid some mistakes.
+
  verbose=FALSE, 
 ### Single logical. If TRUE, information on what is done are output 
 ### on screen.
@@ -1203,7 +1268,7 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
 ### data.frame. Data to be writen in \code{tableName}. If the table 
 ### has a PRIMARY KEY, and if it is AUTOINCREMENT, then the column 
 ### can be omitted, and the attributed ID's will be retrieved if 
-### \code{getKey = TRUE} (not the default). If \code{sRow} is not 
+### \code{!is.null(getKey)} (not the default). If \code{sRow} is not 
 ### NULL, then data must contain the column names given in \code{sRow}.
 
 ){  #
@@ -1222,6 +1287,12 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
         formatCol   = formatCol, 
         posixFormat = posixFormat, 
         dateFormat  = dateFormat, 
+#         logOp       = logOp, 
+#         logRandId   = logRandId, 
+#         logMsg      = logMsg, 
+#         logTableName= logTableName, 
+#         logCreateTableIfNotExist=logCreateTableIfNotExist, 
+        parano      = parano, 
         ...
     )   #
     #
