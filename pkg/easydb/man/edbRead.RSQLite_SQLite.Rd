@@ -10,6 +10,8 @@ sCol = NULL,
 sRowOp = c("AND",
 "OR")[1],
 formatCol = NULL,
+distinct = FALSE,
+orderBy = NULL,
 testFiles = TRUE,
 verbose = FALSE,
 ...)
@@ -38,6 +40,19 @@ item gives the column to process, and the value of each item gives the
 function that must be applied. For instance 
 formatCol = list("DATE"=as.Date) will apply the function 
 \link{as.Date} to the column "DATE".}
+  \item{distinct}{Single logical. If TRUE, unique values in the result table will 
+be returned, using the \code{SELECT DISTINCT} SQL statement. 
+This is equivalent to applying \code{\link{unique}} to the 
+data.frame returned by the function, except that the action is 
+performed inside the database (not in R).}
+  \item{orderBy}{Vector of character strings, or NULL (the default). If non NULL, 
+vector of column names that must be used to sort the result table. 
+Column names may be followed by a space and 'DESC' if the column 
+must be sorted in a descending order ('ASC', ascending, is the 
+default). This operation is performed in the database with 
+SQL ORDER BY statement and is equivalent to ordering the 
+data in R with \code{\link{order}}. You may write the 
+column names between square brackets [] if they contain spaces.}
   \item{testFiles}{Single logical. Should the function test for the presence 
 (file.exist()) of the needed files in the folder before trying 
 to fetch information from the database? }
@@ -187,6 +202,20 @@ formatD <- function( x, tz = "GMT" ){
 # Now we can convert the columns on-the-fly
 myDb[ "MISCFORMAT", formatCol = list( "DAT_TIM_SEC" = formatDT, 
     "DAT_DAY" = formatD, "TEST_BOOL" = as.logical ) ] 
+
+
+
+# SQL SELECT DISTINCT, equivalent of R unique().
+# To select unique / distinct values in a (group of) columns, 
+# set 'distinct' to TRUE:
+myDb[ "PROFILE", sCol = "COMMENTS", distinct = TRUE ] 
+
+
+
+# SQL ORDER BY, equivalent of R order(). 
+# To sort the table according to some columns (ascending or 
+# descending), use 'orderBy':
+myDb[ "WRB_SOIL_GROUP", orderBy = "ABBREV DESC" ] 
 
 
 

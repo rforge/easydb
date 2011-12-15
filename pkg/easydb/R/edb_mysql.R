@@ -435,6 +435,23 @@ edbRead.RODBC_MySQL <- function(# Read all or part of a table in a MySQL databas
 ### formatCol = list("DATE"=as.Date) will apply the function 
 ### \link{as.Date} to the column "DATE".
 
+ distinct=FALSE, 
+### Single logical. If TRUE, unique values in the result table will 
+### be returned, using the \code{SELECT DISTINCT} SQL statement. 
+### This is equivalent to applying \code{\link{unique}} to the 
+### data.frame returned by the function, except that the action is 
+### performed inside the database (not in R).
+
+ orderBy=NULL, 
+### Vector of character strings, or NULL (the default). If non NULL, 
+### vector of column names that must be used to sort the result table. 
+### Column names may be followed by a space and 'DESC' if the column 
+### must be sorted in a descending order ('ASC', ascending, is the 
+### default). This operation is performed in the database with 
+### SQL ORDER BY statement and is equivalent to ordering the 
+### data in R with \code{\link{order}}. You may write the 
+### column names between `` delimiters if they contain spaces.
+
  testFiles=TRUE,  
 ### Single logical. Should the function test for the presence 
 ### (file.exist()) of the needed files in the folder before trying 
@@ -583,12 +600,28 @@ edbRead.RODBC_MySQL <- function(# Read all or part of a table in a MySQL databas
         sRow <- NULL 
     }   #
     #
+    # DISTINCT statement
+    distinct <- ifelse(distinct,"DISTINCT ","")
+    #
+    # ORDER BY statement:
+    if( !is.null(orderBy) ){ 
+        orderBy <- paste( 
+            sep = "", 
+            "\nORDER BY ", 
+            paste( collapse = ", ", orderBy ), 
+            "\n" 
+        )   #
+    }else{ 
+        orderBy <- "" 
+    }   #
+    #
     # Create the full querry statement:
     statement <- paste( 
             sep = "", 
-            "SELECT ", selectWhat, "\n", 
+            "SELECT ", distinct, selectWhat, "\n", 
             "FROM `", tableName, "`\n", 
-            sRow, "\n", 
+            sRow, 
+            orderBy, 
             ";\n" 
         )   #
     #
@@ -749,6 +782,13 @@ edbNames.RODBC_MySQL <- function(# Retrieve table names in a MySQL database (ref
 ### formatCol = list("DATE"=as.Date) will apply the function 
 ### \link{as.Date} to the column "DATE".
 
+ distinct=FALSE, 
+### Single logical. If TRUE, unique values in the result table will 
+### be returned, using the \code{SELECT DISTINCT} SQL statement. 
+### This is equivalent to applying \code{\link{unique}} to the 
+### data.frame returned by the function, except that the action is 
+### performed inside the database (not in R).
+
  verbose=FALSE, 
 ### Single logical. If TRUE, information on what is done are output 
 ### on screen.
@@ -765,6 +805,7 @@ edbNames.RODBC_MySQL <- function(# Retrieve table names in a MySQL database (ref
         sRowOp    = sRowOp,
         verbose   = verbose, 
         formatCol = formatCol, 
+        distinct  = distinct, 
         ...
     )   #
     #

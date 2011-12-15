@@ -145,6 +145,20 @@ if( testODBC ){
     
     
     
+    # SQL SELECT DISTINCT, equivalent of R unique().
+    # To select unique / distinct values in a (group of) columns, 
+    # set 'distinct' to TRUE:
+    myDb[ "PROFILE", sCol = "COMMENTS", distinct = TRUE ] 
+    
+    
+    
+    # SQL ORDER BY, equivalent of R order(). 
+    # To sort the table according to some columns (ascending or 
+    # descending), use 'orderBy':
+    myDb[ "WRB_SOIL_GROUP", orderBy = "ABBREV DESC" ] 
+    
+    
+    
     ### Clean-up
     file.remove( "soils.xls" ) 
     
@@ -281,6 +295,20 @@ if( testODBC ){
     # Now we can convert the columns on-the-fly
     myDb2[ "MISCFORMAT", formatCol = list( "DAT_TIM_SEC" = formatDT, 
         "DAT_DAY" = formatD, "TEST_BOOL" = as.logical ) ] 
+    
+    
+    
+    # SQL SELECT DISTINCT, equivalent of R unique().
+    # To select unique / distinct values in a (group of) columns, 
+    # set 'distinct' to TRUE:
+    myDb2[ "PROFILE", sCol = "COMMENTS", distinct = TRUE ] 
+    
+    
+    
+    # SQL ORDER BY, equivalent of R order(). 
+    # To sort the table according to some columns (ascending or 
+    # descending), use 'orderBy':
+    myDb2[ "WRB_SOIL_GROUP", orderBy = "ABBREV DESC" ] 
     
     
     

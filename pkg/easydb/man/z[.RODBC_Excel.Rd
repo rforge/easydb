@@ -12,6 +12,7 @@ sCol = NULL,
 sRowOp = c("AND",
 "OR")[1],
 formatCol = NULL,
+distinct = FALSE,
 verbose = FALSE,
 ...)
 }
@@ -34,6 +35,11 @@ item gives the column to process, and the value of each item gives the
 function that must be applied. For instance 
 formatCol = list("DATE"=as.Date) will apply the function 
 \link{as.Date} to the column "DATE".}
+  \item{distinct}{Single logical. If TRUE, unique values in the result table will 
+be returned, using the \code{SELECT DISTINCT} SQL statement. 
+This is equivalent to applying \code{\link{unique}} to the 
+data.frame returned by the function, except that the action is 
+performed inside the database (not in R).}
   \item{verbose}{Single logical. If TRUE, information on what is done are output 
 on screen.}
   \item{\dots}{Additional parameters to be passed to \code{dbGetQuery}.}

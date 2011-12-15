@@ -148,6 +148,20 @@ if( (Sys.info()[[ "sysname" ]] == "Windows") & testMySQL ){
     
     
     
+    # SQL SELECT DISTINCT, equivalent of R unique().
+    # To select unique / distinct values in a (group of) columns, 
+    # set 'distinct' to TRUE:
+    myDb[ "PROFILE", sCol = "COMMENTS", distinct = TRUE ] 
+    
+    
+    
+    # SQL ORDER BY, equivalent of R order(). 
+    # To sort the table according to some columns (ascending or 
+    # descending), use 'orderBy':
+    myDb[ "WRB_SOIL_GROUP", orderBy = "ABBREV DESC" ] 
+    
+    
+    
     ### Un-register the data source in ODBC (windows only)
     edbDataSource( myDb, trash = TRUE ) 
 }   #

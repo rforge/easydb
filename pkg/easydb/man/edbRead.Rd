@@ -12,6 +12,8 @@ sCol = NULL,
 sRowOp = c("AND",
 "OR")[1],
 formatCol = NULL,
+distinct = FALSE,
+orderBy = NULL,
 ...)
 }
 \arguments{
@@ -33,6 +35,19 @@ item gives the column to process, and the value of each item gives the
 function that must be applied. For instance 
 formatCol = list("DATE"=as.Date) will apply the function 
 \link{as.Date} to the column "DATE".}
+  \item{distinct}{Single logical. If TRUE, unique values in the result table will 
+be returned, using the \code{SELECT DISTINCT} SQL statement. 
+This is equivalent to applying \code{\link{unique}} to the 
+data.frame returned by the function, except that the action is 
+performed inside the database (not in R).}
+  \item{orderBy}{Vector of character strings, or NULL (the default). If non NULL, 
+vector of column names that must be used to sort the result table. 
+Column names may be followed by a space and 'DESC' if the column 
+must be sorted in a descending order ('ASC', ascending, is the 
+default). For example, \code{oderBy = "MYCOLUMN DESC"}. This 
+operation is performed in the database with SQL ORDER BY 
+statement and is equivalent to ordering the data in R with 
+\code{\link{order}}.}
   \item{\dots}{Additional parameters to be passed to class-specific method. See 
 \code{methods("edbRead")}}
 }
