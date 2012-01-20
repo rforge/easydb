@@ -2671,6 +2671,8 @@ edbLog <- function(# Write an operation "log" (used when modifying the database)
         }else{ 
             mode2 <- "a" 
         }   #
+    }else{ 
+        mode2 <- "a" 
     }   #
     #
     res <- edbWrite(

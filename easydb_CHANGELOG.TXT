@@ -1,3 +1,8 @@
+VERSION 0.6.3 
+
+  2011/01/20 fixed a bug in edbLog() (writing mode was sometimes 
+             not set)
+
 VERSION 0.6.2 
 
   2011/12/15 edbRead() supports SQL SELECT DISTINCT 
