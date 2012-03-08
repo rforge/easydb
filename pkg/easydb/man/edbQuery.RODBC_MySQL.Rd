@@ -6,7 +6,6 @@
 \method{edbQuery}{RODBC_MySQL}(edb,
 statement,
 formatCol = NULL,
-testFiles = TRUE,
 verbose = FALSE,
 ...)
 }
@@ -20,9 +19,6 @@ item gives the column to process, and the value of each item gives the
 function that must be applied. For instance 
 formatCol = list("DATE"=as.Date) will apply the function 
 \link{as.Date} to the column "DATE".}
-  \item{testFiles}{Single logical. Should the function test for the presence 
-(file.exist()) of the needed files in the folder before trying 
-to fetch information from the database? }
   \item{verbose}{Single logical. If TRUE, information on what is done are output 
 on screen.}
   \item{\dots}{Additional parameters to be passed to \code{link[RODBC]{sqlQuery}}.}

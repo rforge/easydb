@@ -6,6 +6,7 @@
   - Push to CRAN
   - ORDER BY 
   - DISTINCT 
-
+- Add a test for odbcDataSources() before connecting 
+  to a database (MySQL)
 - Implement edbJoin for JOIN queries (unschedule);
 

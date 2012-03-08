@@ -474,78 +474,6 @@ edbRead.RODBC_MySQL <- function(# Read all or part of a table in a MySQL databas
     )   #
     sCol       <- selectWhat[[ "sCol" ]] 
     selectWhat <- selectWhat[[ "selectWhat" ]] 
-    #
-    # if( length(sCol) != 0 )
-    # {   #
-    #     if( is.numeric( sCol ) ) # Index selection
-    #     {   #
-    #         sCol <- as.integer( sCol ) 
-    #         #
-    #         # Test that the sign ofcolums is homogeneous:
-    #         # (inspired by the package dfdb-rodbc)
-    #         signSCol <- sign( sCol )
-    #         testSign <- !(sum( signSCol ) %in% (c(1,-1)*length(sCol))) 
-    #         #
-    #         if( testSign )
-    #         {   #
-    #             stop( "When 'sCol' is integers/index, it must be either all positive or all negative" ) 
-    #         }   #
-    #         #
-    #         # Get column names:
-    #         colsList <- edbColnames( edb, tableName = tableName ) 
-    #         #
-    #         # Test that the range of values does not exceed the number of columns
-    #         testRange <- abs( sCol ) %in% 1:length( colsList ) 
-    #         #
-    #         if( !all(testRange) ) # Positive index
-    #         {   #
-    #             stop( "When 'sCol' is integers/index, it can't be 0 or bigger than the number of columns." ) 
-    #         }   #
-    #         #
-    #         # Transform indexes into column names
-    #         if( all(as.logical(signSCol)) == 1 ) # Positive index
-    #         {   #
-    #             sCol <- colsList[ sCol ] 
-    #         }else{ # Negative index
-    #             sCol <- colsList[ !(colsList %in% colsList[ sCol ]) ] 
-    #         }   #
-    #         #
-    #         # Wrap and concatenate column names for SQL
-    #         selectWhat <- paste( sep="", "`", sCol, "`" ) 
-    #         #
-    #         selectWhat <- paste( sCol, collapse = ", " ) 
-    #     }else{ 
-    #         if( is.logical( sCol ) )
-    #         {   #
-    #             # Get column names:
-    #             colsList <- edbColnames( edb, tableName = tableName ) 
-    #             #
-    #             if( length(sCol) != length(colsList) )
-    #             {   #
-    #                 stop( "When 'sCol' is logical, it must be the same length as the number of columns in the table." ) 
-    #             }   #
-    #             #
-    #             sCol <- colsList[ sCol ]
-    #             #
-    #             # Wrap and concatenate column names for SQL
-    #             selectWhat <- paste( sep="", "`", sCol, "`" ) 
-    #             #
-    #             selectWhat <- paste( sCol, collapse = ", " ) 
-    #         }else{ 
-    #             if( is.character( sCol ) )
-    #             {   #
-    #                 # Wrap and concatenate column names for SQL
-    #                 selectWhat <- paste( sep="", "`", sCol, "`" ) 
-    #                 #
-    #                 selectWhat <- paste( sCol, collapse = ", " ) 
-    #             }else{ 
-    #                 stop( "class(sCol) must be numerical/integer, logical or character." )
-    #             }   #
-    #         }   #
-    #     }   #
-    # }else{ 
-    #     selectWhat <- "*"
-    # }   #
     # 
     # Prepare the 1st series of constrains:
     sRow <- .edb.sRow( # Create row constrains
@@ -554,67 +482,6 @@ edbRead.RODBC_MySQL <- function(# Read all or part of a table in a MySQL databas
         charQ   = "\"", 
         colQ    = c("`","`") 
     )   #
-    # 
-    # if( length(sRow) != 0 ) 
-    # {   #
-    #     if( class(sRow) != "list" ){ 
-    #         stop("'sRow' must be a list.")
-    #     }   #
-    #     #
-    #     sRowLength <- length( sRow ) 
-    #     sRowNames  <- names( sRow ) 
-    #     #
-    #     if( length( sRowNames ) != sRowLength )
-    #     {   #
-    #         stop( "(column) names are missing in 'sRow'." ) 
-    #     }   #
-    #     #
-    #     selSQL  <- names(sRow) == "SQL"
-    #     sRowSQL <- sRow[ selSQL ]  
-    #     sRow    <- sRow[ !selSQL ] 
-    #     #
-    #     if( length(sRow) > 0 ){ 
-    #         sRow <- lapply( 
-    #             X   = 1:length(sRow), 
-    #             FUN = function(X){ 
-    #                 const <- sRow[[ X ]] 
-    #                 #
-    #                 if( class(const) == "character" ) 
-    #                 {   #
-    #                     const <- paste( "\"", const, "\"", sep = "" ) 
-    #                 }   #
-    #                 #
-    #                 const <- paste( 
-    #                     sep = "", 
-    #                     "(`", sRowNames[ X ], "` = ", 
-    #                     const, ")" 
-    #                 )   #
-    #                 #
-    #                 const <- paste( const, collapse = " OR " )
-    #                 #
-    #                 const <- paste( "(", const, ")", sep = "" )  
-    #                 #
-    #                 return( const ) 
-    #              }  #
-    #         )   #
-    #     }else{ 
-    #         sRow <- NULL 
-    #     }   #
-    #     #
-    #     if( length(sRowSQL) ){
-    #         sRowSQL <- paste( "(", sRowSQL, ")", sep = "" )
-    #     }   # 
-    #     #
-    #     sRowOp <- paste( " ", sRowOp, " ", sep = "" ) 
-    #     #
-    #     sRow <- c( unlist(sRow), sRowSQL ) 
-    #     #
-    #     sRow <- paste( unlist( sRow ), collapse = sRowOp ) 
-    #     #
-    #     sRow <- paste( "WHERE", sRow, sep = " " ) 
-    # }else{ 
-    #     sRow <- NULL 
-    # }   #
     #
     # DISTINCT statement
     distinct <- ifelse(distinct,"DISTINCT ","")
@@ -1532,67 +1399,6 @@ edbDelete.RODBC_MySQL <- function(# Delete all or some rows in a table in a MySQ
         colQ    = c("`","`") 
     )   #
     #
-    # if( length(sRow) != 0 ) 
-    # {   #
-    #     if( class(sRow) != "list" ){ 
-    #         stop("'sRow' must be a list.")
-    #     }   #
-    #     #
-    #     sRowLength <- length( sRow ) 
-    #     sRowNames  <- names( sRow ) 
-    #     #
-    #     if( length( sRowNames ) != sRowLength )
-    #     {   #
-    #         stop( "(column) names are missing in 'sRow'." ) 
-    #     }   #
-    #     #
-    #     selSQL  <- names(sRow) == "SQL"
-    #     sRowSQL <- sRow[ selSQL ]  
-    #     sRow    <- sRow[ !selSQL ] 
-    #     #
-    #     if( length(sRow) > 0 ){ 
-    #         sRow <- lapply( 
-    #             X   = 1:length(sRow), 
-    #             FUN = function(X){ 
-    #                 const <- sRow[[ X ]] 
-    #                 #
-    #                 if( class(const) == "character" ) 
-    #                 {   #
-    #                     const <- paste( "\"", const, "\"", sep = "" ) 
-    #                 }   #
-    #                 #
-    #                 const <- paste( 
-    #                     sep = "", 
-    #                     "(`", sRowNames[ X ], "` = ", 
-    #                     const, ")" 
-    #                 )   #
-    #                 #
-    #                 const <- paste( const, collapse = " OR " )
-    #                 #
-    #                 const <- paste( "(", const, ")", sep = "" )  
-    #                 #
-    #                 return( const ) 
-    #              }  #
-    #         )   #
-    #     }else{ 
-    #         sRow <- NULL 
-    #     }   #
-    #     #
-    #     if( length(sRowSQL) ){
-    #         sRowSQL <- paste( "(", sRowSQL, ")", sep = "" )
-    #     }   # 
-    #     #
-    #     sRowOp <- paste( " ", sRowOp, " ", sep = "" ) 
-    #     #
-    #     sRow <- c( unlist(sRow), sRowSQL ) 
-    #     #
-    #     sRow <- paste( unlist( sRow ), collapse = sRowOp ) 
-    #     #
-    #     sRow <- paste( "WHERE", sRow, sep = " " ) 
-    # }else{ 
-    #     sRow <- NULL 
-    # }   #
-    #
     # Create the full querry statement:
     statement <- paste( 
             sep = "", 
@@ -1782,10 +1588,10 @@ edbQuery.RODBC_MySQL <- function(# Send and retrieve a query in a SQLite databas
 ### formatCol = list("DATE"=as.Date) will apply the function 
 ### \link{as.Date} to the column "DATE".
 
- testFiles=TRUE,  
-### Single logical. Should the function test for the presence 
-### (file.exist()) of the needed files in the folder before trying 
-### to fetch information from the database? 
+#  testFiles=TRUE,  
+# ### Single logical. Should the function test for the presence 
+# ### (file.exist()) of the needed files in the folder before trying 
+# ### to fetch information from the database? 
 
  verbose=FALSE, 
 ### Single logical. If TRUE, information on what is done are output 
@@ -1795,10 +1601,10 @@ edbQuery.RODBC_MySQL <- function(# Send and retrieve a query in a SQLite databas
 ### Additional parameters to be passed to \code{link[RODBC]{sqlQuery}}.
 
 ){  #
-    if( testFiles ) 
-    {   # Check if the database files is present:
-        easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
-    }   #
+#     if( testFiles ) 
+#     {   # Check if the database files is present:
+#         easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+#     }   #
     #
     if( verbose ){ 
         cat( "SQL statement:\n" ) 
