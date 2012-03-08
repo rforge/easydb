@@ -1,3 +1,12 @@
+VERSION 0.6.4 
+
+  2012/03/08 added function and methods for edbQuery() 
+  2012/03/08 Improved edbNRow() and edbDim() that were unefficient 
+             on very large databases (now use SQL COUNT(*)) 
+  2012/03/08 added hidden functions .edb.sRow() and .edb.sCol() 
+             to format SQL code for rows and column selection 
+             (now same code for all databases) 
+
 VERSION 0.6.3 
 
   2011/01/20 fixed a bug in edbLog() (writing mode was sometimes 

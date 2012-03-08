@@ -1,3 +1,4 @@
+- Add tests for edbQuery() and edbNRow with non NULL 'sRow'
 - Testthat (run & complete with dates)
 - Complete the vignette
   - Retrieve IDs

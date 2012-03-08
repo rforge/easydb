@@ -13,3 +13,10 @@ msg <- tools::texi2dvi(
     texinputs   = getwd() 
 )   # 
 
+file.remove( list.files( getwd(), "\\.tex$", full.names = TRUE ) )
+file.remove( list.files( getwd(), "\\.bib.bak$", full.names = TRUE ) )
+file.remove( list.files( getwd(), "\\.R$", full.names = TRUE ) )
+
+library("tools")
+res <- compactPDF( paths = getwd(), gs_quality = "ebook" ) # paste(sep="",file.name.root,".pdf") 
+res 

@@ -22,7 +22,7 @@ verbose = FALSE,
   \item{tableName}{Single character string. Name of the table to read in 'edb'.}
   \item{sRow}{A list of named items. List of contrains/criterion to be applied 
 on \code{tableName} to retrieve a subset of rows. Each item in 
-\code{rowC} must be named after the columns on which the constrain 
+\code{sRow} must be named after the columns on which the constrain 
 apply. The (vector of) value(s) of each items are the possible values 
 that can be retrieved. Values can be character or numeric. If NULL 
 (the default), all values are returned.}

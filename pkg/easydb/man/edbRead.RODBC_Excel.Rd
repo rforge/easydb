@@ -166,7 +166,7 @@ if( testODBC ){
     # - Number of columns:
     edbNCol( edb = myDb, tableName = "WRB_SOIL_GROUP" ) 
     # - Number of rows:
-    edbNCol( edb = myDb, tableName = "WRB_SOIL_GROUP" ) 
+    edbNRow( edb = myDb, tableName = "WRB_SOIL_GROUP" ) 
     # - Dimensions:
     edbDim( edb = myDb, tableName = "WRB_SOIL_GROUP" ) 
     

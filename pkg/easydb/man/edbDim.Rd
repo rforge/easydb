@@ -13,7 +13,7 @@ tableName,
   \item{edb}{An object of class 'edb', such as returned by \code{\link{edb}}.}
   \item{tableName}{Single character string. Name of the table to read in 'edb'.}
   \item{\dots}{Additional parameters to be passed to class-specific method. See 
-\code{methods("edbColnames")} and \code{methods("edbRead")}.}
+\code{methods("edbColnames")} and \code{methods("edbNRow")}.}
 }
 
 

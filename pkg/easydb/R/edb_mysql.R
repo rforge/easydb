@@ -466,139 +466,155 @@ edbRead.RODBC_MySQL <- function(# Read all or part of a table in a MySQL databas
 
 ){  #
     # Prepare the list of columns to choose in the table:
-    if( length(sCol) != 0 )
-    {   #
-        if( is.numeric( sCol ) ) # Index selection
-        {   #
-            sCol <- as.integer( sCol ) 
-            #
-            # Test that the sign ofcolums is homogeneous:
-            # (inspired by the package dfdb-rodbc)
-            signSCol <- sign( sCol )
-            testSign <- !(sum( signSCol ) %in% (c(1,-1)*length(sCol))) 
-            #
-            if( testSign )
-            {   #
-                stop( "When 'sCol' is integers/index, it must be either all positive or all negative" ) 
-            }   #
-            #
-            # Get column names:
-            colsList <- edbColnames( edb, tableName = tableName ) 
-            #
-            # Test that the range of values does not exceed the number of columns
-            testRange <- abs( sCol ) %in% 1:length( colsList ) 
-            #
-            if( !all(testRange) ) # Positive index
-            {   #
-                stop( "When 'sCol' is integers/index, it can't be 0 or bigger than the number of columns." ) 
-            }   #
-            #
-            # Transform indexes into column names
-            if( all(as.logical(signSCol)) == 1 ) # Positive index
-            {   #
-                sCol <- colsList[ sCol ] 
-            }else{ # Negative index
-                sCol <- colsList[ !(colsList %in% colsList[ sCol ]) ] 
-            }   #
-            #
-            # Wrap and concatenate column names for SQL
-            selectWhat <- paste( sep="", "[", sCol, "]" ) 
-            #
-            selectWhat <- paste( sCol, collapse = ", " ) 
-        }else{ 
-            if( is.logical( sCol ) )
-            {   #
-                # Get column names:
-                colsList <- edbColnames( edb, tableName = tableName ) 
-                #
-                if( length(sCol) != length(colsList) )
-                {   #
-                    stop( "When 'sCol' is logical, it must be the same length as the number of columns in the table." ) 
-                }   #
-                #
-                sCol <- colsList[ sCol ]
-                #
-                # Wrap and concatenate column names for SQL
-                selectWhat <- paste( sep="", "`", sCol, "`" ) 
-                #
-                selectWhat <- paste( sCol, collapse = ", " ) 
-            }else{ 
-                if( is.character( sCol ) )
-                {   #
-                    # Wrap and concatenate column names for SQL
-                    selectWhat <- paste( sep="", "`", sCol, "`" ) 
-                    #
-                    selectWhat <- paste( sCol, collapse = ", " ) 
-                }else{ 
-                    stop( "class(sCol) must be numerical/integer, logical or character." )
-                }   #
-            }   #
-        }   #
-    }else{ 
-        selectWhat <- "*"
-    }   #
+    selectWhat <- .edb.sCol( 
+        edb       = edb, 
+        sCol      = sCol, 
+        tableName = tableName, 
+        colQ = c("`","`") 
+    )   #
+    sCol       <- selectWhat[[ "sCol" ]] 
+    selectWhat <- selectWhat[[ "selectWhat" ]] 
+    #
+    # if( length(sCol) != 0 )
+    # {   #
+    #     if( is.numeric( sCol ) ) # Index selection
+    #     {   #
+    #         sCol <- as.integer( sCol ) 
+    #         #
+    #         # Test that the sign ofcolums is homogeneous:
+    #         # (inspired by the package dfdb-rodbc)
+    #         signSCol <- sign( sCol )
+    #         testSign <- !(sum( signSCol ) %in% (c(1,-1)*length(sCol))) 
+    #         #
+    #         if( testSign )
+    #         {   #
+    #             stop( "When 'sCol' is integers/index, it must be either all positive or all negative" ) 
+    #         }   #
+    #         #
+    #         # Get column names:
+    #         colsList <- edbColnames( edb, tableName = tableName ) 
+    #         #
+    #         # Test that the range of values does not exceed the number of columns
+    #         testRange <- abs( sCol ) %in% 1:length( colsList ) 
+    #         #
+    #         if( !all(testRange) ) # Positive index
+    #         {   #
+    #             stop( "When 'sCol' is integers/index, it can't be 0 or bigger than the number of columns." ) 
+    #         }   #
+    #         #
+    #         # Transform indexes into column names
+    #         if( all(as.logical(signSCol)) == 1 ) # Positive index
+    #         {   #
+    #             sCol <- colsList[ sCol ] 
+    #         }else{ # Negative index
+    #             sCol <- colsList[ !(colsList %in% colsList[ sCol ]) ] 
+    #         }   #
+    #         #
+    #         # Wrap and concatenate column names for SQL
+    #         selectWhat <- paste( sep="", "`", sCol, "`" ) 
+    #         #
+    #         selectWhat <- paste( sCol, collapse = ", " ) 
+    #     }else{ 
+    #         if( is.logical( sCol ) )
+    #         {   #
+    #             # Get column names:
+    #             colsList <- edbColnames( edb, tableName = tableName ) 
+    #             #
+    #             if( length(sCol) != length(colsList) )
+    #             {   #
+    #                 stop( "When 'sCol' is logical, it must be the same length as the number of columns in the table." ) 
+    #             }   #
+    #             #
+    #             sCol <- colsList[ sCol ]
+    #             #
+    #             # Wrap and concatenate column names for SQL
+    #             selectWhat <- paste( sep="", "`", sCol, "`" ) 
+    #             #
+    #             selectWhat <- paste( sCol, collapse = ", " ) 
+    #         }else{ 
+    #             if( is.character( sCol ) )
+    #             {   #
+    #                 # Wrap and concatenate column names for SQL
+    #                 selectWhat <- paste( sep="", "`", sCol, "`" ) 
+    #                 #
+    #                 selectWhat <- paste( sCol, collapse = ", " ) 
+    #             }else{ 
+    #                 stop( "class(sCol) must be numerical/integer, logical or character." )
+    #             }   #
+    #         }   #
+    #     }   #
+    # }else{ 
+    #     selectWhat <- "*"
+    # }   #
     # 
     # Prepare the 1st series of constrains:
-    if( length(sRow) != 0 ) 
-    {   #
-        if( class(sRow) != "list" ){ 
-            stop("'sRow' must be a list.")
-        }   #
-        #
-        sRowLength <- length( sRow ) 
-        sRowNames  <- names( sRow ) 
-        #
-        if( length( sRowNames ) != sRowLength )
-        {   #
-            stop( "(column) names are missing in 'sRow'." ) 
-        }   #
-        #
-        selSQL  <- names(sRow) == "SQL"
-        sRowSQL <- sRow[ selSQL ]  
-        sRow    <- sRow[ !selSQL ] 
-        #
-        if( length(sRow) > 0 ){ 
-            sRow <- lapply( 
-                X   = 1:length(sRow), 
-                FUN = function(X){ 
-                    const <- sRow[[ X ]] 
-                    #
-                    if( class(const) == "character" ) 
-                    {   #
-                        const <- paste( "\"", const, "\"", sep = "" ) 
-                    }   #
-                    #
-                    const <- paste( 
-                        sep = "", 
-                        "(`", sRowNames[ X ], "` = ", 
-                        const, ")" 
-                    )   #
-                    #
-                    const <- paste( const, collapse = " OR " )
-                    #
-                    const <- paste( "(", const, ")", sep = "" )  
-                    #
-                    return( const ) 
-                 }  #
-            )   #
-        }else{ 
-            sRow <- NULL 
-        }   #
-        #
-        if( length(sRowSQL) ){
-            sRowSQL <- paste( "(", sRowSQL, ")", sep = "" )
-        }   # 
-        #
-        sRowOp <- paste( " ", sRowOp, " ", sep = "" ) 
-        #
-        sRow <- c( unlist(sRow), sRowSQL ) 
-        #
-        sRow <- paste( unlist( sRow ), collapse = sRowOp ) 
-        #
-        sRow <- paste( "WHERE", sRow, sep = " " ) 
-    }else{ 
-        sRow <- NULL 
-    }   #
+    sRow <- .edb.sRow( # Create row constrains
+        sRow    = sRow, 
+        sRowOp  = sRowOp, 
+        charQ   = "\"", 
+        colQ    = c("`","`") 
+    )   #
+    # 
+    # if( length(sRow) != 0 ) 
+    # {   #
+    #     if( class(sRow) != "list" ){ 
+    #         stop("'sRow' must be a list.")
+    #     }   #
+    #     #
+    #     sRowLength <- length( sRow ) 
+    #     sRowNames  <- names( sRow ) 
+    #     #
+    #     if( length( sRowNames ) != sRowLength )
+    #     {   #
+    #         stop( "(column) names are missing in 'sRow'." ) 
+    #     }   #
+    #     #
+    #     selSQL  <- names(sRow) == "SQL"
+    #     sRowSQL <- sRow[ selSQL ]  
+    #     sRow    <- sRow[ !selSQL ] 
+    #     #
+    #     if( length(sRow) > 0 ){ 
+    #         sRow <- lapply( 
+    #             X   = 1:length(sRow), 
+    #             FUN = function(X){ 
+    #                 const <- sRow[[ X ]] 
+    #                 #
+    #                 if( class(const) == "character" ) 
+    #                 {   #
+    #                     const <- paste( "\"", const, "\"", sep = "" ) 
+    #                 }   #
+    #                 #
+    #                 const <- paste( 
+    #                     sep = "", 
+    #                     "(`", sRowNames[ X ], "` = ", 
+    #                     const, ")" 
+    #                 )   #
+    #                 #
+    #                 const <- paste( const, collapse = " OR " )
+    #                 #
+    #                 const <- paste( "(", const, ")", sep = "" )  
+    #                 #
+    #                 return( const ) 
+    #              }  #
+    #         )   #
+    #     }else{ 
+    #         sRow <- NULL 
+    #     }   #
+    #     #
+    #     if( length(sRowSQL) ){
+    #         sRowSQL <- paste( "(", sRowSQL, ")", sep = "" )
+    #     }   # 
+    #     #
+    #     sRowOp <- paste( " ", sRowOp, " ", sep = "" ) 
+    #     #
+    #     sRow <- c( unlist(sRow), sRowSQL ) 
+    #     #
+    #     sRow <- paste( unlist( sRow ), collapse = sRowOp ) 
+    #     #
+    #     sRow <- paste( "WHERE", sRow, sep = " " ) 
+    # }else{ 
+    #     sRow <- NULL 
+    # }   #
     #
     # DISTINCT statement
     distinct <- ifelse(distinct,"DISTINCT ","")
@@ -1509,66 +1525,73 @@ edbDelete.RODBC_MySQL <- function(# Delete all or some rows in a table in a MySQ
 
 ){  # 
     # Prepare the 1st series of constrains:
-    if( length(sRow) != 0 ) 
-    {   #
-        if( class(sRow) != "list" ){ 
-            stop("'sRow' must be a list.")
-        }   #
-        #
-        sRowLength <- length( sRow ) 
-        sRowNames  <- names( sRow ) 
-        #
-        if( length( sRowNames ) != sRowLength )
-        {   #
-            stop( "(column) names are missing in 'sRow'." ) 
-        }   #
-        #
-        selSQL  <- names(sRow) == "SQL"
-        sRowSQL <- sRow[ selSQL ]  
-        sRow    <- sRow[ !selSQL ] 
-        #
-        if( length(sRow) > 0 ){ 
-            sRow <- lapply( 
-                X   = 1:length(sRow), 
-                FUN = function(X){ 
-                    const <- sRow[[ X ]] 
-                    #
-                    if( class(const) == "character" ) 
-                    {   #
-                        const <- paste( "\"", const, "\"", sep = "" ) 
-                    }   #
-                    #
-                    const <- paste( 
-                        sep = "", 
-                        "(`", sRowNames[ X ], "` = ", 
-                        const, ")" 
-                    )   #
-                    #
-                    const <- paste( const, collapse = " OR " )
-                    #
-                    const <- paste( "(", const, ")", sep = "" )  
-                    #
-                    return( const ) 
-                 }  #
-            )   #
-        }else{ 
-            sRow <- NULL 
-        }   #
-        #
-        if( length(sRowSQL) ){
-            sRowSQL <- paste( "(", sRowSQL, ")", sep = "" )
-        }   # 
-        #
-        sRowOp <- paste( " ", sRowOp, " ", sep = "" ) 
-        #
-        sRow <- c( unlist(sRow), sRowSQL ) 
-        #
-        sRow <- paste( unlist( sRow ), collapse = sRowOp ) 
-        #
-        sRow <- paste( "WHERE", sRow, sep = " " ) 
-    }else{ 
-        sRow <- NULL 
-    }   #
+    sRow <- .edb.sRow( # Create row constrains
+        sRow    = sRow, 
+        sRowOp  = sRowOp, 
+        charQ   = "\"", 
+        colQ    = c("`","`") 
+    )   #
+    #
+    # if( length(sRow) != 0 ) 
+    # {   #
+    #     if( class(sRow) != "list" ){ 
+    #         stop("'sRow' must be a list.")
+    #     }   #
+    #     #
+    #     sRowLength <- length( sRow ) 
+    #     sRowNames  <- names( sRow ) 
+    #     #
+    #     if( length( sRowNames ) != sRowLength )
+    #     {   #
+    #         stop( "(column) names are missing in 'sRow'." ) 
+    #     }   #
+    #     #
+    #     selSQL  <- names(sRow) == "SQL"
+    #     sRowSQL <- sRow[ selSQL ]  
+    #     sRow    <- sRow[ !selSQL ] 
+    #     #
+    #     if( length(sRow) > 0 ){ 
+    #         sRow <- lapply( 
+    #             X   = 1:length(sRow), 
+    #             FUN = function(X){ 
+    #                 const <- sRow[[ X ]] 
+    #                 #
+    #                 if( class(const) == "character" ) 
+    #                 {   #
+    #                     const <- paste( "\"", const, "\"", sep = "" ) 
+    #                 }   #
+    #                 #
+    #                 const <- paste( 
+    #                     sep = "", 
+    #                     "(`", sRowNames[ X ], "` = ", 
+    #                     const, ")" 
+    #                 )   #
+    #                 #
+    #                 const <- paste( const, collapse = " OR " )
+    #                 #
+    #                 const <- paste( "(", const, ")", sep = "" )  
+    #                 #
+    #                 return( const ) 
+    #              }  #
+    #         )   #
+    #     }else{ 
+    #         sRow <- NULL 
+    #     }   #
+    #     #
+    #     if( length(sRowSQL) ){
+    #         sRowSQL <- paste( "(", sRowSQL, ")", sep = "" )
+    #     }   # 
+    #     #
+    #     sRowOp <- paste( " ", sRowOp, " ", sep = "" ) 
+    #     #
+    #     sRow <- c( unlist(sRow), sRowSQL ) 
+    #     #
+    #     sRow <- paste( unlist( sRow ), collapse = sRowOp ) 
+    #     #
+    #     sRow <- paste( "WHERE", sRow, sep = " " ) 
+    # }else{ 
+    #     sRow <- NULL 
+    # }   #
     #
     # Create the full querry statement:
     statement <- paste( 
@@ -1732,6 +1755,150 @@ edbDrop.RODBC_MySQL <- function(# Drop a table in a MySQL database (referenced b
     #
     return( out ) 
 ### The function returns the requested table. 
+}   #
+
+
+
+
+
+
+edbQuery.RODBC_MySQL <- function(# Send and retrieve a query in a SQLite database (referenced by 'edb').
+### Send and retrieve a query in a SQLIte database (referenced by 'edb'). 
+
+##seealso<< \code{link{edb}}, \code{link[RODBC]{sqlQuery}}.
+
+ edb,
+### An object of class 'edb', such as returned by \code{\link{edb}}.
+
+ statement, 
+### Single character string. SQL statement / SQL query to be passed 
+### to \code{link[RODBC]{sqlQuery}}.
+
+ formatCol=NULL, 
+### If not NULL, a named list of functions to be applied to certain columns 
+### after the data has been extracted from the database. The name of each list 
+### item gives the column to process, and the value of each item gives the 
+### function that must be applied. For instance 
+### formatCol = list("DATE"=as.Date) will apply the function 
+### \link{as.Date} to the column "DATE".
+
+ testFiles=TRUE,  
+### Single logical. Should the function test for the presence 
+### (file.exist()) of the needed files in the folder before trying 
+### to fetch information from the database? 
+
+ verbose=FALSE, 
+### Single logical. If TRUE, information on what is done are output 
+### on screen.
+
+ ...
+### Additional parameters to be passed to \code{link[RODBC]{sqlQuery}}.
+
+){  #
+    if( testFiles ) 
+    {   # Check if the database files is present:
+        easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+    }   #
+    #
+    if( verbose ){ 
+        cat( "SQL statement:\n" ) 
+        cat( statement, sep = "\n" )
+    }   #
+    #
+    # require( "DBI" ) # in .edbOperation.RSQLite_SQLite
+    # require( "RSQLite" ) 
+    #
+    msg <- sprintf( 
+        fmt = "Error detected in sqlQuery() in edbQuery.RSQLite_SQLite() (database: %s). Database connection closed.\n", 
+        edb[["dbName"]] 
+    )   #
+    #
+    qRes <- easydb:::.edbOperation.RODBC_MySQL(
+        edb          = edb, 
+        expr         = expression({ 
+            exprOut <- sqlQuery( 
+                channel = dbCon, 
+                ...  
+            )   #
+        }),  #
+        # maxCon     = 1,  
+        errorClasses = c("simpleError","error","condition"),  
+        stopOnError  = TRUE, 
+        errorMessage = msg, 
+        # ... options for expr:
+        query        = statement, 
+        ... 
+    )   #
+    #
+    qRes <- easydb:::.formatCol( 
+        x         = qRes, 
+        formatCol = formatCol 
+    )   #
+    #
+    return( qRes ) 
+### The function returns the requested table. 
+}   #
+
+
+
+
+
+
+edbNRow.RODBC_MySQL <- function(# Retrieve the number of rows of a table in a database (referenced by 'edb').
+### Retrieve the number of rows of a table in a database (referenced by 
+### 'edb'). Notice that the methods do NOT retrieve the full table to 
+### get its column names (so it should work even if the table is big).
+
+##seealso<< \code{link{edb}}, \code{link{edbColnames}}, 
+## \code{link{edbRead}}.
+
+ edb,
+### An object of class 'edb', such as returned by \code{\link{edb}}.
+
+ tableName, 
+### Single character string. Name of the table to read in 'edb'.
+
+ sRow=NULL, 
+### A list of named items. List of contrains/criterion to be applied 
+### on a table to retrieve a subset of rows. Each item in 
+### \code{sRow} must be named after the columns on which the constrain 
+### apply. The (vector of) value(s) of each items are the possible values 
+### that can be retrieved. Values can be character or numeric. If NULL 
+### (the default), all values are returned.
+
+ sRowOp=c("AND","OR")[1], 
+### A single character string. Operator to be used to combine multiple 
+### constrains in sRow. Possible values are "OR" or "AND". Default value 
+### is "AND".
+
+ verbose=FALSE, 
+### Single logical. If TRUE, information on what is done are output 
+### on screen.
+
+ ...
+### Additional parameters to be passed to \code{edbQuery}.
+
+){  # Retrieve the dimention of the table:
+    statement <- paste("SELECT Count(*) FROM `", tableName, "`", sep = "" ) 
+    #
+    sRow <- .edb.sRow( # Create row constrains
+        sRow    = sRow, 
+        sRowOp  = sRowOp, 
+        charQ   = "\"", 
+        colQ    = c("`","`") 
+    )   #
+    #
+    # statement and row constrains:
+    statement <- paste( statement, sRow, "\n", sep = " " ) 
+    #
+    if( verbose ){ cat( statement ) } 
+    #
+    # Send the query and fetch the result:
+    nbrow <- edbQuery( edb = edb, statement = statement, ... )[,] 
+    #
+    return( nbrow ) 
+### Returns the number of rows in the table, rows that respect \code{sRow} 
+### constrains if \code{sRow} is not \code{NULL}.
 }   #
 
 
