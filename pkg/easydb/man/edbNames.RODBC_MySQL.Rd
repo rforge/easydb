@@ -21,9 +21,9 @@ and if FALSE returns a detailed table as in
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbRead.RODBC_MySQL}}, 
-\code{link{edbWrite.RODBC_MySQL}}, 
-\code{link{edbColnames.RRODBC_MySQL}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbRead.RODBC_MySQL}}, 
+\code{\link{edbWrite.RODBC_MySQL}}, 
+\code{\link{edbColnames.RODBC_MySQL}}.}
 \examples{library( "easydb" ) 
 
 

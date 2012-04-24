@@ -1,3 +1,14 @@
+VERSION 0.6.5 
+
+  2012/04/24 Internal modification of SQL query formulation 
+             for row constrains: used 'IN' statement instead 
+             of multiple 'OR' statements.
+  2012/04/24 Added examples for edbQuery() and edbNRow() with 
+             row constrains.
+  2012/04/24 Added a check in the examples using RODBC for 
+             Access and Excel, as it only works for 32-bits 
+             systems (not on 64-bits).
+
 VERSION 0.6.4 
 
   2012/03/08 added function and methods for edbQuery() 

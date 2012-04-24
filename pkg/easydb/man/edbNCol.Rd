@@ -22,6 +22,6 @@ tableName,
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbColnames}}, 
-\code{link{edbRead}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbColnames}}, 
+\code{\link{edbRead}}.}
 \examples{# See edbRead for an example.}

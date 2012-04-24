@@ -99,6 +99,9 @@ if( (Sys.info()[[ "sysname" ]] == "Windows") & testMySQL ){
     edbNCol( edb = myDb, tableName = "WRB_SOIL_GROUP" ) 
     # - Number of rows:
     edbNRow( edb = myDb, tableName = "WRB_SOIL_GROUP" ) 
+    # - Number of rows, with constrains: 
+    edbNRow( edb = myDb, tableName = "WRB_SOIL_GROUP", 
+        sRow = list("ABBREV" = c("AC","AB")) ) 
     # - Dimensions:
     edbDim( edb = myDb, tableName = "WRB_SOIL_GROUP" ) 
     

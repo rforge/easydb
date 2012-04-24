@@ -33,17 +33,18 @@ full details on the columns (see \code{onlyNames}).}
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbRead.RODBC_Access}}, 
-\code{link{edbwrite.RODBC_Access}}, 
-\code{link{edbNames.RODBC_Access}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbRead.RODBC_Access}}, 
+\code{\link{edbWrite.RODBC_Access}}, 
+\code{\link{edbNames.RODBC_Access}}.}
 \examples{library( "easydb" ) 
 library( "RODBC" ) 
 
 
 
 # System check. Ingnore this or set 'testODBC' to TRUE 
-testODBC <- (class(try(odbcDataSources())) != "try-error") & 
-            (Sys.info()[[ "sysname" ]] == "Windows")
+testODBC <- (class(try(odbcDataSources())) != "try-error") & # Check (R)ODBC 
+            (Sys.info()[[ "sysname" ]] == "Windows") &       # Only MS Windows
+            (.Machine$"sizeof.pointer" == 4)                 # Only 32-bits 
 
 
 

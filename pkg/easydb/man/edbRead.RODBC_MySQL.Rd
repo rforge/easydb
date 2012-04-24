@@ -67,9 +67,9 @@ on screen.}
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbWrite.RODBC_MySQL}}, 
-\code{link{edbNames.RODBC_MySQL}}, 
-\code{link{edbColnames.RODBC_MySQL}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbWrite.RODBC_MySQL}}, 
+\code{\link{edbNames.RODBC_MySQL}}, 
+\code{\link{edbColnames.RODBC_MySQL}}.}
 \examples{library( "easydb" ) 
 
 
@@ -171,6 +171,9 @@ if( (Sys.info()[[ "sysname" ]] == "Windows") & testMySQL ){
     edbNCol( edb = myDb, tableName = "WRB_SOIL_GROUP" ) 
     # - Number of rows:
     edbNRow( edb = myDb, tableName = "WRB_SOIL_GROUP" ) 
+    # - Number of rows, with constrains: 
+    edbNRow( edb = myDb, tableName = "WRB_SOIL_GROUP", 
+        sRow = list("ABBREV" = c("AC","AB")) ) 
     # - Dimensions:
     edbDim( edb = myDb, tableName = "WRB_SOIL_GROUP" ) 
     

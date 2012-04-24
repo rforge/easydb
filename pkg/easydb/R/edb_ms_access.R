@@ -147,9 +147,9 @@ edbColnames.RODBC_Access <- function(# Retrieve column names of a table in a MS 
 ### Notice that the method does NOT retrieve the full table to 
 ### get its column names (so it should work even if the table is big).
 
-##seealso<< \code{link{edb}}, \code{link{edbRead.RODBC_Access}}, 
-## \code{link{edbwrite.RODBC_Access}}, 
-## \code{link{edbNames.RODBC_Access}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbRead.RODBC_Access}}, 
+## \code{\link{edbWrite.RODBC_Access}}, 
+## \code{\link{edbNames.RODBC_Access}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -216,9 +216,9 @@ edbColnames.RODBC_Access <- function(# Retrieve column names of a table in a MS 
 edbRead.RODBC_Access <- function(# Read all or part of a table in a MS Access database (referenced by 'edb').
 ### Read all or part of a table in a MS Access database (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbWrite.RODBC_Access}}, 
-## \code{link{edbNames.RODBC_Access}}, 
-## \code{link{edbColnames.RODBC_Access}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbWrite.RODBC_Access}}, 
+## \code{\link{edbNames.RODBC_Access}}, 
+## \code{\link{edbColnames.RODBC_Access}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -401,9 +401,9 @@ edbRead.RODBC_Access <- function(# Read all or part of a table in a MS Access da
 edbNames.RODBC_Access <- function(# Retrieve table names in a MS Access database (referenced by 'edb').
 ### Retrieve table names in a MS Access database (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbRead.RODBC_Access}}, 
-## \code{link{edbWrite.RODBC_Access}}, 
-## \code{link{edbColnames.RRODBC_Access}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbRead.RODBC_Access}}, 
+## \code{\link{edbWrite.RODBC_Access}}, 
+## \code{\link{edbColnames.RODBC_Access}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -465,9 +465,9 @@ edbNames.RODBC_Access <- function(# Retrieve table names in a MS Access database
 ### database (referenced by 'edb'). Wrapper for 
 ### \code{\link{edbRead.RODBC_Access}}. 
 
-##seealso<< \code{link{edb}}, \code{link{edbRead.RODBC_Access}}, 
-## \code{link{edbNames.RODBC_Access}}, 
-## \code{link{edbColnames.RODBC_Access}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbRead.RODBC_Access}}, 
+## \code{\link{edbNames.RODBC_Access}}, 
+## \code{\link{edbColnames.RODBC_Access}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -578,9 +578,9 @@ edbNames.RODBC_Access <- function(# Retrieve table names in a MS Access database
 edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a database (referenced by 'edb').
 ### Write data in a table in a MS Access database (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbRead.RODBC_Access}}, 
-## \code{link{edbNames.RODBC_Access}}, 
-## \code{link{edbColnames.RODBC_Access}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbRead.RODBC_Access}}, 
+## \code{\link{edbNames.RODBC_Access}}, 
+## \code{\link{edbColnames.RODBC_Access}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -1231,9 +1231,9 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
 edbDelete.RODBC_Access <- function(# Delete all or some rows in a table in a MS Access database (referenced by 'edb').
 ### Delete all or some rows in a table in a MS Access database (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbWrite.RODBC_Access}}, 
-## \code{link{edbNames.RODBC_Access}}, 
-## \code{link{edbColnames.RODBC_Access}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbWrite.RODBC_Access}}, 
+## \code{\link{edbNames.RODBC_Access}}, 
+## \code{\link{edbColnames.RODBC_Access}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -1363,9 +1363,9 @@ edbDelete.RODBC_Access <- function(# Delete all or some rows in a table in a MS 
 edbDrop.RODBC_Access <- function(# Drop a table in a MS Access database (referenced by 'edb').
 ### Drop a table in a MS Access database (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbWrite.RODBC_Access}}, 
-## \code{link{edbNames.RODBC_Access}}, 
-## \code{link{edbColnames.RODBC_Access}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbWrite.RODBC_Access}}, 
+## \code{\link{edbNames.RODBC_Access}}, 
+## \code{\link{edbColnames.RODBC_Access}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -1472,7 +1472,7 @@ edbDrop.RODBC_Access <- function(# Drop a table in a MS Access database (referen
 edbQuery.RODBC_Access <- function(# Send and retrieve a query in an MS Access database (referenced by 'edb').
 ### Send and retrieve a query in a SQLIte database (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link[RODBC]{sqlQuery}}.
+##seealso<< \code{\link{edb}}, \code{link[RODBC]{sqlQuery}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -1556,8 +1556,8 @@ edbNRow.RODBC_Access <- function(# Retrieve the number of rows of a table in a d
 ### 'edb'). Notice that the methods do NOT retrieve the full table to 
 ### get its column names (so it should work even if the table is big).
 
-##seealso<< \code{link{edb}}, \code{link{edbColnames}}, 
-## \code{link{edbRead}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbColnames}}, 
+## \code{\link{edbRead}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.

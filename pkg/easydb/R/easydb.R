@@ -48,8 +48,8 @@ edb <- function(# Create a database description (class 'edb'), to be used by oth
 ### so the function won't give a warning if the database does not 
 ### exists (yet) or if some parameters are wrong.
 
-##seealso<< \code{link{edbRead}}, \code{link{edbWrite}}, 
-## \code{link{edbNames}}, \code{link{edbColnames}}.
+##seealso<< \code{\link{edbRead}}, \code{\link{edbWrite}}, 
+## \code{\link{edbNames}}, \code{\link{edbColnames}}.
 
  dbType, 
 ### Single character string. Type of the database to describe, 
@@ -212,8 +212,8 @@ edbRead <- function(# Read all or part of a table in a database (referenced by '
 ### Generic function that call class-specific method corresponding 
 ### to the class of the \code{edb} object provided.
 
-##seealso<< \code{link{edb}}, \code{link{edbWrite}}, 
-## \code{link{edbNames}}, \code{link{edbColnames}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbWrite}}, 
+## \code{\link{edbNames}}, \code{\link{edbColnames}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -467,9 +467,9 @@ edbColnames <- function(# Retrieve column names of a table in a database (refere
 ### Notice that the methods do NOT retrieve the full table to 
 ### get its column names (so it should work even if the table is big).
 
-##seealso<< \code{link{edb}}, \code{link{edbRead}}, 
-## \code{link{edbWrite}}, 
-## \code{link{edbNames}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbRead}}, 
+## \code{\link{edbWrite}}, 
+## \code{\link{edbNames}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -496,9 +496,9 @@ edbColnames.RSQLite_SQLite <- function(# Retrieve column names of a table in a S
 ### Notice that the method does NOT retrieve the full table to 
 ### get its column names (so it should work even if the table is big).
 
-##seealso<< \code{link{edb}}, \code{link{edbRead.RSQLite_SQLite}}, 
-## \code{link{edbwrite.RSQLite_SQLite}}, 
-## \code{link{edbNames.RSQLite_SQLite}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbRead.RSQLite_SQLite}}, 
+## \code{\link{edbWrite.RSQLite_SQLite}}, 
+## \code{\link{edbNames.RSQLite_SQLite}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -607,15 +607,23 @@ edbColnames.RSQLite_SQLite <- function(# Retrieve column names of a table in a S
                         const <- paste( charQ, const, charQ, sep = "" ) 
                     }   #
                     #
-                    const <- paste( 
+                    const <- paste( const, collapse = ", " ) 
+                    #
+                    const <- paste( # modified 2012/04/24 
                         sep = "", 
-                        "(", colQ[1], sRowNames[ X ], colQ[2], " = ", 
-                        const, ")" 
+                        "(", colQ[1], sRowNames[ X ], colQ[2], " IN (", 
+                        const, "))" 
                     )   #
                     #
-                    const <- paste( const, collapse = " OR " )
+                    # const <- paste( 
+                    #     sep = "", 
+                    #     "(", colQ[1], sRowNames[ X ], colQ[2], " = ", 
+                    #     const, ")" 
+                    # )   #
+                    # #
+                    # const <- paste( const, collapse = " OR " )
                     #
-                    const <- paste( "(", const, ")", sep = "" )  
+                    # const <- paste( "(", const, ")", sep = "" )  
                     #
                     return( const ) 
                  }  #
@@ -765,9 +773,9 @@ edbColnames.RSQLite_SQLite <- function(# Retrieve column names of a table in a S
 edbRead.RSQLite_SQLite <- function(# Read all or part of a table in a SQLIte database (referenced by 'edb').
 ### Read all or part of a table in a SQLIte database (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbWrite.RSQLite_SQLite}}, 
-## \code{link{edbNames.RSQLite_SQLite}}, 
-## \code{link{edbColnames.RSQLite_SQLite}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbWrite.RSQLite_SQLite}}, 
+## \code{\link{edbNames.RSQLite_SQLite}}, 
+## \code{\link{edbColnames.RSQLite_SQLite}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -955,9 +963,9 @@ edbNames <- function(# Retrieve table names in a database (referenced by 'edb').
 ### Generic function that call class-specific method corresponding 
 ### to the class of the \code{edb} object provided.
 
-##seealso<< \code{link{edb}}, \code{link{edbRead}}, 
-## \code{link{edbWrite}}, 
-## \code{link{edbColnames}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbRead}}, 
+## \code{\link{edbWrite}}, 
+## \code{\link{edbColnames}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -978,9 +986,9 @@ edbNames <- function(# Retrieve table names in a database (referenced by 'edb').
 edbNames.RSQLite_SQLite <- function(# Retrieve table names in a SQLIte database (referenced by 'edb').
 ### Retrieve table names in a SQLite database (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbRead.RSQLite_SQLite}}, 
-## \code{link{edbWrite.RSQLite_SQLite}}, 
-## \code{link{edbColnames.RSQLite_SQLite}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbRead.RSQLite_SQLite}}, 
+## \code{\link{edbWrite.RSQLite_SQLite}}, 
+## \code{\link{edbColnames.RSQLite_SQLite}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -1038,8 +1046,8 @@ edbNames.RSQLite_SQLite <- function(# Retrieve table names in a SQLIte database 
 # ### call class-specific method corresponding to the class of the 
 # ### \code{edb} object provided.
 
-# ##seealso<< \code{link{edb}}, \code{link{edbRead}}, 
-# ## \code{link{edbNames}}, \code{link{edbColnames}}.
+# ##seealso<< \code{\link{edb}}, \code{\link{edbRead}}, 
+# ## \code{\link{edbNames}}, \code{\link{edbColnames}}.
 
 #  edb,
 # ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -1089,9 +1097,9 @@ edbNames.RSQLite_SQLite <- function(# Retrieve table names in a SQLIte database 
 ### database (referenced by 'edb'). Wrapper for 
 ### \code{\link{edbRead.RSQLite_SQLite}}. 
 
-##seealso<< \code{link{edb}}, \code{link{edbRead.RSQLite_SQLite}}, 
-## \code{link{edbNames.RSQLite_SQLite}}, 
-## \code{link{edbColnames.RSQLite_SQLite}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbRead.RSQLite_SQLite}}, 
+## \code{\link{edbNames.RSQLite_SQLite}}, 
+## \code{\link{edbColnames.RSQLite_SQLite}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -1185,8 +1193,8 @@ edbWrite <- function(# Write data in a table in a database (referenced by 'edb')
 ### Generic function that call class-specific method corresponding 
 ### to the class of the \code{edb} object provided.
 
-##seealso<< \code{link{edb}}, \code{link{edbRead}}, 
-## \code{link{edbNames}}, \code{link{edbColnames}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbRead}}, 
+## \code{\link{edbNames}}, \code{\link{edbColnames}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -1467,9 +1475,9 @@ edbWrite <- function(# Write data in a table in a database (referenced by 'edb')
 edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database (referenced by 'edb').
 ### Write data in a table in a SQLite database (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbRead.RSQLite_SQLite}}, 
-## \code{link{edbNames.RSQLite_SQLite}}, 
-## \code{link{edbColnames.RSQLite_SQLite}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbRead.RSQLite_SQLite}}, 
+## \code{\link{edbNames.RSQLite_SQLite}}, 
+## \code{\link{edbColnames.RSQLite_SQLite}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -2153,9 +2161,9 @@ edbDelete <- function(# Delete all or some rows in a table in a database (refere
 ### Generic function that call class-specific method corresponding 
 ### to the class of the \code{edb} object provided.
 
-##seealso<< \code{link{edb}}, \code{link{edbWrite}}, 
-## \code{link{edbNames}}, \code{link{edbColnames}}, 
-## \code{link{edbRead}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbWrite}}, 
+## \code{\link{edbNames}}, \code{\link{edbColnames}}, 
+## \code{\link{edbRead}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -2209,9 +2217,9 @@ edbDelete <- function(# Delete all or some rows in a table in a database (refere
 edbDelete.RSQLite_SQLite <- function(# Delete all or some rows in a table in a SQLIte database (referenced by 'edb').
 ### Delete all or some rows in a table in a SQLIte database (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbWrite.RSQLite_SQLite}}, 
-## \code{link{edbNames.RSQLite_SQLite}}, 
-## \code{link{edbColnames.RSQLite_SQLite}}, \code{link{edbRead.RSQLite_SQLite}}
+##seealso<< \code{\link{edb}}, \code{\link{edbWrite.RSQLite_SQLite}}, 
+## \code{\link{edbNames.RSQLite_SQLite}}, 
+## \code{\link{edbColnames.RSQLite_SQLite}}, \code{\link{edbRead.RSQLite_SQLite}}
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -2346,9 +2354,9 @@ edbDrop <- function(# Drop a table in a database (referenced by 'edb').
 ### Generic function that call class-specific method corresponding 
 ### to the class of the \code{edb} object provided.
 
-##seealso<< \code{link{edb}}, \code{link{edbWrite}}, 
-## \code{link{edbNames}}, \code{link{edbColnames}}, 
-## \code{link{edbRead}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbWrite}}, 
+## \code{\link{edbNames}}, \code{\link{edbColnames}}, 
+## \code{\link{edbRead}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -2389,9 +2397,9 @@ edbDrop <- function(# Drop a table in a database (referenced by 'edb').
 edbDrop.RSQLite_SQLite <- function(# Delete all or some rows in a table in a SQLIte database (referenced by 'edb').
 ### Delete all or some rows in a table in a SQLIte database (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbWrite.RSQLite_SQLite}}, 
-## \code{link{edbNames.RSQLite_SQLite}}, 
-## \code{link{edbColnames.RSQLite_SQLite}}, \code{link{edbRead.RSQLite_SQLite}}
+##seealso<< \code{\link{edb}}, \code{\link{edbWrite.RSQLite_SQLite}}, 
+## \code{\link{edbNames.RSQLite_SQLite}}, 
+## \code{\link{edbColnames.RSQLite_SQLite}}, \code{\link{edbRead.RSQLite_SQLite}}
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -2505,8 +2513,8 @@ edbDim <- function(# Retrieve the dimension of a table in a database (referenced
 ### 'edb'). Notice that the methods do NOT retrieve the full table to 
 ### get its column names (so it should work even if the table is big).
 
-##seealso<< \code{link{edb}}, \code{link{edbColnames}}, 
-## \code{link{edbRead}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbColnames}}, 
+## \code{\link{edbRead}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -2552,8 +2560,8 @@ edbNRow <- function(# Retrieve the number of rows of a table in a database (refe
 ### 'edb'). Notice that the methods do NOT retrieve the full table to 
 ### get its column names (so it should work even if the table is big).
 
-##seealso<< \code{link{edb}}, \code{link{edbColnames}}, 
-## \code{link{edbRead}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbColnames}}, 
+## \code{\link{edbRead}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -2579,8 +2587,8 @@ edbNRow.RSQLite_SQLite <- function(# Retrieve the number of rows of a table in a
 ### 'edb'). Notice that the methods do NOT retrieve the full table to 
 ### get its column names (so it should work even if the table is big).
 
-##seealso<< \code{link{edb}}, \code{link{edbColnames}}, 
-## \code{link{edbRead}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbColnames}}, 
+## \code{\link{edbRead}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -2641,8 +2649,8 @@ edbNCol <- function(# Retrieve the number of columns of a table in a database (r
 ### 'edb'). Notice that the methods do NOT retrieve the full table to 
 ### get its column names (so it should work even if the table is big).
 
-##seealso<< \code{link{edb}}, \code{link{edbColnames}}, 
-## \code{link{edbRead}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbColnames}}, 
+## \code{\link{edbRead}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -2685,8 +2693,8 @@ edbLog <- function(# Write an operation "log" (used when modifying the database)
 ### edbWrite()). This is not version control, and this is not comprehensive 
 ### operation log.
 
-##seealso<<\code{link{edb}}, \code{link{edbWrite}}, \code{link{edbDelete}}, 
-## \code{link{edbDrop}}.
+##seealso<<\code{\link{edb}}, \code{\link{edbWrite}}, \code{\link{edbDelete}}, 
+## \code{\link{edbDrop}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -2807,8 +2815,8 @@ edbQuery <- function(# Read all or part of a table in a database (referenced by 
 ### Generic function that call class-specific method corresponding 
 ### to the class of the \code{edb} object provided.
 
-##seealso<< \code{link{edb}}, \code{link{edbWrite}}, 
-## \code{link{edbNames}}, \code{link{edbColnames}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbWrite}}, 
+## \code{\link{edbNames}}, \code{\link{edbColnames}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -2841,7 +2849,7 @@ edbQuery <- function(# Read all or part of a table in a database (referenced by 
 edbQuery.RSQLite_SQLite <- function(# Send and retrieve a query in a SQLIte database (referenced by 'edb').
 ### Send and retrieve a query in a SQLIte database (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link[DBI]{dbGetQuery}}.
+##seealso<< \code{\link{edb}}, \code{link[DBI]{dbGetQuery}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.

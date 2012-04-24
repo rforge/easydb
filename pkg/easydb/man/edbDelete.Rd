@@ -46,9 +46,9 @@ See the arguments below and \code{\link{edbLog}} for more details.}
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbWrite}}, 
-\code{link{edbNames}}, \code{link{edbColnames}}, 
-\code{link{edbRead}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbWrite}}, 
+\code{\link{edbNames}}, \code{\link{edbColnames}}, 
+\code{\link{edbRead}}.}
 \examples{# See related methods for detailed examples:
 # (for example ?edbDelete.RSQLite_SQLite) 
 require( "easydb" ) 

@@ -51,7 +51,7 @@ on screen.}
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbRead.RODBC_Excel}}, 
-\code{link{edbNames.RODBC_Excel}}, 
-\code{link{edbColnames.RODBC_Excel}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbRead.RODBC_Excel}}, 
+\code{\link{edbNames.RODBC_Excel}}, 
+\code{\link{edbColnames.RODBC_Excel}}.}
 

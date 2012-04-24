@@ -336,9 +336,9 @@ edbColnames.RODBC_MySQL <- function(# Retrieve column names of a table in a MySQ
 ### Notice that the method does NOT retrieve the full table to 
 ### get its column names (so it should work even if the table is big).
 
-##seealso<< \code{link{edb}}, \code{link{edbRead.RODBC_MySQL}}, 
-## \code{link{edbwrite.RODBC_MySQL}}, 
-## \code{link{edbNames.RODBC_MySQL}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbRead.RODBC_MySQL}}, 
+## \code{\link{edbWrite.RODBC_MySQL}}, 
+## \code{\link{edbNames.RODBC_MySQL}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -396,9 +396,9 @@ edbColnames.RODBC_MySQL <- function(# Retrieve column names of a table in a MySQ
 edbRead.RODBC_MySQL <- function(# Read all or part of a table in a MySQL database (referenced by 'edb').
 ### Read all or part of a table in a MySQL database (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbWrite.RODBC_MySQL}}, 
-## \code{link{edbNames.RODBC_MySQL}}, 
-## \code{link{edbColnames.RODBC_MySQL}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbWrite.RODBC_MySQL}}, 
+## \code{\link{edbNames.RODBC_MySQL}}, 
+## \code{\link{edbColnames.RODBC_MySQL}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -576,9 +576,9 @@ edbRead.RODBC_MySQL <- function(# Read all or part of a table in a MySQL databas
 edbNames.RODBC_MySQL <- function(# Retrieve table names in a MySQL database (referenced by 'edb').
 ### Retrieve table names in a MySQL database (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbRead.RODBC_MySQL}}, 
-## \code{link{edbWrite.RODBC_MySQL}}, 
-## \code{link{edbColnames.RRODBC_MySQL}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbRead.RODBC_MySQL}}, 
+## \code{\link{edbWrite.RODBC_MySQL}}, 
+## \code{\link{edbColnames.RODBC_MySQL}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -631,9 +631,9 @@ edbNames.RODBC_MySQL <- function(# Retrieve table names in a MySQL database (ref
 ### database (referenced by 'edb'). Wrapper for 
 ### \code{\link{edbRead.RODBC_MySQL}}. 
 
-##seealso<< \code{link{edb}}, \code{link{edbRead.RODBC_MySQL}}, 
-## \code{link{edbNames.RODBC_MySQL}}, 
-## \code{link{edbColnames.RODBC_MySQL}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbRead.RODBC_MySQL}}, 
+## \code{\link{edbNames.RODBC_MySQL}}, 
+## \code{\link{edbColnames.RODBC_MySQL}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -744,9 +744,9 @@ edbNames.RODBC_MySQL <- function(# Retrieve table names in a MySQL database (ref
 edbWrite.RODBC_MySQL <- function(# Write data in a MySQL table in a database (referenced by 'edb').
 ### Write data in a table in a MySQL database (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbRead.RODBC_MySQL}}, 
-## \code{link{edbNames.RODBC_MySQL}}, 
-## \code{link{edbColnames.RODBC_MySQL}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbRead.RODBC_MySQL}}, 
+## \code{\link{edbNames.RODBC_MySQL}}, 
+## \code{\link{edbColnames.RODBC_MySQL}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -1338,9 +1338,9 @@ edbWrite.RODBC_MySQL <- function(# Write data in a MySQL table in a database (re
 edbDelete.RODBC_MySQL <- function(# Delete all or some rows in a table in a MySQL database (referenced by 'edb').
 ### Delete all or some rows in a table in a MySQL database (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbWrite.RODBC_MySQL}}, 
-## \code{link{edbNames.RODBC_MySQL}}, 
-## \code{link{edbColnames.RODBC_MySQL}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbWrite.RODBC_MySQL}}, 
+## \code{\link{edbNames.RODBC_MySQL}}, 
+## \code{\link{edbColnames.RODBC_MySQL}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -1466,9 +1466,9 @@ edbDelete.RODBC_MySQL <- function(# Delete all or some rows in a table in a MySQ
 edbDrop.RODBC_MySQL <- function(# Drop a table in a MySQL database (referenced by 'edb').
 ### Drop a table in a MySQL database (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbWrite.RODBC_MySQL}}, 
-## \code{link{edbNames.RODBC_MySQL}}, 
-## \code{link{edbColnames.RODBC_MySQL}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbWrite.RODBC_MySQL}}, 
+## \code{\link{edbNames.RODBC_MySQL}}, 
+## \code{\link{edbColnames.RODBC_MySQL}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -1571,7 +1571,7 @@ edbDrop.RODBC_MySQL <- function(# Drop a table in a MySQL database (referenced b
 edbQuery.RODBC_MySQL <- function(# Send and retrieve a query in a SQLite database (referenced by 'edb').
 ### Send and retrieve a query in a SQLIte database (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link[RODBC]{sqlQuery}}.
+##seealso<< \code{\link{edb}}, \code{link[RODBC]{sqlQuery}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -1655,8 +1655,8 @@ edbNRow.RODBC_MySQL <- function(# Retrieve the number of rows of a table in a da
 ### 'edb'). Notice that the methods do NOT retrieve the full table to 
 ### get its column names (so it should work even if the table is big).
 
-##seealso<< \code{link{edb}}, \code{link{edbColnames}}, 
-## \code{link{edbRead}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbColnames}}, 
+## \code{\link{edbRead}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.

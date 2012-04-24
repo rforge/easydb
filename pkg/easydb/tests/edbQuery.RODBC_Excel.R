@@ -33,12 +33,23 @@ if( testODBC ){
     
     
     ### Use the database:
+
+    ## Read data in a table in the database
     
-    # List the column names in a table:
-    edbColnames( edb = myDb, tableName = "WRB_SOIL_GROUP" ) 
+    # Retrieve a table (data.frame style subsetting):
+    myDb[ "WRB_SOIL_GROUP" ]
     
+    # Same operation, but with edbRead()
+    edbRead( edb = myDb, tableName = "WRB_SOIL_GROUP" ) 
     
+    # Retrieve part of a table (with row constrains)
+    myDb[ "WRB_SOIL_GROUP", list("ABBREV" = c("AC","CR","PL")), 
+        verbose = TRUE ] 
     
+    # Same operation, but with edbQuery() 
+    edbQuery( edb = myDb, statement = 
+        "SELECT * FROM [WRB_SOIL_GROUP] WHERE [ABBREV] IN ('AC','CR','PL')" ) 
+
     ### Clean-up
     file.remove( "soils.xls" ) 
     
@@ -65,11 +76,22 @@ if( testODBC ){
     
     
     ### Use the database:
+
+    ## Read data in a table in the database
     
-    # List the column names in a table:
-    edbColnames( edb = myDb2, tableName = "WRB_SOIL_GROUP" ) 
+    # Retrieve a table (data.frame style subsetting):
+    myDb2[ "WRB_SOIL_GROUP" ]
     
+    # Same operation, but with edbRead()
+    edbRead( edb = myDb2, tableName = "WRB_SOIL_GROUP" ) 
     
+    # Retrieve part of a table (with row constrains)
+    myDb2[ "WRB_SOIL_GROUP", list("ABBREV" = c("AC","CR","PL")), 
+        verbose = TRUE ] 
+    
+    # Same operation, but with edbQuery() 
+    edbQuery( edb = myDb2, statement = 
+        "SELECT * FROM [WRB_SOIL_GROUP] WHERE [ABBREV] IN ('AC','CR','PL')" ) 
     
     ### Clean-up
     file.remove( "soils.xlsx" ) 

@@ -21,9 +21,9 @@ to fetch information from the database? }
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbRead.RSQLite_SQLite}}, 
-\code{link{edbWrite.RSQLite_SQLite}}, 
-\code{link{edbColnames.RSQLite_SQLite}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbRead.RSQLite_SQLite}}, 
+\code{\link{edbWrite.RSQLite_SQLite}}, 
+\code{\link{edbColnames.RSQLite_SQLite}}.}
 \examples{library( "easydb" ) 
 
 

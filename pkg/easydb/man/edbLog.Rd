@@ -54,6 +54,6 @@ safe.}
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbWrite}}, \code{link{edbDelete}}, 
-\code{link{edbDrop}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbWrite}}, \code{\link{edbDelete}}, 
+\code{\link{edbDrop}}.}
 

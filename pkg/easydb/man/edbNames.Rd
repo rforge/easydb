@@ -20,9 +20,9 @@ edbNames(edb,
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbRead}}, 
-\code{link{edbWrite}}, 
-\code{link{edbColnames}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbRead}}, 
+\code{\link{edbWrite}}, 
+\code{\link{edbColnames}}.}
 \examples{# See related methods for detailed examples:
 # (for example ?edbNames.RSQLite_SQLite) 
 require( "easydb" ) 

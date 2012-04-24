@@ -29,9 +29,9 @@ full details on the columns (see \code{onlyNames}).}
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbRead.RODBC_MySQL}}, 
-\code{link{edbwrite.RODBC_MySQL}}, 
-\code{link{edbNames.RODBC_MySQL}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbRead.RODBC_MySQL}}, 
+\code{\link{edbWrite.RODBC_MySQL}}, 
+\code{\link{edbNames.RODBC_MySQL}}.}
 \examples{library( "easydb" ) 
 
 

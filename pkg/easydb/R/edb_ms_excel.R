@@ -147,9 +147,9 @@ edbColnames.RODBC_Excel <- function(# Retrieve column names of a table in a MS E
 ### Notice that the method does NOT retrieve the full table to 
 ### get its column names (so it should work even if the table is big).
 
-##seealso<< \code{link{edb}}, \code{link{edbRead.RODBC_Excel}}, 
-## \code{link{edbwrite.RODBC_Excel}}, 
-## \code{link{edbNames.RODBC_Excel}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbRead.RODBC_Excel}}, 
+## \code{\link{edbWrite.RODBC_Excel}}, 
+## \code{\link{edbNames.RODBC_Excel}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -217,9 +217,9 @@ edbColnames.RODBC_Excel <- function(# Retrieve column names of a table in a MS E
 edbRead.RODBC_Excel <- function(# Read all or part of a table in a MS Excel file (referenced by 'edb').
 ### Read all or part of a table in a MS Excel file (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbWrite.RODBC_Excel}}, 
-## \code{link{edbNames.RODBC_Excel}}, 
-## \code{link{edbColnames.RODBC_Excel}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbWrite.RODBC_Excel}}, 
+## \code{\link{edbNames.RODBC_Excel}}, 
+## \code{\link{edbColnames.RODBC_Excel}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -402,9 +402,9 @@ edbRead.RODBC_Excel <- function(# Read all or part of a table in a MS Excel file
 edbNames.RODBC_Excel <- function(# Retrieve table names in a MS Excel file (referenced by 'edb').
 ### Retrieve table names in a MS Excel file (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbRead.RODBC_Excel}}, 
-## \code{link{edbWrite.RODBC_Excel}}, 
-## \code{link{edbColnames.RRODBC_Excel}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbRead.RODBC_Excel}}, 
+## \code{\link{edbWrite.RODBC_Excel}}, 
+## \code{\link{edbColnames.RODBC_Excel}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -467,9 +467,9 @@ edbNames.RODBC_Excel <- function(# Retrieve table names in a MS Excel file (refe
 ### database (referenced by 'edb'). Wrapper for 
 ### \code{\link{edbRead.RODBC_Excel}}. 
 
-##seealso<< \code{link{edb}}, \code{link{edbRead.RODBC_Excel}}, 
-## \code{link{edbNames.RODBC_Excel}}, 
-## \code{link{edbColnames.RODBC_Excel}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbRead.RODBC_Excel}}, 
+## \code{\link{edbNames.RODBC_Excel}}, 
+## \code{\link{edbColnames.RODBC_Excel}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -580,9 +580,9 @@ edbNames.RODBC_Excel <- function(# Retrieve table names in a MS Excel file (refe
 edbWrite.RODBC_Excel <- function(# Write data in a MS Excel table in a database (referenced by 'edb').
 ### Write data in a table in a MS Excel file (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbRead.RODBC_Excel}}, 
-## \code{link{edbNames.RODBC_Excel}}, 
-## \code{link{edbColnames.RODBC_Excel}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbRead.RODBC_Excel}}, 
+## \code{\link{edbNames.RODBC_Excel}}, 
+## \code{\link{edbColnames.RODBC_Excel}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -1236,9 +1236,9 @@ edbDelete.RODBC_Excel <- function(# NOT SUPORTED FOR EXCEL. Delete all or some r
 ### NOT SUPORTED FOR EXCEL. Delete all or some rows in a table 
 ### in a MS Excel file (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbWrite.RODBC_Excel}}, 
-## \code{link{edbNames.RODBC_Excel}}, 
-## \code{link{edbColnames.RODBC_Excel}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbWrite.RODBC_Excel}}, 
+## \code{\link{edbNames.RODBC_Excel}}, 
+## \code{\link{edbColnames.RODBC_Excel}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -1302,9 +1302,9 @@ edbDelete.RODBC_Excel <- function(# NOT SUPORTED FOR EXCEL. Delete all or some r
 edbDrop.RODBC_Excel <- function(# Drop a table in a MS Excel file (referenced by 'edb').
 ### Drop a table in a MS Excel file (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link{edbWrite.RODBC_Excel}}, 
-## \code{link{edbNames.RODBC_Excel}}, 
-## \code{link{edbColnames.RODBC_Excel}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbWrite.RODBC_Excel}}, 
+## \code{\link{edbNames.RODBC_Excel}}, 
+## \code{\link{edbColnames.RODBC_Excel}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -1414,7 +1414,7 @@ edbDrop.RODBC_Excel <- function(# Drop a table in a MS Excel file (referenced by
 edbQuery.RODBC_Excel <- function(# Send and retrieve a query in an MS Excel database (referenced by 'edb').
 ### Send and retrieve a query in a SQLIte database (referenced by 'edb'). 
 
-##seealso<< \code{link{edb}}, \code{link[RODBC]{sqlQuery}}.
+##seealso<< \code{\link{edb}}, \code{link[RODBC]{sqlQuery}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.
@@ -1498,8 +1498,8 @@ edbNRow.RODBC_Excel <- function(# Retrieve the number of rows of a table in a da
 ### 'edb'). Notice that the methods do NOT retrieve the full table to 
 ### get its column names (so it should work even if the table is big).
 
-##seealso<< \code{link{edb}}, \code{link{edbColnames}}, 
-## \code{link{edbRead}}.
+##seealso<< \code{\link{edb}}, \code{\link{edbColnames}}, 
+## \code{\link{edbRead}}.
 
  edb,
 ### An object of class 'edb', such as returned by \code{\link{edb}}.

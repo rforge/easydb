@@ -69,7 +69,7 @@ on screen.}
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbRead.RSQLite_SQLite}}, 
-\code{link{edbNames.RSQLite_SQLite}}, 
-\code{link{edbColnames.RSQLite_SQLite}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbRead.RSQLite_SQLite}}, 
+\code{\link{edbNames.RSQLite_SQLite}}, 
+\code{\link{edbColnames.RSQLite_SQLite}}.}
 

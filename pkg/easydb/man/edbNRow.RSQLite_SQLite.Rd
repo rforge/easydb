@@ -37,6 +37,6 @@ constrains if \code{sRow} is not \code{NULL}.}
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbColnames}}, 
-\code{link{edbRead}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbColnames}}, 
+\code{\link{edbRead}}.}
 

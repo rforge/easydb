@@ -85,9 +85,9 @@ If an error message is detected the function stops.}
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbRead.RODBC_MySQL}}, 
-\code{link{edbNames.RODBC_MySQL}}, 
-\code{link{edbColnames.RODBC_MySQL}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbRead.RODBC_MySQL}}, 
+\code{\link{edbNames.RODBC_MySQL}}, 
+\code{\link{edbColnames.RODBC_MySQL}}.}
 \examples{library( "easydb" ) 
 
 

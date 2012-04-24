@@ -51,7 +51,7 @@ on screen.}
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbRead.RODBC_MySQL}}, 
-\code{link{edbNames.RODBC_MySQL}}, 
-\code{link{edbColnames.RODBC_MySQL}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbRead.RODBC_MySQL}}, 
+\code{\link{edbNames.RODBC_MySQL}}, 
+\code{\link{edbColnames.RODBC_MySQL}}.}
 

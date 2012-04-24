@@ -24,9 +24,9 @@ tableName,
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbRead}}, 
-\code{link{edbWrite}}, 
-\code{link{edbNames}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbRead}}, 
+\code{\link{edbWrite}}, 
+\code{\link{edbNames}}.}
 \examples{# See related methods for detailed examples:
 # (for example ?edbColnames.RSQLite_SQLite) 
 require( "easydb" ) 

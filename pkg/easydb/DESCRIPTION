@@ -1,6 +1,6 @@
 Package: easydb
-Version: 0.6.4
-Date: 2012-03-08
+Version: 0.6.5
+Date: 2012-04-24
 Title: Simple database interface for SQLite, MySQL and MS Access.
 Author: Julien MOEYS <Julien.Moeys@mark.slu.se> 
 Maintainer: Julien MOEYS <Julien.Moeys@mark.slu.se> 

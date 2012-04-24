@@ -25,17 +25,18 @@ to fetch information from the database? }
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbRead.RODBC_Excel}}, 
-\code{link{edbWrite.RODBC_Excel}}, 
-\code{link{edbColnames.RRODBC_Excel}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbRead.RODBC_Excel}}, 
+\code{\link{edbWrite.RODBC_Excel}}, 
+\code{\link{edbColnames.RODBC_Excel}}.}
 \examples{library( "easydb" ) 
 library( "RODBC" ) 
 
 
 
 # System check. Ingnore this or set 'testODBC' to TRUE 
-testODBC <- (class(try(odbcDataSources())) != "try-error") & 
-            (Sys.info()[[ "sysname" ]] == "Windows")
+testODBC <- (class(try(odbcDataSources())) != "try-error") & # Check (R)ODBC 
+            (Sys.info()[[ "sysname" ]] == "Windows") &       # Only MS Windows
+            (.Machine$"sizeof.pointer" == 4)                 # Only 32-bits 
 
 
 

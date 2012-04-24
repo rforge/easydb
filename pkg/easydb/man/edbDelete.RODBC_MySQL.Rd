@@ -50,8 +50,8 @@ on screen.}
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbWrite.RODBC_MySQL}}, 
-\code{link{edbNames.RODBC_MySQL}}, 
-\code{link{edbColnames.RODBC_MySQL}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbWrite.RODBC_MySQL}}, 
+\code{\link{edbNames.RODBC_MySQL}}, 
+\code{\link{edbColnames.RODBC_MySQL}}.}
 \examples{# See ?edbWrite.RODBC_MySQL for an example
 }

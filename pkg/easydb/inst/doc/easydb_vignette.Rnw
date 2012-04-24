@@ -1078,5 +1078,23 @@ WORK ON PROGRESS!
 file.remove( sDb[["dbName"]] ) 
 @ 
 
+
+
+% +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+\section{Misc: Session info} 
+
+Information on R Session and packages versions (that were used to 
+build this vignette): 
+
+<<echo=TRUE,eval=TRUE>>= 
+sessionInfo() 
+packageVersion( pkg = "easydb" ) 
+# packageVersion( pkg = "RODBC" ) 
+packageVersion( pkg = "DBI" ) 
+packageVersion( pkg = "RSQLite" ) 
+@ 
+
+
+
 \bibliography{easydb_vignette} % no .bib extension here
 \end{document}

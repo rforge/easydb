@@ -30,6 +30,10 @@ formatCol = list("DATE"=as.Date) will apply the function
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbWrite}}, 
-\code{link{edbNames}}, \code{link{edbColnames}}.}
-
+\seealso{\code{\link{edb}}, \code{\link{edbWrite}}, 
+\code{\link{edbNames}}, \code{\link{edbColnames}}.}
+\examples{# See related methods for detailed examples:
+# (for example ?edbQuery.RSQLite_SQLite) 
+require( "easydb" ) 
+methods( "edbRead" )
+}

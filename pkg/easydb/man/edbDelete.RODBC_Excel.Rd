@@ -51,9 +51,9 @@ on screen.}
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbWrite.RODBC_Excel}}, 
-\code{link{edbNames.RODBC_Excel}}, 
-\code{link{edbColnames.RODBC_Excel}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbWrite.RODBC_Excel}}, 
+\code{\link{edbNames.RODBC_Excel}}, 
+\code{\link{edbColnames.RODBC_Excel}}.}
 \examples{# See ?edbWrite.RODBC_Excel 
 # Row deletion is not supported with (RODBC) Excel
 }

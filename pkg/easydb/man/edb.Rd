@@ -44,8 +44,8 @@ to connect to the database (internally).}
 
 
 
-\seealso{\code{link{edbRead}}, \code{link{edbWrite}}, 
-\code{link{edbNames}}, \code{link{edbColnames}}.}
+\seealso{\code{\link{edbRead}}, \code{\link{edbWrite}}, 
+\code{\link{edbNames}}, \code{\link{edbColnames}}.}
 \examples{library( "easydb" ) 
 
 

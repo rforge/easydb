@@ -67,9 +67,9 @@ on screen.}
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbWrite.RSQLite_SQLite}}, 
-\code{link{edbNames.RSQLite_SQLite}}, 
-\code{link{edbColnames.RSQLite_SQLite}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbWrite.RSQLite_SQLite}}, 
+\code{\link{edbNames.RSQLite_SQLite}}, 
+\code{\link{edbColnames.RSQLite_SQLite}}.}
 \examples{library( "easydb" ) 
 
 
@@ -158,6 +158,9 @@ myDb[
 edbNCol( edb = myDb, tableName = "WRB_SOIL_GROUP" ) 
 # - Number of rows:
 edbNRow( edb = myDb, tableName = "WRB_SOIL_GROUP" ) 
+# - Number of rows, with constrains: 
+edbNRow( edb = myDb, tableName = "WRB_SOIL_GROUP", 
+    sRow = list("ABBREV" = c("AC","AB")) ) 
 # - Dimensions:
 edbDim( edb = myDb, tableName = "WRB_SOIL_GROUP" ) 
 

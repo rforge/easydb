@@ -28,9 +28,9 @@ columns / fields of the original sqlite table.}
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbRead.RSQLite_SQLite}}, 
-\code{link{edbwrite.RSQLite_SQLite}}, 
-\code{link{edbNames.RSQLite_SQLite}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbRead.RSQLite_SQLite}}, 
+\code{\link{edbWrite.RSQLite_SQLite}}, 
+\code{\link{edbNames.RSQLite_SQLite}}.}
 \examples{library( "easydb" ) 
 
 

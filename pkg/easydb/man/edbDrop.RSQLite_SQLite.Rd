@@ -38,8 +38,8 @@ on screen.}
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbWrite.RSQLite_SQLite}}, 
-\code{link{edbNames.RSQLite_SQLite}}, 
-\code{link{edbColnames.RSQLite_SQLite}}, \code{link{edbRead.RSQLite_SQLite}}}
+\seealso{\code{\link{edb}}, \code{\link{edbWrite.RSQLite_SQLite}}, 
+\code{\link{edbNames.RSQLite_SQLite}}, 
+\code{\link{edbColnames.RSQLite_SQLite}}, \code{\link{edbRead.RSQLite_SQLite}}}
 \examples{# See ?edbWrite.RSQLite_SQLite for an example
 }

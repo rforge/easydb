@@ -51,7 +51,7 @@ on screen.}
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbRead.RODBC_Access}}, 
-\code{link{edbNames.RODBC_Access}}, 
-\code{link{edbColnames.RODBC_Access}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbRead.RODBC_Access}}, 
+\code{\link{edbNames.RODBC_Access}}, 
+\code{\link{edbColnames.RODBC_Access}}.}
 

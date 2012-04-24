@@ -58,8 +58,8 @@ statement and is equivalent to ordering the data in R with
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbWrite}}, 
-\code{link{edbNames}}, \code{link{edbColnames}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbWrite}}, 
+\code{\link{edbNames}}, \code{\link{edbColnames}}.}
 \examples{# See related methods for detailed examples:
 # (for example ?edbRead.RSQLite_SQLite) 
 require( "easydb" ) 

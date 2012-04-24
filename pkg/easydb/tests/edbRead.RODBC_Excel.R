@@ -4,8 +4,9 @@ library( "RODBC" )
 
 
 # System check. Ingnore this or set 'testODBC' to TRUE 
-testODBC <- (class(try(odbcDataSources())) != "try-error") & 
-            (Sys.info()[[ "sysname" ]] == "Windows")
+testODBC <- (class(try(odbcDataSources())) != "try-error") & # Check (R)ODBC 
+            (Sys.info()[[ "sysname" ]] == "Windows") &       # Only MS Windows
+            (.Machine$"sizeof.pointer" == 4)                 # Only 32-bits 
 
 
 
@@ -95,6 +96,9 @@ if( testODBC ){
     edbNCol( edb = myDb, tableName = "WRB_SOIL_GROUP" ) 
     # - Number of rows:
     edbNRow( edb = myDb, tableName = "WRB_SOIL_GROUP" ) 
+    # - Number of rows, with constrains: 
+    edbNRow( edb = myDb, tableName = "WRB_SOIL_GROUP", 
+        sRow = list("ABBREV" = c("AC","AB")) ) 
     # - Dimensions:
     edbDim( edb = myDb, tableName = "WRB_SOIL_GROUP" ) 
     

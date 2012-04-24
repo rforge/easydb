@@ -77,8 +77,8 @@ a bit (more) the function, but it may avoid some mistakes.}
 
 
 
-\seealso{\code{link{edb}}, \code{link{edbRead}}, 
-\code{link{edbNames}}, \code{link{edbColnames}}.}
+\seealso{\code{\link{edb}}, \code{\link{edbRead}}, 
+\code{\link{edbNames}}, \code{\link{edbColnames}}.}
 \examples{# See related methods for detailed examples:
 # (for example ?edbWrite.RSQLite_SQLite) 
 require( "easydb" ) 
