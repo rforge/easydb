@@ -515,7 +515,11 @@ edbNames.RODBC_Excel <- function(# Retrieve table names in a MS Excel file (refe
  ...
 ### Additional parameters to be passed to \code{dbGetQuery}.
 
-){  #
+){  
+    if( missing( edb ) ){ stop( "Argument 'edb' is missing, with no default" ) } 
+    
+    if( missing( tableName ) ){ stop( "Argument 'tableName' is missing, with no default" ) } 
+    
     tbl <- edbRead.RODBC_Excel(       
         edb       = edb, 
         tableName = tableName, 
@@ -527,9 +531,9 @@ edbNames.RODBC_Excel <- function(# Retrieve table names in a MS Excel file (refe
         distinct  = distinct, 
         ...
     )   #
-    #
+    
     return( tbl ) 
-}   #
+}   
 
 
 
@@ -1199,11 +1203,15 @@ edbWrite.RODBC_Excel <- function(# Write data in a MS Excel table in a database 
 ### is not NULL, then data must contain the column names given in 
 ### \code{sRow}.
 
-){  #
+){  
+    if( missing( edb ) ){ stop( "Argument 'edb' is missing, with no default" ) } 
+    
+    if( missing( tableName ) ){ stop( "Argument 'tableName' is missing, with no default" ) } 
+    
     if( !is.null(getKey) ){ 
          stop( "'getKey' must be NULL to use '[<-' methods." )
     }   #
-    #
+    
     res <- edbWrite.RODBC_Excel( 
         edb         = edb,
         tableName   = tableName, 
@@ -1215,17 +1223,17 @@ edbWrite.RODBC_Excel <- function(# Write data in a MS Excel table in a database 
         formatCol   = formatCol, 
         posixFormat = posixFormat, 
         dateFormat  = dateFormat, 
-#         logOp       = logOp, 
-#         logRandId   = logRandId, 
-#         logMsg      = logMsg, 
-#         logTableName= logTableName, 
-#         logCreateTableIfNotExist=logCreateTableIfNotExist, 
+        # logOp       = logOp, 
+        # logRandId   = logRandId, 
+        # logMsg      = logMsg, 
+        # logTableName= logTableName, 
+        # logCreateTableIfNotExist=logCreateTableIfNotExist, 
         parano      = parano, 
         ...
     )   #
-    #
+    
     return( edb ) 
-}   #
+}   
 
 
 

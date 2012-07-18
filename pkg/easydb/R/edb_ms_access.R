@@ -513,7 +513,11 @@ edbNames.RODBC_Access <- function(# Retrieve table names in a MS Access database
  ...
 ### Additional parameters to be passed to \code{dbGetQuery}.
 
-){  #
+){  
+    if( missing( edb ) ){ stop( "Argument 'edb' is missing, with no default" ) } 
+    
+    if( missing( tableName ) ){ stop( "Argument 'tableName' is missing, with no default" ) } 
+    
     tbl <- edbRead.RODBC_Access(       
         edb       = edb, 
         tableName = tableName, 
@@ -1195,7 +1199,11 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
 ### \code{!is.null(getKey)} (not the default). If \code{sRow} is not 
 ### NULL, then data must contain the column names given in \code{sRow}.
 
-){  #
+){  
+    if( missing( edb ) ){ stop( "Argument 'edb' is missing, with no default" ) } 
+    
+    if( missing( tableName ) ){ stop( "Argument 'tableName' is missing, with no default" ) } 
+    
     if( !is.null(getKey) ){ 
          stop( "'getKey' must be NULL to use '[<-' methods." )
     }   #
@@ -1211,17 +1219,17 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
         formatCol   = formatCol, 
         posixFormat = posixFormat, 
         dateFormat  = dateFormat, 
-#         logOp       = logOp, 
-#         logRandId   = logRandId, 
-#         logMsg      = logMsg, 
-#         logTableName= logTableName, 
-#         logCreateTableIfNotExist=logCreateTableIfNotExist, 
+        # logOp       = logOp, 
+        # logRandId   = logRandId, 
+        # logMsg      = logMsg, 
+        # logTableName= logTableName, 
+        # logCreateTableIfNotExist=logCreateTableIfNotExist, 
         parano      = parano, 
         ...
     )   #
     #
     return( edb ) 
-}   #
+}   
 
 
 

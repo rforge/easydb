@@ -33,7 +33,11 @@
 ### See help(".onLoad")
 
 ){  #
-    packageStartupMessage( "'easydb' package loaded. Type ?edb or help(package='easydb') for examples or help." ) 
+    msg <- sprintf( 
+        "'%s' package loaded. Type help(package='%s') for examples and help.", 
+        pkgname, pkgname ) 
+    
+    packageStartupMessage( msg ) 
 ### Does not return anything.
 }   #
 
@@ -96,16 +100,16 @@ edb <- function(# Create a database description (class 'edb'), to be used by oth
         "dbHost"       = dbHost, 
         "dbPort"       = dbPort  
     )   #
-    #
+    
     dotDot <- list(...) 
-    #
+    
     if( length( dotDot ) != 0 ) 
     {   #
         res <- c( res, dotDot ) 
     }   #
-    #
+    
     class( res ) <- c( "edb", dbType ) 
-    #
+    
     return( res ) 
 }   #
 
@@ -267,6 +271,10 @@ edbRead <- function(# Read all or part of a table in a database (referenced by '
 ### \code{methods("edbRead")}
 
 ){  #
+    if( missing( edb ) ){ stop( "Argument 'edb' is missing, with no default" ) } 
+    
+    if( missing( tableName ) ){ stop( "Argument 'tableName' is missing, with no default" ) } 
+    
     UseMethod( generic = "edbRead", object = edb ) 
 }   #
 
@@ -314,6 +322,10 @@ edbRead <- function(# Read all or part of a table in a database (referenced by '
 ### \code{methods("edbRead")}
 
 ){  #
+    if( missing( edb ) ){ stop( "Argument 'edb' is missing, with no default" ) } 
+    
+    if( missing( expr ) ){ stop( "Argument 'expr' is missing, with no default" ) } 
+    
     UseMethod( generic = ".edbOperation", object = edb ) 
 }   #
 
@@ -482,6 +494,10 @@ edbColnames <- function(# Retrieve column names of a table in a database (refere
 ### \code{methods("edbColnames")}
 
 ){  #
+    if( missing( edb ) ){ stop( "Argument 'edb' is missing, with no default" ) } 
+    
+    if( missing( tableName ) ){ stop( "Argument 'tableName' is missing, with no default" ) } 
+    
     UseMethod( generic = "edbColnames", object = edb ) 
 }   #
 
@@ -975,6 +991,8 @@ edbNames <- function(# Retrieve table names in a database (referenced by 'edb').
 ### \code{methods("edbColnames")}
 
 ){  #
+    if( missing( edb ) ){ stop( "Argument 'edb' is missing, with no default" ) } 
+    
     UseMethod( generic = "edbNames", object = edb ) 
 }   #
 
@@ -1166,6 +1184,10 @@ edbNames.RSQLite_SQLite <- function(# Retrieve table names in a SQLIte database 
 ### Additional parameters to be passed to \code{dbGetQuery}.
 
 ){  #
+    if( missing( edb ) ){ stop( "Argument 'edb' is missing, with no default" ) } 
+    
+    if( missing( tableName ) ){ stop( "Argument 'tableName' is missing, with no default" ) } 
+    
     tbl <- edbRead.RSQLite_SQLite(       
         edb       = edb, 
         tableName = tableName, 
@@ -1282,6 +1304,12 @@ edbWrite <- function(# Write data in a table in a database (referenced by 'edb')
 ### \code{methods("edbWrite")}
 
 ){  #
+    if( missing( edb ) ){ stop( "Argument 'edb' is missing, with no default" ) } 
+    
+    if( missing( tableName ) ){ stop( "Argument 'tableName' is missing, with no default" ) } 
+    
+    if( missing( data ) ){ stop( "Argument 'data' is missing, with no default" ) } 
+    
     UseMethod( generic = "edbWrite", object = edb ) 
 }   #
 
@@ -2125,8 +2153,12 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
 ){  #
     if( !is.null(getKey) ){ 
          stop( "'getKey' must be NULL to use '[<-' methods." )
-    }   #
-    #
+    }   
+    
+    if( missing( edb ) ){ stop( "Argument 'edb' is missing, with no default" ) } 
+    
+    if( missing( tableName ) ){ stop( "Argument 'tableName' is missing, with no default" ) } 
+    
     res <- edbWrite.RSQLite_SQLite( 
         edb         = edb,
         tableName   = tableName, 
@@ -2139,11 +2171,11 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
         formatCol   = formatCol, 
         posixFormat = posixFormat, 
         dateFormat  = dateFormat, 
-#         logOp       = logOp, 
-#         logRandId   = logRandId, 
-#         logMsg      = logMsg, 
-#         logTableName= logTableName, 
-#         logCreateTableIfNotExist=logCreateTableIfNotExist, 
+        # logOp       = logOp, 
+        # logRandId   = logRandId, 
+        # logMsg      = logMsg, 
+        # logTableName= logTableName, 
+        # logCreateTableIfNotExist=logCreateTableIfNotExist, 
         parano      = parano, 
         ...
     )   #
@@ -2206,6 +2238,10 @@ edbDelete <- function(# Delete all or some rows in a table in a database (refere
 ### \code{methods("edbDelete")}
 
 ){  #
+    if( missing( edb ) ){ stop( "Argument 'edb' is missing, with no default" ) } 
+    
+    if( missing( tableName ) ){ stop( "Argument 'tableName' is missing, with no default" ) } 
+    
     UseMethod( generic = "edbDelete", object = edb ) 
 }   #
 
@@ -2385,9 +2421,13 @@ edbDrop <- function(# Drop a table in a database (referenced by 'edb').
 ### Additional parameters to be passed to class-specific method. See 
 ### \code{methods("edbDelete")}
 
-){  #
+){  
+    if( missing( edb ) ){ stop( "Argument 'edb' is missing, with no default" ) } 
+    
+    if( missing( tableName ) ){ stop( "Argument 'tableName' is missing, with no default" ) } 
+
     UseMethod( generic = "edbDrop", object = edb ) 
-}   #
+}   
 
 
 
@@ -2526,27 +2566,32 @@ edbDim <- function(# Retrieve the dimension of a table in a database (referenced
 ### Additional parameters to be passed to class-specific method. See 
 ### \code{methods("edbColnames")} and \code{methods("edbNRow")}.
 
-){  # Retrieve the column names:
+){  
+    if( missing( edb ) ){ stop( "Argument 'edb' is missing, with no default" ) } 
+    
+    if( missing( tableName ) ){ stop( "Argument 'tableName' is missing, with no default" ) } 
+    
+    # Retrieve the column names:
     cn <- edbColnames( 
         edb       = edb, 
         tableName = tableName, 
         ...
     )   #
-    #
+    
     # Number of columns
     nbcol <- length( cn ) 
-    #
+    
     nbrow <- edbNRow( 
         edb       = edb, 
         tableName = tableName, 
         ...
     )   #
-    #
+    
     # # Format the query to count the rows
     # statement <- paste("SELECT Count(*) FROM", tableName ) 
     # #
     # nbrow <- edbQuery( edb = edb, statement = statement, ... )[,] 
-    #
+    
     return( c(nbrow,nbcol) ) 
 }   #
 
@@ -2574,6 +2619,10 @@ edbNRow <- function(# Retrieve the number of rows of a table in a database (refe
 ### \code{methods("edbNRow")}.
 
 ){  # Retrieve the dimention of the table:
+    if( missing( edb ) ){ stop( "Argument 'edb' is missing, with no default" ) } 
+    
+    if( missing( tableName ) ){ stop( "Argument 'tableName' is missing, with no default" ) } 
+    
     UseMethod( generic = "edbNRow", object = edb ) 
 }   #
 
@@ -2663,6 +2712,10 @@ edbNCol <- function(# Retrieve the number of columns of a table in a database (r
 ### \code{methods("edbColnames")}.
 
 ){  # Retrieve the dimention of the table:
+    if( missing( edb ) ){ stop( "Argument 'edb' is missing, with no default" ) } 
+    
+    if( missing( tableName ) ){ stop( "Argument 'tableName' is missing, with no default" ) } 
+    
     # tblDim <- edbDim( 
     #     edb       = edb, 
     #     tableName = tableName, 
@@ -2746,6 +2799,8 @@ edbLog <- function(# Write an operation "log" (used when modifying the database)
 ### safe.
 
 ){  #
+    if( missing( edb ) ){ stop( "Argument 'edb' is missing, with no default" ) } 
+    
     if( is.null( edbVersion ) )
     {   #
         edbVersion <- installed.packages()[,c("Package","Version")] 
@@ -2838,6 +2893,10 @@ edbQuery <- function(# Read all or part of a table in a database (referenced by 
 ### \code{methods("edbRead")}
 
 ){  #
+    if( missing( edb ) ){ stop( "Argument 'edb' is missing, with no default" ) } 
+    
+    if( missing( statement ) ){ stop( "Argument 'statement' is missing, with no default" ) } 
+    
     UseMethod( generic = "edbQuery", object = edb ) 
 }   #
 
