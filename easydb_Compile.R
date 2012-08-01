@@ -3,10 +3,10 @@ rm(list=ls(all=TRUE))
 pkg.dir.win  <- "C:/_R_PACKAGES/easydb/pkg" 
 # pkg.dir.lin  <- "/media/JMOEYS_8G2/_R_PACKAGES/easydb/pkg" 
 pkg.name     <- "easydb" 
-pkg.version  <- "0.6.6" 
+pkg.version  <- "0.7.0" 
 pkg.depends  <- NULL 
-pkg.suggests <- c("RODBC","RSQLite") 
-RVersion     <- "R (>= 2.10.0)" 
+pkg.suggests <- NULL # c( "easyrsqlite", "easyrodbcexcel", "easyrodbcmysql", "easyrodbcaccess" ) 
+RVersion     <- "R (>= 2.15.1)" 
 # r.path       <- "C:/Program Files/_SCIENCE/R_PROJECT_2-4-1/bin" 
 r.path       <- ""  #  Use curent R version
 
@@ -16,6 +16,8 @@ r.path       <- ""  #  Use curent R version
 #       0.4.x = POSIX, Date and Boolean data handling
 #       0.5.x = Build-in operation-log system
 #       0.6.x = Excel finished;
+#       0.7.x = Separated base-easydb from easyrodbcexcel and 
+#               easyrsqlite
 
 
 

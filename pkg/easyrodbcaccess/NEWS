@@ -1,0 +1,66 @@
+VERSION 0.6.7 
+
+  2012/08/01 RODBC Excel wasn't throwing an error when trying 
+             to fetch a table that oes not exists, but edbRead 
+             was hanging anyway later. Now edbRead stops with 
+             the error message from ODBC.
+  2012/08/01 edbRead.RODBC_Excel now suports table names without 
+             a "$" suffix (added automatically if absent).
+  2012/08/01 Added a readOnly argument to edbQuery.RODBC_Excel.
+
+VERSION 0.6.5 
+
+  2012/04/24 Internal modification of SQL query formulation 
+             for row constrains: used 'IN' statement instead 
+             of multiple 'OR' statements.
+  2012/04/24 Added examples for edbQuery() and edbNRow() with 
+             row constrains.
+  2012/04/24 Added a check in the examples using RODBC for 
+             Access and Excel, as it only works for 32-bits 
+             systems (not on 64-bits).
+
+VERSION 0.6.4 
+
+  2012/03/08 added function and methods for edbQuery() 
+  2012/03/08 Improved edbNRow() and edbDim() that were unefficient 
+             on very large databases (now use SQL COUNT(*)) 
+  2012/03/08 added hidden functions .edb.sRow() and .edb.sCol() 
+             to format SQL code for rows and column selection 
+             (now same code for all databases) 
+
+VERSION 0.6.3 
+
+  2011/01/20 fixed a bug in edbLog() (writing mode was sometimes 
+             not set)
+
+VERSION 0.6.2 
+
+  2011/12/15 edbRead() supports SQL SELECT DISTINCT 
+  2011/12/15 edbRead() supports SQL ORDER BY 
+  
+VERSION 0.6.1 
+
+  2011/12/14 edbWrite now checks that all expected columns 
+             are supplied, and that they are in the correct order 
+             (parano = TRUE)
+
+VERSION 0.6.0 
+
+  2011/12/13 MS Excel is now fully supported.
+
+VERSION 0.5.x to 0.4.x 
+
+  2011/12/08 Added examples and tests for Access 2007 databases.
+  2011/11/28 Added an operation log system for edbWrite, edbDelete 
+             and edbDrop.
+  2011/11/26 Improved handling of POSIX and Date formats
+  2011/11/26 Added argument to convert columns before writing them 
+             or after reading them. Useful for writing and reading 
+             dates to and from SQLite database (as integers) 
+
+VERSION <= 0.3.x 
+
+  2011/07/07 Added support for MS Access (via RODBC).
+  2011/07/01 Finished edbDelete and edbDrop for MySQL and SQLite.
+  2011/06/10 Added support to MySQL. edbWrite still to be done.
+  2011/06/01 Version 0.1 of the package. Documented. Only SQLite.

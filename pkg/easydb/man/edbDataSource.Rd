@@ -21,5 +21,5 @@ edbDataSource(edb,
 
 
 
-\seealso{\code{\link{edbDataSource.RODBC_MySQL}}, \code{\link{edb}}.}
+\seealso{\code{\link{edb}}.}
 

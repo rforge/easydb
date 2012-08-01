@@ -1,0 +1,15 @@
+import(RODBC, easydb)
+
+exportPattern("^[[:alpha:]]+")
+
+S3method("[", "RODBC_MySQL")
+S3method("[<-", "RODBC_MySQL")
+S3method("edbColnames", "RODBC_MySQL")
+S3method("edbDataSource", "RODBC_MySQL")
+S3method("edbDelete", "RODBC_MySQL")
+S3method("edbDrop", "RODBC_MySQL")
+S3method("edbNames", "RODBC_MySQL")
+S3method("edbNRow", "RODBC_MySQL")
+S3method("edbQuery", "RODBC_MySQL")
+S3method("edbRead", "RODBC_MySQL")
+S3method("edbWrite", "RODBC_MySQL")

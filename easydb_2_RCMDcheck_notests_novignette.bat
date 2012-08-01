@@ -1,5 +1,9 @@
+set pkgname=easydb
+set projectname=easydb
+set rootdir="_R_PACKAGES"
 c:
 cd \
-cd "_R_PACKAGES\easydb\pkg" 
-R CMD check --no-tests --no-examples --as-cran --no-vignettes easydb
+cd "%rootdir%\%projectname%\pkg" 
+R CMD check --no-tests --no-examples --no-vignettes %pkgname%
+@REM --as-cran
 pause

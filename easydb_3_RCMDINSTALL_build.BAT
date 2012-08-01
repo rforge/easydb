@@ -1,5 +1,8 @@
+set pkgname=easydb
+set projectname=easydb
+set rootdir="_R_PACKAGES"
 c:
 cd \
-cd "_R_PACKAGES\easydb\pkg" 
-R CMD INSTALL --build --compact-docs --byte-compile easydb
+cd "%rootdir%\%projectname%\pkg" 
+R CMD INSTALL --build --compact-docs --byte-compile %pkgname%
 pause

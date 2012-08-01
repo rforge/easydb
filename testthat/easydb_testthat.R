@@ -33,7 +33,8 @@ myDb <- edb(
     dbLogin      = "edbtestuser", 
     dbPwd        = ref[["dbPwd"]], 
     dbHost       = ref[["dbHost"]], 
-    dbPort       = 3306 
+    dbPort       = 80 
+    # dbPort       = 3306 
 )   #    
 
 

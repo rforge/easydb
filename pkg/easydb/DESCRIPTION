@@ -1,11 +1,11 @@
 Package: easydb
-Version: 0.6.6
-Date: 2012-07-13
-Title: Simple database interface for SQLite, MySQL and MS Access.
+Version: 0.7.0
+Date: 2012-08-01
+Title: S3 classes for simple database interfaces to databases.
 Author: Julien MOEYS <Julien.Moeys@mark.slu.se> 
 Maintainer: Julien MOEYS <Julien.Moeys@mark.slu.se> 
-Depends: R (>= 2.10.0)
-Suggests: RODBC, RSQLite
-Description: Simple database interface for SQLite, MySQL, MS Access and MS Excel. easydb is build on top of RSQLite and RODBC. It provides functions for reading, writing, listing and subsetting tables in SQLite, MySQL and MS Access. easydb allow to retrieve, write and subset database's tables in a similar way as data.frame's, using single square brackets db[,,,]. easydb internalise many database operations (otherwise tedious) such as rows and columns subsetting (no SQL needed) and connection and disconnection to / from databases. 
+Depends: R (>= 2.15.1)
+Suggests: easyrsqlite, easyrodbcexcel, easyrodbcmysql
+Description: S3 classes for simple database interfaces to databases (presently RODBC and RSQLite). 'easydb' provide common S3 classes for reading, writing, listing and subsetting tables in RODBC and (R)SQLite databases. Functions in 'easydb' alone DO NOT provide any database interface, but they are used in other packages that provide inteface to various database systems (see suggests). 'easydb' allows to retrieve, write and subset database's tables in a similar way as data.frame's, using single square brackets db[,,,]. easydb internalise many database operations (otherwise tedious) such as rows and columns subsetting (no SQL needed) and connection and disconnection to / from databases. 
 License: AGPL-3
 URL: http://easydb.r-forge.r-project.org/ 

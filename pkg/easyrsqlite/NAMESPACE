@@ -1,0 +1,14 @@
+import(RSQLite, easydb)
+
+exportPattern("^[[:alpha:]]+")
+
+S3method("[", "RSQLite_SQLite")
+S3method("[<-", "RSQLite_SQLite")
+S3method("edbColnames", "RSQLite_SQLite")
+S3method("edbDelete", "RSQLite_SQLite")
+S3method("edbDrop", "RSQLite_SQLite")
+S3method("edbNames", "RSQLite_SQLite")
+S3method("edbNRow", "RSQLite_SQLite")
+S3method("edbQuery", "RSQLite_SQLite")
+S3method("edbRead", "RSQLite_SQLite")
+S3method("edbWrite", "RSQLite_SQLite")
