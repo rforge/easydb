@@ -5,8 +5,8 @@
 \description{Simple database interface for MySQL. easyrodbcmysql is build on top of RODBC. It provides functions for reading, writing, listing and subsetting tables in MySQL. easyrodbcmysql allow to retrieve, write and subset database's tables in a similar way as data.frame's, using single square brackets db[,,,]. easyrodbcmysql internalise many database operations (otherwise tedious) such as rows and columns subsetting (no SQL needed) and connection and disconnection to / from databases.}
 \details{
 \tabular{ll}{Package: \tab easyrodbcmysql\cr
-Version: \tab 0.7.0\cr
-Date: \tab 2012-08-01\cr
+Version: \tab 0.7.1\cr
+Date: \tab 2012-08-02\cr
 Title: \tab Simple database interface for MySQL.\cr
 Author: \tab Julien MOEYS <Julien.Moeys@mark.slu.se>\cr
 Maintainer: \tab Julien MOEYS <Julien.Moeys@mark.slu.se>\cr

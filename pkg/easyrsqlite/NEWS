@@ -1,7 +1,15 @@
+VERSION 0.7.1
+
+  2012/08/02 .edbOperation.RSQLite_SQLite() now uses on.exit() 
+             instead of tryCatch() to close the database 
+             (even when an error occur). This should make 
+             error message clearer.
+
 VERSION 0.7.0
 
-  2012/08/01 easyrsqlite is now an separate (but depedent) 
-             package from easydb
+  2012/08/01 'easyrsqlite' is now a package separated from 
+             (but dependent on) 'easydb'. 'easydb' defines the 
+             S3 Generic classes used by 'easyrsqlite'
 
 VERSION 0.6.7 
 

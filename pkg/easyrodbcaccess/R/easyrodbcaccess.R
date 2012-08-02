@@ -75,10 +75,10 @@
     
     ## Set on.exit, so the database will be closed in case of 
     ## an error
-    on.exit( expr = expression( { 
+    on.exit( expr = { 
         odbcClose( channel = dbCon ) 
         message( errorMessage )  ##  'Clearer' error message
-    } ) ) 
+    } ) 
     
     if( any( dbCon == -1 ) ){ 
         stop( sprintf( "Connexion to MS Access database %s failed.", edb[[ "dbName" ]] ) ) 
@@ -117,9 +117,9 @@
     ## Set on.exit, so the database will be closed in case of 
     ## an error
     
-    on.exit( expr = expression( { 
+    on.exit( expr = { 
         odbcClose( channel = dbCon )  ##  No more error message
-    } ) ) 
+    } ) 
     
     return( exprOut ) 
 ### The function returns the object 'exprOut' eventually outputed 

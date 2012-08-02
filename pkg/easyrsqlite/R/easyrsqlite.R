@@ -21,14 +21,14 @@
 ### After the operation is done, the database connection is closed 
 ### (even if an error was detected).
 
- errorClasses=c("simpleError","error","condition"),  
-### Vector of character strings. Error data classes to be found in 
-### tryCatch result.
+#  errorClasses=c("simpleError","error","condition"),  
+# ### Vector of character strings. Error data classes to be found in 
+# ### tryCatch result.
 
- stopOnError=TRUE, 
-### Single logical. If TRUE and an error is detected, the function stops 
-### AFTER closing the database and driver. If FALSE it just returns 
-### the error as an object.
+#  stopOnError=TRUE, 
+# ### Single logical. If TRUE and an error is detected, the function stops 
+# ### AFTER closing the database and driver. If FALSE it just returns 
+# ### the error as an object.
 
  errorMessage="An error was detected by tryCatch", 
 ### Error message to be send if an error is detected. Either as 
@@ -43,64 +43,76 @@
  ...
 ### Additional parameters to be passed to some function in \code{expr}.
 
-){  # Empty output:
-    exprOut <- NULL 
-    #
-    # require( "DBI" ) 
+){  
     require( "RSQLite" ) 
-    #
+    
     sqliteCon <- dbDriver( 
         drvName = "SQLite", 
         max.con = maxCon  
     )   #
-    #
+    
     dbCon <- dbConnect( 
         drv    = sqliteCon, 
         dbname = edb[[ "dbName" ]]  
     )   #
-    #
-    # Initiate the error catching object:
-    catchRes <- NULL 
-    #
-    catchRes <- tryCatch( 
-        expr = eval( expr ),  #
-        # What to do with an eventual error message catched (theError)?
-        error = function(theError){ 
-            theError # just return it.
-        },  #
-        ... 
-    )   #
-    #
-    exRes <- dbGetException( dbCon ) 
-    #
-    dbDisconnect( conn = dbCon ) 
-    #
-    dbUnloadDriver( drv = sqliteCon ) 
-    #
-    if( any( class(catchRes) %in% errorClasses ) )
-    {   #
-        warning( catchRes ) 
-        #
-        if( stopOnError )
-        {   #
-            stop( errorMessage ) 
-        }else{ 
-            warning( errorMessage ) 
-        }   #
-    }   #
-    #
-    if( exRes[["errorNum"]] != 0 )
-    {   #
-        warning( exRes[["errorMsg"]] ) 
-        #
-        if( stopOnError )
-        {   #
-            stop( errorMessage ) 
-        }else{ 
-            warning( errorMessage ) 
-        }   #
-    }   #
-    #
+    
+    ## Set on.exit, so the database will be closed in case of 
+    ## an error
+    on.exit( expr = { 
+        odbcClose( channel = dbCon ) 
+        message( errorMessage )  ##  'Clearer' error message
+    } ) 
+    
+    
+    ## expr should output its result to 'exprOut'
+    exprOut <- NULL; eval( expr ) 
+    
+    # # Initiate the error catching object:
+    # catchRes <- NULL 
+    
+    # catchRes <- tryCatch( 
+    #     expr = eval( expr ),  #
+    #     # What to do with an eventual error message catched (theError)?
+    #     error = function(theError){ 
+    #         theError # just return it.
+    #     },  #
+    #     ... 
+    # )   #
+    # #
+    # exRes <- dbGetException( dbCon ) 
+    # #
+    # dbDisconnect( conn = dbCon ) 
+    # #
+    # dbUnloadDriver( drv = sqliteCon ) 
+    # #
+    # if( any( class(catchRes) %in% errorClasses ) )
+    # {   #
+    #     warning( catchRes ) 
+    #     #
+    #     if( stopOnError )
+    #     {   #
+    #         stop( errorMessage ) 
+    #     }else{ 
+    #         warning( errorMessage ) 
+    #     }   #
+    # }   #
+    # #
+    # if( exRes[["errorNum"]] != 0 )
+    # {   #
+    #     warning( exRes[["errorMsg"]] ) 
+    #     #
+    #     if( stopOnError )
+    #     {   #
+    #         stop( errorMessage ) 
+    #     }else{ 
+    #         warning( errorMessage ) 
+    #     }   #
+    # }   #
+    
+    on.exit( expr = expression( { 
+        odbcClose( channel = dbCon )  ##  No more error message
+    } ) ) 
+    
     return( exprOut ) 
 ### The function returns the object 'exprOut' eventually outputed 
 ### by expr, and NULL otherwise.
@@ -136,17 +148,17 @@ edbColnames.RSQLite_SQLite <- function(# Retrieve column names of a table in a S
 ### Additional parameters to be passed to dbListFields(). See 
 ### \code{?dbListFields}.
 
-){  #
+){  
     if( testFiles ) 
     {   # Check if the database files is present:
         easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
-    }   #
-    # 
+    }   
+    
     msg <- sprintf( 
         fmt = "Error detected in dbListFields() in edbColnames.RSQLite_SQLite() (database: %s; table: %s). Database connection closed.\n", 
         edb[["dbName"]], tableName 
     )   #
-    #
+    
     tbl <- .edbOperation.RSQLite_SQLite(
         edb          = edb, 
         expr         = expression({ 
@@ -156,14 +168,14 @@ edbColnames.RSQLite_SQLite <- function(# Retrieve column names of a table in a S
             )   #
         }), #
         maxCon       = 1,  
-        errorClasses = c("simpleError","error","condition"),  
-        stopOnError  = TRUE, 
+        # errorClasses = c("simpleError","error","condition"),  
+        # stopOnError  = TRUE, 
         errorMessage = msg, 
         # ... options for expr:
         name         = tableName, 
         ... 
     )   #
-    #
+    
     return( tbl ) 
 ### The function returns a vector of character strings with the 
 ### columns / fields of the original sqlite table.
@@ -301,12 +313,12 @@ edbRead.RSQLite_SQLite <- function(# Read all or part of a table in a SQLIte dat
     #
     # require( "DBI" ) # in .edbOperation.RSQLite_SQLite
     # require( "RSQLite" ) 
-    #
+    
     msg <- sprintf( 
         fmt = "Error detected in dbGetQuery() in edbRead.RSQLite_SQLite() (database: %s; table: %s). Database connection closed.\n", 
         edb[["dbName"]], tableName 
     )   #
-    #
+    
     tbl <- .edbOperation.RSQLite_SQLite(
         edb          = edb, 
         expr         = expression({ 
@@ -316,38 +328,38 @@ edbRead.RSQLite_SQLite <- function(# Read all or part of a table in a SQLIte dat
             )   #
         }),  #
         maxCon       = 1,  
-        errorClasses = c("simpleError","error","condition"),  
-        stopOnError  = TRUE, 
+        # errorClasses = c("simpleError","error","condition"),  
+        # stopOnError  = TRUE, 
         errorMessage = msg, 
         # ... options for expr:
         statement    = statement, 
         ... 
     )   #
-    #
-    if( dim(tbl)[2] == 0 ) 
-    {   #
-        fieldsRes <- edbColnames.RSQLite_SQLite( 
-            edb       = edb,
-            tableName = tableName, 
-            testFiles = FALSE  # Already done
-        )   #
-        #
-        tbl <- as.data.frame( 
-            matrix( 
-                data = vector(mode = "numeric", length = 0), 
-                nrow = 0, 
-                ncol = length( fieldsRes ) 
-            )   #
-        )   #
-        #
-        colnames(tbl) <- fieldsRes 
-        #
-        if( length(sCol) != 0 ) 
-        {   #
-            tbl <- tbl[, sCol, drop = FALSE ] 
-        }   #
-    }   #
-    #
+    
+    # if( dim(tbl)[2] == 0 ) 
+    # {   #
+    #     fieldsRes <- edbColnames.RSQLite_SQLite( 
+    #         edb       = edb,
+    #         tableName = tableName, 
+    #         testFiles = FALSE  # Already done
+    #     )   #
+    #     #
+    #     tbl <- as.data.frame( 
+    #         matrix( 
+    #             data = vector(mode = "numeric", length = 0), 
+    #             nrow = 0, 
+    #             ncol = length( fieldsRes ) 
+    #         )   #
+    #     )   #
+    #     #
+    #     colnames(tbl) <- fieldsRes 
+    #     #
+    #     if( length(sCol) != 0 ) 
+    #     {   #
+    #         tbl <- tbl[, sCol, drop = FALSE ] 
+    #     }   #
+    # }   #
+    
     tbl <- easydb:::.formatCol( 
         x         = tbl, 
         formatCol = formatCol 
@@ -388,12 +400,12 @@ edbNames.RSQLite_SQLite <- function(# Retrieve table names in a SQLIte database 
     #
     # require( "DBI" ) # in .edbOperation.RSQLite_SQLite
     # require( "RSQLite" ) 
-    #
+    
     msg <- sprintf( 
         fmt = "Error detected in dbListTables() in edbNames.RSQLite_SQLite() (database: %s). Database connection closed.\n", 
         edb[["dbName"]] 
     )   #
-    #
+    
     tbl <- .edbOperation.RSQLite_SQLite(
         edb          = edb, 
         expr         = expression({ 
@@ -402,9 +414,9 @@ edbNames.RSQLite_SQLite <- function(# Retrieve table names in a SQLIte database 
                 ...  
             )   #
         }), #
-        maxCon       = 1,  
-        errorClasses = c("simpleError","error","condition"),  
-        stopOnError  = TRUE, 
+        maxCon       = 1, 
+        # errorClasses = c("simpleError","error","condition"),  
+        # stopOnError  = TRUE, 
         errorMessage = msg, 
         # ... options for expr:
         ... 
@@ -646,36 +658,36 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
     if( testFiles ) 
     {   # Check if the database files is present:
         easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
-    }   #
-    #
+    }   
+    
     # require( "DBI" ) # in .edbOperation.RSQLite_SQLite
     # require( "RSQLite" ) 
-    #
+    
     # Save the existing state of 'last.warning' to be able to detect 
     # if warnings were emitted during the transaction (see after dbUnloadDriver)
     last.warning.exist <- exists( "last.warning", envir = baseenv() ) 
-    #
+    
     if( last.warning.exist ) 
-    {   #
+    {   
         old.warn <- get( "last.warning", envir = baseenv() ) 
-        #
+        
         assign( 
             x     = "last.warning", 
             value = list(), 
             envir = baseenv() 
         )   
-        #
+        
         # remove( list = "last.warning", envir = baseenv() ) 
     }else{ 
         old.warn <- list()  
-    }   #
-    #
+    }   
+    
     # Convert the format of some columns:
     data <- easydb:::.formatCol( 
         x         = data, 
         formatCol = formatCol 
     )   #
-    #
+    
     if( mode != "u" ) 
     {   ### Case 1: mode != "u", append or overwrite mode.
         #
@@ -734,9 +746,10 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
                 edb[["dbName"]], tableName 
             )   #
             #
-            oldOptions <- options( "warn" )[[ 1 ]] 
-            options( "warn" = 1 )  
-            #
+            oldOptions <- getOption( "warn" ) 
+            
+            options( "warn" = max( c( 1, oldOptions ) ) )  
+            
             res <- .edbOperation.RSQLite_SQLite(
                 edb          = edb, 
                 expr         = expression({ 
@@ -746,8 +759,8 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
                     )   #
                 }),  #
                 maxCon       = 1,  
-                errorClasses = c("simpleError","error","condition"),  
-                stopOnError  = TRUE, 
+                # errorClasses = c("simpleError","error","condition"),  
+                # stopOnError  = TRUE, 
                 errorMessage = msg, 
                 # ... options for expr:
                 name         = tableName, 
@@ -757,7 +770,7 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
                 append       = append,   
                 ... 
             )   #
-            #
+            
             options( "warn" = oldOptions ) 
         }else{ 
             #
@@ -798,30 +811,30 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
                         getKey, 
                         " = last_insert_rowid();\n" 
                     )   #
-                    #
+                    
                     if( verbose ){ 
                          cat( sqlUpdate2 ) 
                     }    # 
-                    #
+                    
                     msg <- sprintf( 
-                        fmt = "Error detected in dbGetQuery() in edbWrite.RSQLite_SQLite() (database: %s; table: %s; row: %s). Database connection closed.\n", 
+                        fmt = "Error detected in .edbSendGetQuery.RSQLite_SQLite() in edbWrite.RSQLite_SQLite() (database: %s; table: %s; row: %s). Database connection closed.\n", 
                         edb[["dbName"]], tableName, as.character(X) 
                     )   #
-                    #
+                    
                     newId <- .edbOperation.RSQLite_SQLite(
                         edb          = edb, 
                         expr         = expression({ 
                             exprOut <- .edbSendGetQuery.RSQLite_SQLite( conn = dbCon, ... )
                         }), #
                         maxCon       = 1,  
-                        errorClasses = c("simpleError","error","condition"),  
-                        stopOnError  = TRUE, 
+                        # errorClasses = c("simpleError","error","condition"),  
+                        # stopOnError  = TRUE, 
                         errorMessage = msg, 
                         # ... options for expr:
                         statement    = c(sqlUpdate,sqlUpdate2), 
                         ... 
-                    )   #
-                    #
+                    )   
+                    
                     msg <- sprintf( 
                         fmt = "Error detected in dbGetQuery() in edbWrite.RSQLite_SQLite() (database: %s; table: %s; row: %s). Database connection closed.\n", 
                         edb[["dbName"]], tableName, as.character(X) 
@@ -923,28 +936,28 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
                 if( verbose ){ 
                      cat( sqlUpdate ) 
                 }    # 
-                #
+                
                 msg <- sprintf( 
                     fmt = "Error detected in dbGetQuery() in edbWrite.RSQLite_SQLite() (database: %s; table: %s; row: %s). Database connection closed.\n", 
                     edb[["dbName"]], tableName, as.character(X) 
-                )   #
-                #
+                )   
+                
                 res <- .edbOperation.RSQLite_SQLite(
                     edb          = edb, 
                     expr         = expression({ 
                         exprOut <- dbGetQuery( 
                             conn        = dbCon, 
                             ... 
-                        )   #
+                        )   
                     }),  #
                     maxCon       = 1,  
-                    errorClasses = c("simpleError","error","condition"),  
-                    stopOnError  = TRUE, 
+                    # errorClasses = c("simpleError","error","condition"),  
+                    # stopOnError  = TRUE, 
                     errorMessage = msg, 
                     # ... options for expr:
                     statement       = sqlUpdate,    
                     ... 
-                )   #
+                )   
                 #
                 return( res ) 
             }   #
@@ -1212,15 +1225,15 @@ edbDelete.RSQLite_SQLite <- function(# Delete all or some rows in a table in a S
         cat( "SQL statement:\n" ) 
         cat( statement, sep = "\n" )
     }   #
-    #
+    
     # require( "DBI" ) # in .edbOperation.RSQLite_SQLite
     # require( "RSQLite" ) 
-    #
+    
     msg <- sprintf( 
         fmt = "Error detected in dbGetQuery() in edbRead.RSQLite_SQLite() (database: %s; table: %s). Database connection closed.\n", 
         edb[["dbName"]], tableName 
     )   #
-    #
+    
     out <- .edbOperation.RSQLite_SQLite(
         edb          = edb, 
         expr         = expression({ 
@@ -1230,14 +1243,14 @@ edbDelete.RSQLite_SQLite <- function(# Delete all or some rows in a table in a S
             )   #
         }),  #
         maxCon       = 1,  
-        errorClasses = c("simpleError","error","condition"),  
-        stopOnError  = TRUE, 
+        # errorClasses = c("simpleError","error","condition"),  
+        # stopOnError  = TRUE, 
         errorMessage = msg, 
         # ... options for expr:
         statement    = statement, 
         ... 
-    )   #
-    #
+    )   
+    
     if( logOp )
     {   #
         tmp <- edbLog(
@@ -1325,16 +1338,16 @@ edbDrop.RSQLite_SQLite <- function(# Delete all or some rows in a table in a SQL
     if( verbose ){ 
         cat( "SQL statement:\n" ) 
         cat( statement, sep = "\n" )
-    }   #
-    #
+    }   
+    
     # require( "DBI" ) # in .edbOperation.RSQLite_SQLite
     # require( "RSQLite" ) 
-    #
+    
     msg <- sprintf( 
         fmt = "Error detected in dbGetQuery() in edbRead.RSQLite_SQLite() (database: %s; table: %s). Database connection closed.\n", 
         edb[["dbName"]], tableName 
     )   #
-    #
+    
     out <- .edbOperation.RSQLite_SQLite(
         edb          = edb, 
         expr         = expression({ 
@@ -1344,8 +1357,8 @@ edbDrop.RSQLite_SQLite <- function(# Delete all or some rows in a table in a SQL
             )   #
         }),  #
         maxCon       = 1,  
-        errorClasses = c("simpleError","error","condition"),  
-        stopOnError  = TRUE, 
+        # errorClasses = c("simpleError","error","condition"),  
+        # stopOnError  = TRUE, 
         errorMessage = msg, 
         # ... options for expr:
         statement    = statement, 
@@ -1474,25 +1487,25 @@ edbQuery.RSQLite_SQLite <- function(# Send and retrieve a query in a SQLIte data
  ...
 ### Additional parameters to be passed to \code{link[DBI]{dbGetQuery}}.
 
-){  #
+){  
     if( testFiles ) 
     {   # Check if the database files is present:
         easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
     }   #
-    #
+    
     if( verbose ){ 
         cat( "SQL statement:\n" ) 
         cat( statement, sep = "\n" )
     }   #
-    #
+    
     # require( "DBI" ) # in .edbOperation.RSQLite_SQLite
     # require( "RSQLite" ) 
-    #
+    
     msg <- sprintf( 
         fmt = "Error detected in dbGetQuery() in edbQuery.RSQLite_SQLite() (database: %s). Database connection closed.\n", 
         edb[["dbName"]] 
     )   #
-    #
+    
     qRes <- .edbOperation.RSQLite_SQLite(
         edb          = edb, 
         expr         = expression({ 
@@ -1502,19 +1515,19 @@ edbQuery.RSQLite_SQLite <- function(# Send and retrieve a query in a SQLIte data
             )   #
         }),  #
         maxCon       = 1,  
-        errorClasses = c("simpleError","error","condition"),  
-        stopOnError  = TRUE, 
+        # errorClasses = c("simpleError","error","condition"),  
+        # stopOnError  = TRUE, 
         errorMessage = msg, 
         # ... options for expr:
         statement    = statement, 
         ... 
-    )   #
-    #
+    )   
+    
     qRes <- easydb:::.formatCol( 
         x         = qRes, 
         formatCol = formatCol 
     )   #
-    #
+    
     return( qRes ) 
 ### The function returns the requested table. 
 }   #

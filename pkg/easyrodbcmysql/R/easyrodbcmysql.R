@@ -196,14 +196,14 @@ edbDataSource.RODBC_MySQL <- function(# Create an RODBC MySQL data source (from 
 ### operation is done, the database connection is closed (even if an 
 ### error was detected).
 
- errorClasses=c("simpleError","error","condition"),  
-### Vector of character strings. Error data classes to be found in 
-### tryCatch result.
+#  errorClasses=c("simpleError","error","condition"),  
+# ### Vector of character strings. Error data classes to be found in 
+# ### tryCatch result.
 
- stopOnError=TRUE, 
-### Single logical. If TRUE and an error is detected, the function stops 
-### AFTER closing the database and driver. If FALSE it just returns 
-### the error as an object.
+#  stopOnError=TRUE, 
+# ### Single logical. If TRUE and an error is detected, the function stops 
+# ### AFTER closing the database and driver. If FALSE it just returns 
+# ### the error as an object.
 
  errorMessage="An error was detected by tryCatch", 
 ### Error message to be send if an error is detected. Either as 
@@ -215,11 +215,9 @@ edbDataSource.RODBC_MySQL <- function(# Create an RODBC MySQL data source (from 
  ...
 ### Additional parameters to be passed to some function in \code{expr}.
 
-){  # Empty output:
-    exprOut <- NULL 
-    #
+){  
     require( "RODBC" ) 
-    #
+    
     # Test that the ODBC datasource has been set:
     sourceTest <- edb[[ "dbSourceName" ]] %in% names( odbcDataSources() ) 
     if( !sourceTest ) 
@@ -232,45 +230,60 @@ edbDataSource.RODBC_MySQL <- function(# Create an RODBC MySQL data source (from 
             "(odbcDataSources()).\nRun edbDataSource(edb) or fix the source manually in ODBC." 
         ) ) #
     }   #
-    #
+    
     dbCon <- odbcConnect( 
         dsn  = edb[[ "dbSourceName" ]], 
         uid  = edb[[ "dbLogin" ]], 
         pwd  = edb[[ "dbPwd" ]], 
         case = "nochange"  
     )   #
-    #
+    
+    ## Set on.exit, so the database will be closed in case of 
+    ## an error
+    on.exit( expr = { 
+        odbcClose( channel = dbCon ) 
+        message( errorMessage )  ##  'Clearer' error message
+    } ) 
+    
     if( any( dbCon == -1 ) ){ 
         stop( sprintf( "Connexion to ODBC source %s failed.", edb[[ "dbName" ]] ) ) 
     }   #
-    #
-    # Initiate the error catching object:
-    catchRes <- NULL 
-    #
-    catchRes <- tryCatch( 
-        expr = eval( expr ),  #
-        # What to do with an eventual error message catched (theError)?
-        error = function(theError){ 
-            theError # just return it.
-        },  #
-        ... 
-    )   #
-    #
-    # dbDisconnect( conn = dbCon ) 
-    odbcClose( channel = dbCon ) 
-    #
-    if( any( class(catchRes) %in% errorClasses ) )
-    {   #
-        warning( catchRes ) 
-        #
-        if( stopOnError )
-        {   #
-            stop( errorMessage ) 
-        }else{ 
-            warning( errorMessage ) 
-        }   #
-    }   #
-    #
+    
+    
+    ## expr should output its result to 'exprOut'
+    exprOut <- NULL; eval( expr ) 
+    
+    # # Initiate the error catching object:
+    # catchRes <- NULL 
+    
+    # catchRes <- tryCatch( 
+    #     expr = eval( expr ),  #
+    #     # What to do with an eventual error message catched (theError)?
+    #     error = function(theError){ 
+    #         theError # just return it.
+    #     },  #
+    #     ... 
+    # )   #
+    # #
+    # # dbDisconnect( conn = dbCon ) 
+    # odbcClose( channel = dbCon ) 
+    # #
+    # if( any( class(catchRes) %in% errorClasses ) )
+    # {   #
+    #     warning( catchRes ) 
+    #     #
+    #     if( stopOnError )
+    #     {   #
+    #         stop( errorMessage ) 
+    #     }else{ 
+    #         warning( errorMessage ) 
+    #     }   #
+    # }   #
+    
+    on.exit( expr = { 
+        odbcClose( channel = dbCon )  ##  No more error message
+    } ) 
+    
     return( exprOut ) 
 ### The function returns the object 'exprOut' eventually outputed 
 ### by expr, and NULL otherwise.
@@ -311,7 +324,7 @@ edbColnames.RODBC_MySQL <- function(# Retrieve column names of a table in a MySQ
         fmt = "Error detected in sqlColumns() in edbColnames.RODBC_MySQL() (database: %s; table: %s). Database connection closed.\n", 
         edb[["dbName"]], tableName 
     )   #
-    #
+    
     tbl <- .edbOperation.RODBC_MySQL(
         edb          = edb, 
         expr         = expression({ 
@@ -321,8 +334,8 @@ edbColnames.RODBC_MySQL <- function(# Retrieve column names of a table in a MySQ
             )   #
         }), #
         maxCon       = 1,  
-        errorClasses = c("simpleError","error","condition"),  
-        stopOnError  = TRUE, 
+        # errorClasses = c("simpleError","error","condition"),  
+        # stopOnError  = TRUE, 
         errorMessage = msg, 
         # ... options for expr:
         sqtable      = tableName, 
@@ -463,12 +476,12 @@ edbRead.RODBC_MySQL <- function(# Read all or part of a table in a MySQL databas
         cat( "SQL statement:\n" ) 
         cat( statement, sep = "\n" )
     }   #
-    #
+    
     msg <- sprintf( 
         fmt = "Error detected in sqlQuery() in edbRead.RODBC_MySQL() (database: %s; table: %s). Database connection closed.\n", 
         edb[["dbName"]], tableName 
     )   #
-    #
+    
     tbl <- .edbOperation.RODBC_MySQL(
         edb          = edb, 
         expr         = expression({ 
@@ -478,38 +491,44 @@ edbRead.RODBC_MySQL <- function(# Read all or part of a table in a MySQL databas
             )   #
         }),  #
         maxCon       = 1,  
-        errorClasses = c("simpleError","error","condition"),  
-        stopOnError  = TRUE, 
+        # errorClasses = c("simpleError","error","condition"),  
+        # stopOnError  = TRUE, 
         errorMessage = msg, 
         # ... options for expr:
         query        = statement, 
         #case        = "nochange", 
         ... 
-    )   #
-    #
-    if( dim(tbl)[2] == 0 ) 
-    {   #
-        fieldsRes <- edbColnames.RODBC_MySQL( 
-            edb       = edb,
-            tableName = tableName 
-        )   #
-        #
-        tbl <- as.data.frame( 
-            matrix( 
-                data = vector(mode = "numeric", length = 0), 
-                nrow = 0, 
-                ncol = length( fieldsRes ) 
-            )   #
-        )   #
-        #
-        colnames(tbl) <- fieldsRes 
-        #
-        if( length(sCol) != 0 ) 
-        {   #
-            tbl <- tbl[, sCol, drop = FALSE ] 
-        }   #
-    }   #
-    #
+    )   
+    
+    testOutput <- any( class( tbl ) %in% c( "matrix", "data.frame" ) ) 
+    
+    if( !testOutput ){ 
+        stop( tbl ) 
+    }   
+    
+    # if( dim(tbl)[2] == 0 ) 
+    # {   #
+    #     fieldsRes <- edbColnames.RODBC_MySQL( 
+    #         edb       = edb,
+    #         tableName = tableName 
+    #     )   #
+    #     #
+    #     tbl <- as.data.frame( 
+    #         matrix( 
+    #             data = vector(mode = "numeric", length = 0), 
+    #             nrow = 0, 
+    #             ncol = length( fieldsRes ) 
+    #         )   #
+    #     )   #
+    #     #
+    #     colnames(tbl) <- fieldsRes 
+    #     #
+    #     if( length(sCol) != 0 ) 
+    #     {   #
+    #         tbl <- tbl[, sCol, drop = FALSE ] 
+    #     }   #
+    # }   #
+    
     tbl <- easydb:::.formatCol( 
         x         = tbl, 
         formatCol = formatCol 
@@ -542,12 +561,12 @@ edbNames.RODBC_MySQL <- function(# Retrieve table names in a MySQL database (ref
  ...
 ### Additional parameters to be passed to \code{dbListTables}.
 
-){  #
+){  
     msg <- sprintf( 
         fmt = "Error detected in sqlTables() in edbNames.RODBC_MySQL() (database: %s). Database connection closed.\n", 
         edb[["dbName"]] 
     )   #
-    #
+    
     tbl <- .edbOperation.RODBC_MySQL(
         edb          = edb, 
         expr         = expression({ 
@@ -557,8 +576,8 @@ edbNames.RODBC_MySQL <- function(# Retrieve table names in a MySQL database (ref
             )   #
         }), #
         maxCon       = 1,  
-        errorClasses = c("simpleError","error","condition"),  
-        stopOnError  = TRUE, 
+        # errorClasses = c("simpleError","error","condition"),  
+        # stopOnError  = TRUE, 
         errorMessage = msg, 
         # ... options for expr:
         ... 
@@ -878,15 +897,16 @@ edbWrite.RODBC_MySQL <- function(# Write data in a MySQL table in a database (re
                 # 3 - Put the columns in the right order:
                 data <- data[, colNamez ] 
             }   #
-            # 
+            
             msg <- sprintf( 
-                fmt = "Error detected in dbWriteTable() in edbWrite.RODBC_MySQL() (database: %s; table: %s). Database connection closed.\n", 
+                fmt = "Error detected in sqlSave() in edbWrite.RODBC_MySQL() (database: %s; table: %s). Database connection closed.\n", 
                 edb[["dbName"]], tableName 
             )   #
-            #
-            oldOptions <- options( "warn" )[[ 1 ]] 
-            options( "warn" = 1 )  
-            #
+            
+            oldOptions <- getOption( "warn" ) 
+            
+            options( "warn" = max( c( 1, oldOptions ) ) )  
+            
             res <- .edbOperation.RODBC_MySQL(
                 edb          = edb, 
                 expr         = expression({ 
@@ -896,8 +916,8 @@ edbWrite.RODBC_MySQL <- function(# Write data in a MySQL table in a database (re
                     )   #
                 }),  #
                 maxCon       = 1,  
-                errorClasses = c("simpleError","error","condition"),  
-                stopOnError  = TRUE, 
+                # errorClasses = c("simpleError","error","condition"),  
+                # stopOnError  = TRUE, 
                 errorMessage = msg, 
                 # ... options for expr:
                 tablename    = tableName, 
@@ -906,7 +926,7 @@ edbWrite.RODBC_MySQL <- function(# Write data in a MySQL table in a database (re
                 append       = append,   
                 ... 
             )   #
-            #
+            
             options( "warn" = oldOptions ) 
         }else{ 
             #
@@ -951,28 +971,28 @@ edbWrite.RODBC_MySQL <- function(# Write data in a MySQL table in a database (re
                     if( verbose ){ 
                          cat( sqlUpdate2 ) 
                     }    # 
-                    #
+                    
                     msg <- sprintf( 
                         fmt = "Error detected in .edbSendGetQuery.RODBC_MySQL() in edbWrite.RODBC_MySQL() (database: %s; table: %s; row: %s). Database connection closed.\n", 
                         edb[["dbName"]], tableName, as.character(X) 
                     )   #
-                    #
+                    
                     newId <- .edbOperation.RODBC_MySQL(
                         edb          = edb, 
                         expr         = expression({ 
                             exprOut <- .edbSendGetQuery.RODBC_MySQL( channel = dbCon, ... )
                         }), #
                         maxCon       = 1,  
-                        errorClasses = c("simpleError","error","condition"),  
-                        stopOnError  = TRUE, 
+                        # errorClasses = c("simpleError","error","condition"),  
+                        # stopOnError  = TRUE, 
                         errorMessage = msg, 
                         # ... options for expr:
                         query        = c(sqlUpdate,sqlUpdate2), 
                         ... 
-                    )   #
-                    #
+                    )   
+                    
                     return( newId )
-                }   #
+                }   
             )   #
             #
             newId <- as.numeric( unlist( newId ) ) 
@@ -1067,12 +1087,12 @@ edbWrite.RODBC_MySQL <- function(# Write data in a MySQL table in a database (re
                 if( verbose ){ 
                      cat( sqlUpdate ) 
                 }    # 
-                #
+                
                 msg <- sprintf( 
-                    fmt = "Error detected in dbGetQuery() in edbWrite.RODBC_MySQL() (database: %s; table: %s; row: %s). Database connection closed.\n", 
+                    fmt = "Error detected in sqlQuery() in edbWrite.RODBC_MySQL() (database: %s; table: %s; row: %s). Database connection closed.\n", 
                     edb[["dbName"]], tableName, as.character(X) 
                 )   #
-                #
+                
                 res <- .edbOperation.RODBC_MySQL(
                     edb          = edb, 
                     expr         = expression({ 
@@ -1082,13 +1102,13 @@ edbWrite.RODBC_MySQL <- function(# Write data in a MySQL table in a database (re
                         )   #
                     }),  #
                     maxCon       = 1,  
-                    errorClasses = c("simpleError","error","condition"),  
-                    stopOnError  = TRUE, 
+                    # errorClasses = c("simpleError","error","condition"),  
+                    # stopOnError  = TRUE, 
                     errorMessage = msg, 
                     # ... options for expr:
                     query        = sqlUpdate,    
                     ... 
-                )   #
+                )   
                 #
                 return( res ) 
             }   #
@@ -1370,12 +1390,12 @@ edbDelete.RODBC_MySQL <- function(# Delete all or some rows in a table in a MySQ
         cat( "SQL statement:\n" ) 
         cat( statement, sep = "\n" )
     }   #
-    #
+    
     msg <- sprintf( 
         fmt = "Error detected in sqlQuery() in edbRead.RODBC_MySQL() (database: %s; table: %s). Database connection closed.\n", 
         edb[["dbName"]], tableName 
     )   #
-    #
+    
     out <- .edbOperation.RODBC_MySQL(
         edb          = edb, 
         expr         = expression({ 
@@ -1385,15 +1405,15 @@ edbDelete.RODBC_MySQL <- function(# Delete all or some rows in a table in a MySQ
             )   #
         }),  #
         maxCon       = 1,  
-        errorClasses = c("simpleError","error","condition"),  
-        stopOnError  = TRUE, 
+        # errorClasses = c("simpleError","error","condition"),  
+        # stopOnError  = TRUE, 
         errorMessage = msg, 
         # ... options for expr:
         query        = statement, 
         #case        = "nochange", 
         ... 
-    )   #
-    #
+    )   
+    
     if( logOp )
     {   #
         tmp <- edbLog(
@@ -1475,12 +1495,12 @@ edbDrop.RODBC_MySQL <- function(# Drop a table in a MySQL database (referenced b
         cat( "SQL statement:\n" ) 
         cat( statement, sep = "\n" )
     }   #
-    #
+    
     msg <- sprintf( 
         fmt = "Error detected in sqlQuery() in edbRead.RODBC_MySQL() (database: %s; table: %s). Database connection closed.\n", 
         edb[["dbName"]], tableName 
     )   #
-    #
+    
     out <- .edbOperation.RODBC_MySQL(
         edb          = edb, 
         expr         = expression({ 
@@ -1490,8 +1510,8 @@ edbDrop.RODBC_MySQL <- function(# Drop a table in a MySQL database (referenced b
             )   #
         }),  #
         maxCon       = 1,  
-        errorClasses = c("simpleError","error","condition"),  
-        stopOnError  = TRUE, 
+        # errorClasses = c("simpleError","error","condition"),  
+        # stopOnError  = TRUE, 
         errorMessage = msg, 
         # ... options for expr:
         query        = statement, 
@@ -1572,12 +1592,12 @@ edbQuery.RODBC_MySQL <- function(# Send and retrieve a query in a SQLite databas
     #
     # require( "DBI" ) # in .edbOperation.RSQLite_SQLite
     # require( "RSQLite" ) 
-    #
+    
     msg <- sprintf( 
         fmt = "Error detected in sqlQuery() in edbQuery.RSQLite_SQLite() (database: %s). Database connection closed.\n", 
         edb[["dbName"]] 
     )   #
-    #
+    
     qRes <- .edbOperation.RODBC_MySQL(
         edb          = edb, 
         expr         = expression({ 
@@ -1587,14 +1607,14 @@ edbQuery.RODBC_MySQL <- function(# Send and retrieve a query in a SQLite databas
             )   #
         }),  #
         # maxCon     = 1,  
-        errorClasses = c("simpleError","error","condition"),  
-        stopOnError  = TRUE, 
+        # errorClasses = c("simpleError","error","condition"),  
+        # stopOnError  = TRUE, 
         errorMessage = msg, 
         # ... options for expr:
         query        = statement, 
         ... 
-    )   #
-    #
+    )   
+    
     qRes <- easydb:::.formatCol( 
         x         = qRes, 
         formatCol = formatCol 

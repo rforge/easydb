@@ -1,12 +1,23 @@
-VERSION 0.7.0 
+VERSION 0.7.1
 
-  2012/08/01 easyrodbcexcel becomes a package dependent on 
-             easydb (before they were merged).
+  2012/08/02 edbRead.RODBC_Excel() now captures some errors 
+             from (R)ODBC that were silently returned as a vector 
+             of character strings.
+  2012/08/02 .edbOperation.RODBC_Excel() now uses on.exit() 
+             instead of tryCatch() to close the database 
+             (even when an error occur). This should make 
+             error message clearer.
+
+VERSION 0.7.0
+
+  2012/08/01 'easyrodbcexcel' is now a package separated from 
+             (but dependent on) 'easydb'. 'easydb' defines the 
+             S3 Generic classes used by 'easyrodbcexcel'
 
 VERSION 0.6.7 
 
   2012/08/01 RODBC Excel wasn't throwing an error when trying 
-             to fetch a table that oes not exists, but edbRead 
+             to fetch a table that does not exists, but edbRead 
              was hanging anyway later. Now edbRead stops with 
              the error message from ODBC.
   2012/08/01 edbRead.RODBC_Excel now suports table names without 

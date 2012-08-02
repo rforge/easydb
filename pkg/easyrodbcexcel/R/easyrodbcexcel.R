@@ -1,26 +1,3 @@
-# source( "C:/_R_PACKAGES/easydb/pkg/easydb/R/edb_ms_excel.R" )
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-
-# See the ../DESCRIPTION file for information on the package & 
-# terms of use.
-
-# Author: Julien MOEYS, after a VB code by Fredrik Stenemo
-
-# Language & Software environment: R. 
-# See ..\DESCRIPTION for more details
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-# Loading required packages:
-
-# Remove this once the package is "stable" 
-# require( "soilmacroutils" ) 
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-
-
-
-
-
 
 .edbOperation.RODBC_Excel <- function(# Connect to a MS Excel file (referenced by 'edb'), do some operation and close the database.
 ### Connect to a database (referenced by 'edb'), do some 
@@ -44,14 +21,14 @@
 ### operation is done, the database connection is closed (even if an 
 ### error was detected).
 
- errorClasses=c("simpleError","error","condition"),  
-### Vector of character strings. Error data classes to be found in 
-### tryCatch result.
+#  errorClasses=c("simpleError","error","condition"),  
+# ### Vector of character strings. Error data classes to be found in 
+# ### tryCatch result.
 
- stopOnError=TRUE, 
-### Single logical. If TRUE and an error is detected, the function stops 
-### AFTER closing the database and driver. If FALSE it just returns 
-### the error as an object.
+#  stopOnError=TRUE, 
+# ### Single logical. If TRUE and an error is detected, the function stops 
+# ### AFTER closing the database and driver. If FALSE it just returns 
+# ### the error as an object.
 
  errorMessage="An error was detected by tryCatch", 
 ### Error message to be send if an error is detected. Either as 
@@ -64,9 +41,7 @@
  ...
 ### Additional parameters to be passed to some function in \code{expr}.
 
-){  # Empty output:
-    exprOut <- NULL 
-    #
+){  
     require( "RODBC" ) 
     
 #     if( "dbLogin" %in% names(edb) ){ 
@@ -102,13 +77,10 @@
     
     ## Set on.exit, so the database will be closed in case of 
     ## an error
-    on.exit( 
-        expr = { 
-            odbcClose( channel = dbCon )
-            # message( errorMessage ) 
-        }, 
-        add  = TRUE 
-    )   
+    on.exit( expr = { 
+        odbcClose( channel = dbCon ) 
+        message( errorMessage )  ##  'Clearer' error message
+    } ) 
     
     if( any( dbCon == -1 ) ){ 
         stop( sprintf( "Connexion to MS Excel database %s failed.", edb[[ "dbName" ]] ) ) 
@@ -144,7 +116,13 @@
     #         warning( errorMessage ) 
     #     }   #
     # }   #
-    #
+    
+    on.exit( expr = { 
+        odbcClose( channel = dbCon )  ##  No more error message
+    } ) 
+    
+    
+    
     return( exprOut ) 
 ### The function returns the object 'exprOut' eventually outputed 
 ### by expr, and NULL otherwise.
@@ -204,8 +182,8 @@ edbColnames.RODBC_Excel <- function(# Retrieve column names of a table in a MS E
                 ... 
             )   #
         }), #
-        errorClasses = c("simpleError","error","condition"),  
-        stopOnError  = TRUE, 
+        # errorClasses = c("simpleError","error","condition"),  
+        # stopOnError  = TRUE, 
         errorMessage = msg, 
         # ... options for expr:
         sqtable      = tableName, 
@@ -360,7 +338,7 @@ edbRead.RODBC_Excel <- function(# Read all or part of a table in a MS Excel file
     )   #
     sCol       <- selectWhat[[ "sCol" ]] 
     selectWhat <- selectWhat[[ "selectWhat" ]] 
-    # 
+    
     # Prepare the 1st series of constrains:
     sRow <- easydb:::.edb.sRow( # Create row constrains
         sRow    = sRow, 
@@ -368,10 +346,10 @@ edbRead.RODBC_Excel <- function(# Read all or part of a table in a MS Excel file
         charQ   = "'", 
         colQ    = c("[","]") 
     )   #
-    #
+    
     # DISTINCT statement
     distinct <- ifelse(distinct,"DISTINCT ","")
-    #
+    
     # ORDER BY statement:
     if( !is.null(orderBy) ){ 
         orderBy <- paste( 
@@ -383,7 +361,7 @@ edbRead.RODBC_Excel <- function(# Read all or part of a table in a MS Excel file
     }else{ 
         orderBy <- "" 
     }   #
-    #
+    
     # Create the full querry statement:
     statement <- paste( 
             sep = "", 
@@ -393,17 +371,17 @@ edbRead.RODBC_Excel <- function(# Read all or part of a table in a MS Excel file
             orderBy, 
             ";\n" 
         )   #
-    #
+    
     if( verbose ){ 
         cat( "SQL statement:\n" ) 
         cat( statement, sep = "\n" )
     }   #
-    #
+    
     msg <- sprintf( 
         fmt = "Error detected in sqlQuery() in edbRead.RODBC_Excel() (database: %s; table: %s). Database connection closed.\n", 
         edb[["dbName"]], tableName 
     )   #
-    #
+    
     tbl <- .edbOperation.RODBC_Excel(
         edb          = edb, 
         expr         = expression({ 
@@ -412,8 +390,8 @@ edbRead.RODBC_Excel <- function(# Read all or part of a table in a MS Excel file
                 ...  
             )   #
         }),  #
-        errorClasses = c("simpleError","error","condition"),  
-        stopOnError  = TRUE, 
+        # errorClasses = c("simpleError","error","condition"),  
+        # stopOnError  = TRUE, 
         errorMessage = msg, 
         # ... options for expr:
         query        = statement, 
@@ -428,34 +406,34 @@ edbRead.RODBC_Excel <- function(# Read all or part of a table in a MS Excel file
         stop( tbl ) 
     }   
     
-    if( dim(tbl)[2] == 0 ) 
-    {   #
-        fieldsRes <- edbColnames.RODBC_Excel( 
-            edb       = edb,
-            tableName = tableName 
-        )   #
-        #
-        tbl <- as.data.frame( 
-            matrix( 
-                data = vector(mode = "numeric", length = 0), 
-                nrow = 0, 
-                ncol = length( fieldsRes ) 
-            )   #
-        )   #
-        #
-        colnames(tbl) <- fieldsRes 
-        #
-        if( length(sCol) != 0 ) 
-        {   #
-            tbl <- tbl[, sCol, drop = FALSE ] 
-        }   #
-    }   #
-    #
+    # if( dim(tbl)[2] == 0 ) 
+    # {   #
+    #     fieldsRes <- edbColnames.RODBC_Excel( 
+    #         edb       = edb,
+    #         tableName = tableName 
+    #     )   #
+    #     #
+    #     tbl <- as.data.frame( 
+    #         matrix( 
+    #             data = vector(mode = "numeric", length = 0), 
+    #             nrow = 0, 
+    #             ncol = length( fieldsRes ) 
+    #         )   #
+    #     )   #
+    #     #
+    #     colnames(tbl) <- fieldsRes 
+    #     #
+    #     if( length(sCol) != 0 ) 
+    #     {   #
+    #         tbl <- tbl[, sCol, drop = FALSE ] 
+    #     }   #
+    # }   #
+    
     tbl <- easydb:::.formatCol( 
         x         = tbl, 
         formatCol = formatCol 
     )   #
-    #
+    
     return( tbl ) 
 ### The function returns the requested table. 
 }   #
@@ -507,8 +485,8 @@ edbNames.RODBC_Excel <- function(# Retrieve table names in a MS Excel file (refe
                 ...  
             )   #
         }), #
-        errorClasses = c("simpleError","error","condition"),  
-        stopOnError  = TRUE, 
+        # errorClasses = c("simpleError","error","condition"),  
+        # stopOnError  = TRUE, 
         errorMessage = msg, 
         readOnly     = TRUE, 
         # ... options for expr:
@@ -842,15 +820,16 @@ edbWrite.RODBC_Excel <- function(# Write data in a MS Excel table in a database 
                 # 3 - Put the columns in the right order:
                 data <- data[, colNamez ] 
             }   #
-            # 
+            
             msg <- sprintf( 
-                fmt = "Error detected in dbWriteTable() in edbWrite.RODBC_Excel() (database: %s; table: %s). Database connection closed.\n", 
+                fmt = "Error detected in sqlSave() in edbWrite.RODBC_Excel() (database: %s; table: %s). Database connection closed.\n", 
                 edb[["dbName"]], tableName 
-            )   #
-            #
-            oldOptions <- options( "warn" )[[ 1 ]] 
-            options( "warn" = 1 )  
-            #
+            )   
+            
+            oldOptions <- getOption( "warn" ) 
+            
+            options( "warn" = max( c( 1, oldOptions ) ) )  
+            
             res <- .edbOperation.RODBC_Excel(
                 edb          = edb, 
                 expr         = expression({ 
@@ -859,8 +838,8 @@ edbWrite.RODBC_Excel <- function(# Write data in a MS Excel table in a database 
                         ... 
                     )   #
                 }),  #
-                errorClasses = c("simpleError","error","condition"),  
-                stopOnError  = TRUE, 
+                # errorClasses = c("simpleError","error","condition"),  
+                # stopOnError  = TRUE, 
                 errorMessage = msg, 
                 readOnly     = FALSE, 
                 # ... options for expr:
@@ -924,8 +903,8 @@ edbWrite.RODBC_Excel <- function(# Write data in a MS Excel table in a database 
                         expr         = expression({ 
                             exprOut <- .edbSendGetQuery.RODBC_Excel( channel = dbCon, ... )
                         }), #
-                        errorClasses = c("simpleError","error","condition"),  
-                        stopOnError  = TRUE, 
+                        # errorClasses = c("simpleError","error","condition"),  
+                        # stopOnError  = TRUE, 
                         errorMessage = msg, 
                         readOnly     = FALSE, 
                         # ... options for expr:
@@ -1050,7 +1029,7 @@ edbWrite.RODBC_Excel <- function(# Write data in a MS Excel table in a database 
         options( "warn" = 1 )  
         #
         msg <- sprintf( 
-            fmt = "Error detected in .edbOperation.RODBC_Excel() in edbWrite.RODBC_Excel() (database: %s; table: %s), update mode. Database connection closed.\n", 
+            fmt = "Error detected in sqlUpdate() in edbWrite.RODBC_Excel() (database: %s; table: %s), update mode. Database connection closed.\n", 
             edb[["dbName"]], tableName 
         )   #
         #
@@ -1062,8 +1041,8 @@ edbWrite.RODBC_Excel <- function(# Write data in a MS Excel table in a database 
                     ... 
                 )   #
             }), #
-            errorClasses = c("simpleError","error","condition"),  
-            stopOnError  = TRUE, 
+            # errorClasses = c("simpleError","error","condition"),  
+            # stopOnError  = TRUE, 
             errorMessage = msg, 
             readOnly     = FALSE, 
             # ... options for expr:
@@ -1457,8 +1436,8 @@ edbDrop.RODBC_Excel <- function(# Drop a table in a MS Excel file (referenced by
                 ...  
             )   #
         }),  #
-        errorClasses = c("simpleError","error","condition"),  
-        stopOnError  = TRUE, 
+        # errorClasses = c("simpleError","error","condition"),  
+        # stopOnError  = TRUE, 
         errorMessage = msg, 
         readOnly     = FALSE, 
         # ... options for expr:
@@ -1547,12 +1526,12 @@ edbQuery.RODBC_Excel <- function(# Send and retrieve a query in an MS Excel data
     #
     # require( "DBI" ) # in .edbOperation.RSQLite_SQLite
     # require( "RSQLite" ) 
-    #
+    
     msg <- sprintf( 
         fmt = "Error detected in sqlQuery() in edbQuery.RSQLite_SQLite() (database: %s). Database connection closed.\n", 
         edb[["dbName"]] 
     )   #
-    #
+    
     qRes <- .edbOperation.RODBC_Excel(
         edb          = edb, 
         expr         = expression({ 
@@ -1562,8 +1541,8 @@ edbQuery.RODBC_Excel <- function(# Send and retrieve a query in an MS Excel data
             )   #
         }),  #
         #maxCon      = 1,  
-        errorClasses = c("simpleError","error","condition"),  
-        stopOnError  = TRUE, 
+        # errorClasses = c("simpleError","error","condition"),  
+        # stopOnError  = TRUE, 
         errorMessage = msg, 
         # ... options for expr:
         query        = statement, 

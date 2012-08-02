@@ -1,6 +1,18 @@
+VERSION 0.7.1
+
+  2012/08/02 edbRead.RODBC_MySQL() now captures some errors 
+             from (R)ODBC that were silently returned as a vector 
+             of character strings.
+  2012/08/02 .edbOperation.RODBC_MySQL() now uses on.exit() 
+             instead of tryCatch() to close the database 
+             (even when an error occur). This should make 
+             error message clearer.
+
 VERSION 0.7.0
 
-  2012/08/01 Separated easyrodbcmysql from easydb.
+  2012/08/01 'easyrodbcmysql' is now a package separated from 
+             (but dependent on) 'easydb'. 'easydb' defines the 
+             S3 Generic classes used by 'easyrodbcmysql'
 
 VERSION 0.6.7 
 

@@ -1,6 +1,6 @@
 Package: easyrodbcexcel
-Version: 0.7.0
-Date: 2012-08-01
+Version: 0.7.1
+Date: 2012-08-02
 Title: Simple database interface for RODBC Excel.
 Author: Julien MOEYS <Julien.Moeys@mark.slu.se> 
 Maintainer: Julien MOEYS <Julien.Moeys@mark.slu.se> 
