@@ -58,10 +58,13 @@
     
     ## Set on.exit, so the database will be closed in case of 
     ## an error
-    on.exit( expr = { 
-        odbcClose( channel = dbCon ) 
-        message( errorMessage )  ##  'Clearer' error message
-    } ) 
+    dbQuit <- function(){ 
+        dbDisconnect( conn = dbCon ) 
+        dbUnloadDriver( sqliteCon ) 
+        message( errorMessage )  ##  'Clearer' error message 
+    }   
+    
+    on.exit( dbQuit() ) 
     
     
     ## expr should output its result to 'exprOut'
@@ -108,10 +111,12 @@
     #         warning( errorMessage ) 
     #     }   #
     # }   #
+    dbQuit <- function(){ 
+        dbDisconnect( conn = dbCon ) 
+        dbUnloadDriver( sqliteCon ) 
+    }   
     
-    on.exit( expr = expression( { 
-        odbcClose( channel = dbCon )  ##  No more error message
-    } ) ) 
+    on.exit( dbQuit() ) 
     
     return( exprOut ) 
 ### The function returns the object 'exprOut' eventually outputed 
