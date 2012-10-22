@@ -3,7 +3,7 @@ rm(list=ls(all=TRUE))
 pkg.dir.win  <- "C:/_R_PACKAGES/easydb/pkg" 
 # pkg.dir.lin  <- "/media/JMOEYS_8G2/_R_PACKAGES/easydb/pkg" 
 pkg.name     <- "easyrsqlite" 
-pkg.version  <- "0.7.1"  
+pkg.version  <- "0.7.2"  
 pkg.depends  <- c("RSQLite","easydb") 
 pkg.suggests <- NULL 
 RVersion     <- "R (>= 2.15.1)" 

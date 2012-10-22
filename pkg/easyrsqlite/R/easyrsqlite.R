@@ -655,6 +655,16 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
 ### Single logical. If TRUE, information on what is done are output 
 ### on screen.
 
+#  speedInsert=FALSE, 
+# ### Single logical. If TRUE, \code{edbWrite.RODBC_MySQL} will bulk 
+# ### multiple insert statements into one query, instead of inserting 
+# ### data row by row (slower). Will only work if \code{getKey} is 
+# ### \code{NULL} and \code{mode} is \code{"a"}.
+
+#  speedInsertNRow=100L, 
+# ### Single integer. Number of rows to be inserted at once when 
+# ### \code{speedInsert} is \code{TRUE}.
+
  ...
 ### Additional parameters to be passed to class-specific method. See 
 ### \code{methods("edbWrite")}
@@ -745,38 +755,110 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
                 # 3 - Put the columns in the right order:
                 data <- data[, colNamez ] 
             }   #
-            # 
-            msg <- sprintf( 
-                fmt = "Error detected in dbWriteTable() in edbWrite.RSQLite_SQLite() (database: %s; table: %s). Database connection closed.\n", 
-                edb[["dbName"]], tableName 
-            )   #
-            #
-            oldOptions <- getOption( "warn" ) 
             
-            options( "warn" = max( c( 1, oldOptions ) ) )  
-            
-            res <- .edbOperation.RSQLite_SQLite(
-                edb          = edb, 
-                expr         = expression({ 
-                    exprOut <- dbWriteTable( 
-                        conn        = dbCon, 
-                        ... 
-                    )   #
-                }),  #
-                maxCon       = 1,  
-                # errorClasses = c("simpleError","error","condition"),  
-                # stopOnError  = TRUE, 
-                errorMessage = msg, 
-                # ... options for expr:
-                name         = tableName, 
-                value        = data, 
-                row.names    = FALSE, 
-                overwrite    = !append, 
-                append       = append,   
-                ... 
-            )   #
-            
-            options( "warn" = oldOptions ) 
+            # if( speedInsert ){ ## Fast, bulk insert of rows
+            #     data <- easydb:::.splitBySize( 
+            #         x    = data, 
+            #         size = speedInsertNRow 
+            #     )   
+            #     
+            #     res <- lapply(
+            #         X   = data, 
+            #         FUN = function(X,tableName){ 
+            #             ## Format the table fort sending as a query
+            #             X <- easydb:::.formatTable4Query( 
+            #                 data        = X, 
+            #                 del         = "'", 
+            #                 posixFormat = posixFormat, 
+            #                 dateFormat  = dateFormat  
+            #             )   
+            #             
+            #             dataCol <- colnames( X ) 
+            #             
+            #             ## Concatenate the values to be inserted
+            #             XX <- X; rm(X) 
+            #             
+            #             insertString1 <- paste0( 
+            #                         as.character( XX[ 1, ] ), 
+            #                         " AS `", dataCol, "`" ) 
+            #             insertString1 <- paste( insertString1, 
+            #                 collapse = ", " ) 
+            #             
+            #             if( nrow(XX) > 1 ){ 
+            #                 insertString <- unlist( lapply( 
+            #                     X   = 2:nrow( XX ), 
+            #                     FUN = function(X,XX){ 
+            #                         ins <- paste0( "", paste( as.character( XX[ X, ] ), 
+            #                             collapse = ", " ), "" ) 
+            #                             
+            #                         return( ins )
+            #                     },  
+            #                     XX = XX 
+            #                 ) ) 
+            #                 
+            #                 insertString <- paste0( 
+            #                     "        SELECT ", insertString1, "\n", 
+            #                     "  UNION SELECT ", 
+            #                     paste( insertString, collapse = "\n  UNION SELECT " ) 
+            #                 )   
+            #             }else{ 
+            #                 insertString <- paste0( 
+            #                     "  SELECT ", insertString1 ) 
+            #             }   
+            #             
+            #             ## Concatenate the full query
+            #             sqlInsert <- paste0( 
+            #                 "INSERT INTO `", tableName, "`\n", 
+            #                 #"(", paste( "`", dataCol, "`", collapse = ",", sep = "" ), ")\n", 
+            #                 #"VALUES\n", 
+            #                 insertString, ";\n" 
+            #             )   
+            #             
+            #             if( verbose ){ 
+            #                 cat( sqlInsert ) 
+            #             }   
+            #             
+            #             ## Send the query
+            #             res <- edbQuery( edb, statement = sqlInsert ) 
+            #             
+            #             return( res ) 
+            #         },  
+            #         tableName = tableName 
+            #     )   
+            #     
+            # }else{             ## Rows inserted one by one (!speedInsert) 
+                msg <- sprintf( 
+                    fmt = "Error detected in dbWriteTable() in edbWrite.RSQLite_SQLite() (database: %s; table: %s). Database connection closed.\n", 
+                    edb[["dbName"]], tableName 
+                )   #
+                #
+                oldOptions <- getOption( "warn" ) 
+                
+                options( "warn" = max( c( 1, oldOptions ) ) )  
+                
+                res <- .edbOperation.RSQLite_SQLite(
+                    edb          = edb, 
+                    expr         = expression({ 
+                        exprOut <- dbWriteTable( 
+                            conn        = dbCon, 
+                            ... 
+                        )   #
+                    }),  #
+                    maxCon       = 1,  
+                    # errorClasses = c("simpleError","error","condition"),  
+                    # stopOnError  = TRUE, 
+                    errorMessage = msg, 
+                    # ... options for expr:
+                    name         = tableName, 
+                    value        = data, 
+                    row.names    = FALSE, 
+                    overwrite    = !append, 
+                    append       = append,   
+                    ... 
+                )   #
+                
+                options( "warn" = oldOptions ) 
+            # }   
         }else{ 
             #
             data <- easydb:::.formatTable4Query( 
