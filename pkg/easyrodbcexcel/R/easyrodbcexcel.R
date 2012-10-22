@@ -77,10 +77,12 @@
     
     ## Set on.exit, so the database will be closed in case of 
     ## an error
-    on.exit( expr = { 
+    dbQuit <- function(){ 
         odbcClose( channel = dbCon ) 
         message( errorMessage )  ##  'Clearer' error message
-    } ) 
+    }   
+    
+    on.exit( dbQuit() ) 
     
     if( any( dbCon == -1 ) ){ 
         stop( sprintf( "Connexion to MS Excel database %s failed.", edb[[ "dbName" ]] ) ) 
@@ -117,11 +119,13 @@
     #     }   #
     # }   #
     
-    on.exit( expr = { 
+    ## Set on.exit, so the database will be closed in case of 
+    ## an error
+    dbQuit <- function(){ 
         odbcClose( channel = dbCon )  ##  No more error message
-    } ) 
+    }   
     
-    
+    on.exit( dbQuit() ) 
     
     return( exprOut ) 
 ### The function returns the object 'exprOut' eventually outputed 
