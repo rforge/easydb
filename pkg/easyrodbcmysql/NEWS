@@ -1,3 +1,9 @@
+VERSION 0.7.2 
+
+  2012/10/22 Work on a draft 'speedInsert' option for 
+             'edbWrite.RODBC_MySQL', for fats bulk / multiple 
+             rows insert.
+
 VERSION 0.7.1
 
   2012/08/02 edbRead.RODBC_MySQL() now captures some errors 

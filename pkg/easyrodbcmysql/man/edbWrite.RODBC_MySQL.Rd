@@ -22,6 +22,8 @@ logCreateTableIfNotExist = TRUE,
 parano = TRUE,
 testFiles = TRUE,
 verbose = FALSE,
+speedInsert = FALSE,
+speedInsertNRow = 100L,
 ...)
 }
 \arguments{
@@ -73,6 +75,12 @@ a bit (more) the function, but it may avoid some mistakes.}
 to fetch information from the database? }
   \item{verbose}{Single logical. If TRUE, information on what is done are output 
 on screen.}
+  \item{speedInsert}{Single logical. If TRUE, \code{edbWrite.RODBC_MySQL} will bulk 
+multiple insert statements into one query, instead of inserting 
+data row by row (slower). Will only work if \code{getKey} is 
+\code{NULL} and \code{mode} is \code{"a"}.}
+  \item{speedInsertNRow}{Single integer. Number of rows to be inserted at once when 
+\code{speedInsert} is \code{TRUE}.}
   \item{\dots}{Additional parameters to be passed to class-specific method. See 
 \code{methods("edbWrite")}}
 }

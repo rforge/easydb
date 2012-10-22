@@ -240,10 +240,12 @@ edbDataSource.RODBC_MySQL <- function(# Create an RODBC MySQL data source (from 
     
     ## Set on.exit, so the database will be closed in case of 
     ## an error
-    on.exit( expr = { 
+    dbQuit <- function(){ 
         odbcClose( channel = dbCon ) 
         message( errorMessage )  ##  'Clearer' error message
-    } ) 
+    }   
+    
+    on.exit( dbQuit() ) 
     
     if( any( dbCon == -1 ) ){ 
         stop( sprintf( "Connexion to ODBC source %s failed.", edb[[ "dbName" ]] ) ) 
@@ -280,9 +282,13 @@ edbDataSource.RODBC_MySQL <- function(# Create an RODBC MySQL data source (from 
     #     }   #
     # }   #
     
-    on.exit( expr = { 
+    ## Set on.exit, so the database will be closed in case of 
+    ## an error
+    dbQuit <- function(){ 
         odbcClose( channel = dbCon )  ##  No more error message
-    } ) 
+    }   
+    
+    on.exit( dbQuit() ) 
     
     return( exprOut ) 
 ### The function returns the object 'exprOut' eventually outputed 
@@ -815,6 +821,16 @@ edbWrite.RODBC_MySQL <- function(# Write data in a MySQL table in a database (re
 ### Single logical. If TRUE, information on what is done are output 
 ### on screen.
 
+ speedInsert=FALSE, 
+### Single logical. If TRUE, \code{edbWrite.RODBC_MySQL} will bulk 
+### multiple insert statements into one query, instead of inserting 
+### data row by row (slower). Will only work if \code{getKey} is 
+### \code{NULL} and \code{mode} is \code{"a"}.
+
+ speedInsertNRow=100L, 
+### Single integer. Number of rows to be inserted at once when 
+### \code{speedInsert} is \code{TRUE}.
+
  ...
 ### Additional parameters to be passed to class-specific method. See 
 ### \code{methods("edbWrite")}
@@ -898,38 +914,92 @@ edbWrite.RODBC_MySQL <- function(# Write data in a MySQL table in a database (re
                 data <- data[, colNamez ] 
             }   #
             
-            msg <- sprintf( 
-                fmt = "Error detected in sqlSave() in edbWrite.RODBC_MySQL() (database: %s; table: %s). Database connection closed.\n", 
-                edb[["dbName"]], tableName 
-            )   #
-            
-            oldOptions <- getOption( "warn" ) 
-            
-            options( "warn" = max( c( 1, oldOptions ) ) )  
-            
-            res <- .edbOperation.RODBC_MySQL(
-                edb          = edb, 
-                expr         = expression({ 
-                    exprOut <- sqlSave( 
-                        channel = dbCon, 
-                        ... 
-                    )   #
-                }),  #
-                maxCon       = 1,  
-                # errorClasses = c("simpleError","error","condition"),  
-                # stopOnError  = TRUE, 
-                errorMessage = msg, 
-                # ... options for expr:
-                tablename    = tableName, 
-                dat          = data, 
-                rownames     = FALSE, 
-                append       = append,   
-                ... 
-            )   #
-            
-            options( "warn" = oldOptions ) 
-        }else{ 
-            #
+            if( speedInsert ){ ## Fast, bulk insert of rows
+                data <- easydb:::.splitBySize( 
+                    x    = data, 
+                    size = speedInsertNRow 
+                )   
+                
+                res <- lapply(
+                    X   = data, 
+                    FUN = function(X,tableName){ 
+                        ## Format the table fort sending as a query
+                        X <- easydb:::.formatTable4Query( 
+                            data        = X, 
+                            del         = "'", 
+                            posixFormat = posixFormat, 
+                            dateFormat  = dateFormat  
+                        )   
+                        
+                        dataCol <- colnames( X ) 
+                        
+                        ## Concatenate the values to be inserted
+                        XX <- X; rm(X) 
+                        
+                        insertString <- unlist( lapply( 
+                            X   = 1:nrow( XX ), 
+                            FUN = function(X,XX){ 
+                                ins <- paste0( "  (", paste( as.character( XX[ X, ] ), 
+                                    collapse = "," ), ")" ) 
+                                    
+                                return( ins )
+                            },  
+                            XX = XX 
+                        ) ) 
+                        
+                        insertString <- paste( insertString, collapse = ", \n" ) 
+                        
+                        ## Concatenate the full query
+                        sqlInsert <- paste0( 
+                            "INSERT INTO `", tableName, "`\n", 
+                            "(", paste( "`", dataCol, "`", collapse = ",", sep = "" ), ")\n", 
+                            "VALUES\n", 
+                            insertString, ";\n" 
+                        )   
+                        
+                        if( verbose ){ 
+                            cat( sqlInsert ) 
+                        }   
+                        
+                        ## Send the query
+                        res <- edbQuery( edb, statement = sqlInsert ) 
+                        
+                        return( res ) 
+                    },  
+                    tableName = tableName 
+                )   
+                
+            }else{             ## Rows inserted one by one (!speedInsert)
+                msg <- sprintf( 
+                    fmt = "Error detected in sqlSave() in edbWrite.RODBC_MySQL() (database: %s; table: %s). Database connection closed.\n", 
+                    edb[["dbName"]], tableName 
+                )   #
+                
+                oldOptions <- getOption( "warn" ) 
+                
+                options( "warn" = max( c( 1, oldOptions ) ) )  
+                
+                res <- .edbOperation.RODBC_MySQL(
+                    edb          = edb, 
+                    expr         = expression({ 
+                        exprOut <- sqlSave( 
+                            channel = dbCon, 
+                            ... 
+                        )   #
+                    }),  #
+                    maxCon       = 1,  
+                    errorMessage = msg, 
+                    # ... options for expr:
+                    tablename    = tableName, 
+                    dat          = data, 
+                    rownames     = FALSE, 
+                    append       = append,   
+                    ... 
+                )   
+                
+                options( "warn" = oldOptions ) 
+            }   
+        }else{ ## !is.null( getKey )
             data <- easydb:::.formatTable4Query( 
                 data        = data, 
                 del         = "'", 
