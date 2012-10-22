@@ -1276,3 +1276,49 @@ edbQuery <- function(# Read all or part of a table in a database (referenced by 
     UseMethod( generic = "edbQuery", object = edb ) 
 }   #
 
+
+
+
+
+
+.splitBySize <- function(# Split a vector or data.frame in equal size groups.
+### Split a vector or data.frame in equal size groups. 
+
+ x, 
+### A vector or a data.frame to be splitted.
+
+ size, 
+### Size of the groups to be created.
+
+ ...
+### Additional parameters passed to \code{\link[base]{split}}.
+
+){  n <- NULL 
+    
+    if( is.vector( x ) ){ 
+        n <- length(x) 
+    }   
+    
+    if( is.data.frame( x ) ){ 
+        n <- nrow(x) 
+    }   
+    
+    if( is.matrix( x ) ){ 
+        x <- as.data.frame( x ) 
+        n <- nrow( x ) 
+    }   
+    
+    if( is.null(n) ){ 
+        stop( "'x' must be a vector, a matrix or a data.frame" )
+    }   
+    
+    ## Create a vector of groups ID
+    grp <- ceiling( n / size ) 
+    grp <- rep( 1:grp, each = size ) 
+    grp <- as.integer( grp[ 1:n ] ) 
+    
+    return( split( x = x, f = grp ) )
+### Returns a splitted \code{x} object.
+}   
+
+

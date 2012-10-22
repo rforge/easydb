@@ -1,6 +1,6 @@
 Package: easydb
-Version: 0.7.0
-Date: 2012-08-02
+Version: 0.7.1
+Date: 2012-10-22
 Title: Generic S3 classes for simple database interfaces.
 Author: Julien MOEYS <Julien.Moeys@mark.slu.se> 
 Maintainer: Julien MOEYS <Julien.Moeys@mark.slu.se> 
