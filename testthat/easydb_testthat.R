@@ -2,11 +2,12 @@
 # https://github.com/hadley/devtools/wiki/Testing 
 
 library( "easydb" ) 
+library( "RODBC" ) 
+library( "easyrodbcmysql" ) 
 library( "testthat" ) 
 
 
 
-library( "RODBC" ) 
 
 
 
@@ -33,8 +34,7 @@ myDb <- edb(
     dbLogin      = "edbtestuser", 
     dbPwd        = ref[["dbPwd"]], 
     dbHost       = ref[["dbHost"]], 
-    dbPort       = 80 
-    # dbPort       = 3306 
+    dbPort       = 3306 
 )   #    
 
 
