@@ -1,3 +1,10 @@
+VERSION 0.7.3 
+
+  2012/10/23 Created .sCol.format() and related functions, 
+             as foundation for a system converting R expressions 
+             into SQL expressions (like translating 'mean(x)' 
+             into 'AVG(`x`)') in edbRead().
+
 VERSION 0.7.1 
 
   2012/10/22 Added the function '.splitBySize' as a support 
