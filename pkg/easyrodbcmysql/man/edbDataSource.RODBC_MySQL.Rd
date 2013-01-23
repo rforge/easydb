@@ -7,13 +7,8 @@ class-specific method corresponding to the class of the
 \code{edb} object provided. Notice that the exectutable 
 odbcconf.exe should be on Windows path, otherwise the command 
 will fail.}
-\usage{
-\method{edbDataSource}{RODBC_MySQL}(edb,
-trash = FALSE,
-mysqlOdbcDriver = "MySQL ODBC 5.1 Driver",
-verbose = FALSE,
-...)
-}
+\usage{\method{edbDataSource}{RODBC_MySQL}(edb, trash = FALSE, mysqlOdbcDriver = "MySQL ODBC 5.2a Driver", 
+    verbose = FALSE, ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}
   \item{trash}{Single logical. If TRUE, then a dummy ODBC data source will 

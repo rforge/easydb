@@ -7,21 +7,11 @@ used, (b) the table modified, (c) the operation date, (d) R version, (e)
 easydb version, (f) the option useds ('mode' and 'getKey' if used with 
 edbWrite()). This is not version control, and this is not comprehensive 
 operation log.}
-\usage{
-edbLog(edb,
-tableName = as.character(NA),
-fun = as.character(NA),
-date = date(),
-R.version = R.version.string,
-nodename = Sys.info()[["nodename"]],
-edbVersion = NULL,
-mode = as.character(NA),
-getKey = as.character(NA),
-logRandId = rnorm(1),
-logMsg = as.character(NA),
-logTableName = "edbLog",
-logCreateTableIfNotExist = TRUE)
-}
+\usage{edbLog(edb, tableName = as.character(NA), fun = as.character(NA), 
+    date = date(), R.version = R.version.string, nodename = Sys.info()[["nodename"]], 
+    edbVersion = NULL, mode = as.character(NA), getKey = as.character(NA), 
+    logRandId = rnorm(1), logMsg = as.character(NA), logTableName = "edbLog", 
+    logCreateTableIfNotExist = TRUE)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link{edb}}.
 Database in which the log has to be written.}

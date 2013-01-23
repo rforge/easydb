@@ -4,12 +4,7 @@
 \description{Read all or part of a table in a database (referenced by 'edb'). 
 Generic function that call class-specific method corresponding 
 to the class of the \code{edb} object provided.}
-\usage{
-edbQuery(edb,
-statement,
-formatCol = NULL,
-...)
-}
+\usage{edbQuery(edb, statement, formatCol = NULL, ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link{edb}}.}
   \item{statement}{Single character string. SQL statement / SQL query to be passed 

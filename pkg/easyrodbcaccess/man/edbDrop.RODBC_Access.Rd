@@ -2,18 +2,9 @@
 \alias{edbDrop.RODBC_Access}
 \title{Drop a table in a MS Access database (referenced by 'edb').}
 \description{Drop a table in a MS Access database (referenced by 'edb'). }
-\usage{
-\method{edbDrop}{RODBC_Access}(edb,
-tableName,
-logOp = FALSE,
-logRandId = rnorm(1),
-logMsg = as.character(NA),
-logTableName = "edbLog",
-logCreateTableIfNotExist = TRUE,
-testFiles = TRUE,
-verbose = FALSE,
-...)
-}
+\usage{\method{edbDrop}{RODBC_Access}(edb, tableName, logOp = FALSE, logRandId = rnorm(1), 
+    logMsg = as.character(NA), logTableName = "edbLog", logCreateTableIfNotExist = TRUE, 
+    testFiles = TRUE, verbose = FALSE, ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}
   \item{tableName}{Single character string. Name of the table to read in 'edb'.}

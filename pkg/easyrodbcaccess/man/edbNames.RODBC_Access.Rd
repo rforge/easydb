@@ -2,12 +2,8 @@
 \alias{edbNames.RODBC_Access}
 \title{Retrieve table names in a MS Access database (referenced by 'edb').}
 \description{Retrieve table names in a MS Access database (referenced by 'edb'). }
-\usage{
-\method{edbNames}{RODBC_Access}(edb,
-onlyNames = TRUE,
-testFiles = TRUE,
-...)
-}
+\usage{\method{edbNames}{RODBC_Access}(edb, onlyNames = TRUE, testFiles = TRUE, 
+    ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}
   \item{onlyNames}{Single logical. If TRUE only returns the table names (vector), 

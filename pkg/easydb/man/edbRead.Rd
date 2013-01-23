@@ -4,18 +4,9 @@
 \description{Read all or part of a table in a database (referenced by 'edb'). 
 Generic function that call class-specific method corresponding 
 to the class of the \code{edb} object provided.}
-\usage{
-edbRead(edb,
-tableName,
-sRow = NULL,
-sCol = NULL,
-sRowOp = c("AND",
-"OR")[1],
-formatCol = NULL,
-distinct = FALSE,
-orderBy = NULL,
-...)
-}
+\usage{edbRead(edb, tableName, sRow = NULL, sCol = NULL, sRowOp = c("AND", 
+    "OR")[1], formatCol = NULL, distinct = FALSE, orderBy = NULL, 
+    ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link{edb}}.}
   \item{tableName}{Single character string. Name of the table to read in 'edb'.}

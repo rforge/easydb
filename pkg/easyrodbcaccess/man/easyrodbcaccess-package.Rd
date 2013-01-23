@@ -1,12 +1,13 @@
 \name{easyrodbcaccess-package}
 \alias{easyrodbcaccess-package}
+\alias{easyrodbcaccess}
 \docType{package}
 \title{Simple database interface for SQLite, MySQL and MS Access.}
 \description{Simple database interface for MS Access. easyrodbcaccess is build on top of RODBC. It provides functions for reading, writing, listing and subsetting tables in MS Access. easyrodbcaccess allow to retrieve, write and subset database's tables in a similar way as data.frame's, using single square brackets db[,,,]. easyrodbcaccess internalise many database operations (otherwise tedious) such as rows and columns subsetting (no SQL needed) and connection and disconnection to / from databases.}
 \details{
 \tabular{ll}{Package: \tab easyrodbcaccess\cr
-Version: \tab 0.7.2\cr
-Date: \tab 2012-10-22\cr
+Version: \tab 0.7.3\cr
+Date: \tab 2012-11-30\cr
 Title: \tab Simple database interface for SQLite, MySQL and MS Access.\cr
 Author: \tab Julien MOEYS <Julien.Moeys@mark.slu.se>\cr
 Maintainer: \tab Julien MOEYS <Julien.Moeys@mark.slu.se>\cr

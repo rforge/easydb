@@ -1,6 +1,6 @@
 Package: easyrodbcaccess
-Version: 0.7.2
-Date: 2012-10-22
+Version: 0.7.3
+Date: 2012-11-30
 Title: Simple database interface for SQLite, MySQL and MS Access.
 Author: Julien MOEYS <Julien.Moeys@mark.slu.se> 
 Maintainer: Julien MOEYS <Julien.Moeys@mark.slu.se> 

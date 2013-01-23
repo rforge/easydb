@@ -2,20 +2,9 @@
 \alias{edbRead.RODBC_Access}
 \title{Read all or part of a table in a MS Access database (referenced by 'edb').}
 \description{Read all or part of a table in a MS Access database (referenced by 'edb'). }
-\usage{
-\method{edbRead}{RODBC_Access}(edb,
-tableName,
-sRow = NULL,
-sCol = NULL,
-sRowOp = c("AND",
-"OR")[1],
-formatCol = NULL,
-distinct = FALSE,
-orderBy = NULL,
-testFiles = TRUE,
-verbose = FALSE,
-...)
-}
+\usage{\method{edbRead}{RODBC_Access}(edb, tableName, sRow = NULL, sCol = NULL, 
+    sRowOp = c("AND", "OR")[1], formatCol = NULL, distinct = FALSE, 
+    orderBy = NULL, testFiles = TRUE, verbose = FALSE, ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}
   \item{tableName}{Single character string. Name of the table to read in 'edb'.}

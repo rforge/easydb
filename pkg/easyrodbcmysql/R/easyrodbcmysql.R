@@ -88,7 +88,7 @@ edbDataSource.RODBC_MySQL <- function(# Create an RODBC MySQL data source (from 
 ### Single logical. If TRUE, then a dummy ODBC data source will 
 ### be created
 
- mysqlOdbcDriver="MySQL ODBC 5.1 Driver", 
+ mysqlOdbcDriver="MySQL ODBC 5.2a Driver", 
 ### Single character string. Name of the MySQL ODBC Driver, as 
 ### displayed in the ODBC data source management GUI.
 

@@ -4,16 +4,9 @@
 \description{Drop a table in a database (referenced by 'edb'). 
 Generic function that call class-specific method corresponding 
 to the class of the \code{edb} object provided.}
-\usage{
-edbDrop(edb,
-tableName,
-logOp = FALSE,
-logRandId = rnorm(1),
-logMsg = as.character(NA),
-logTableName = "edbLog",
-logCreateTableIfNotExist = TRUE,
-...)
-}
+\usage{edbDrop(edb, tableName, logOp = FALSE, logRandId = rnorm(1), 
+    logMsg = as.character(NA), logTableName = "edbLog", logCreateTableIfNotExist = TRUE, 
+    ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link{edb}}.}
   \item{tableName}{Single character string. Name of the table to read in 'edb'.}

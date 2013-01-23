@@ -19,7 +19,7 @@ context("1. Testing easydb for MySQL databases")
 # computer) -- replace this by your own password and 
 # host IP.
 ref <- dget( file = 
-    "C:/_R_PACKAGES/easydb/testthat_ref/testthat_ref.txt" ) 
+    "D:/Users/julienm/Documents/_WORKS/_PROJECTS/r_packages/easydb/testthat_ref/testthat_ref.txt" ) 
 names( ref ); class( ref ) 
 # [1] "dbPwd"  "dbHost"
 # [1] "list"
@@ -41,33 +41,33 @@ myDb <- edb(
 
 ### Windows only:
 if( Sys.info()[[ "sysname" ]] == "Windows" ){ 
-    #
+    
     context("1. 1. MySQL for MS Windows") 
-    #
+    
     test_that("Register the data source in ODBC", {
         res <- edbDataSource( myDb, verbose = TRUE ) 
-        #
+        
         expect_that( res, equals(0) )
-    } ) #
-    #
+    } ) 
+    
     # TEST edbNames()
-    #
+    
     test_that("List the table names in the database", {
         res <- edbNames( edb = myDb, onlyNames = FALSE ) 
-        #
+        
         expect_that( class(res), equals("data.frame") ) 
         expect_that( nrow(res) > 1, equals(TRUE) )
-    } ) #
-    #
+    } ) 
+    
     test_that("List the table names in the database (2)", {
         res <- edbNames( edb = myDb ) 
-        #
+        
         expect_that( class(res), equals("character") ) 
         expect_that( length(res) > 1, equals(TRUE) )
-    } ) #
-    #
+    } ) 
+    
     # TEST edbColnames()
-    #
+    
     test_that("List the column names in a table", {
         res <- edbColnames( edb = myDb, tableName = "WRB_SOIL_GROUP" ) 
         #

@@ -6,11 +6,7 @@
 corresponding to the class of the \code{edb} object provided.
 Notice that the methods do NOT retrieve the full table to 
 get its column names (so it should work even if the table is big).}
-\usage{
-edbColnames(edb,
-tableName,
-...)
-}
+\usage{edbColnames(edb, tableName, ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link{edb}}.}
   \item{tableName}{Single character string. Name of the table to read in 'edb'.}

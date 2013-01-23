@@ -2,14 +2,8 @@
 \alias{edbQuery.RODBC_Access}
 \title{Send and retrieve a query in an MS Access database (referenced by 'edb').}
 \description{Send and retrieve a query in a SQLIte database (referenced by 'edb'). }
-\usage{
-\method{edbQuery}{RODBC_Access}(edb,
-statement,
-formatCol = NULL,
-testFiles = TRUE,
-verbose = FALSE,
-...)
-}
+\usage{\method{edbQuery}{RODBC_Access}(edb, statement, formatCol = NULL, testFiles = TRUE, 
+    verbose = FALSE, ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}
   \item{statement}{Single character string. SQL statement / SQL query to be passed 

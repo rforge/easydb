@@ -2,30 +2,12 @@
 \alias{edbWrite.RODBC_MySQL}
 \title{Write data in a MySQL table in a database (referenced by 'edb').}
 \description{Write data in a table in a MySQL database (referenced by 'edb'). }
-\usage{
-\method{edbWrite}{RODBC_MySQL}(edb,
-tableName,
-data,
-mode = c("a",
-"u",
-"o")[1],
-pKey = NULL,
-getKey = NULL,
-formatCol = NULL,
-posixFormat = "",
-dateFormat = "",
-logOp = FALSE,
-logRandId = rnorm(1),
-logMsg = as.character(NA),
-logTableName = "edbLog",
-logCreateTableIfNotExist = TRUE,
-parano = TRUE,
-testFiles = TRUE,
-verbose = FALSE,
-speedInsert = FALSE,
-speedInsertNRow = 100L,
-...)
-}
+\usage{\method{edbWrite}{RODBC_MySQL}(edb, tableName, data, mode = c("a", "u", 
+    "o")[1], pKey = NULL, getKey = NULL, formatCol = NULL, posixFormat = "", 
+    dateFormat = "", logOp = FALSE, logRandId = rnorm(1), logMsg = as.character(NA), 
+    logTableName = "edbLog", logCreateTableIfNotExist = TRUE, 
+    parano = TRUE, testFiles = TRUE, verbose = FALSE, speedInsert = FALSE, 
+    speedInsertNRow = 100L, ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}
   \item{tableName}{Single character string. Name of the table to read in 'edb'.}

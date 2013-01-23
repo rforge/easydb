@@ -4,10 +4,7 @@
 \description{Retrieve table names in a database (referenced by 'edb'). 
 Generic function that call class-specific method corresponding 
 to the class of the \code{edb} object provided.}
-\usage{
-edbNames(edb,
-...)
-}
+\usage{edbNames(edb, ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link{edb}}.}
   \item{\dots}{Additional parameters to be passed to class-specific method. See 

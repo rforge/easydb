@@ -1,9 +1,9 @@
 # source( "C:/_R_PACKAGES/easydb/easydb_Compile.R", echo = TRUE, verbose = FALSE ) 
 rm(list=ls(all=TRUE)) 
-pkg.dir.win  <- "C:/_R_PACKAGES/easydb/pkg" 
+pkg.dir.win  <- "D:/Users/julienm/Documents/_WORKS/_PROJECTS/r_packages/easydb/pkg" 
 # pkg.dir.lin  <- "/media/JMOEYS_8G2/_R_PACKAGES/easydb/pkg" 
 pkg.name     <- "easyrodbcaccess" 
-pkg.version  <- "0.7.2" 
+pkg.version  <- "0.7.3" 
 pkg.depends  <- c("RODBC","easydb") 
 pkg.suggests <- NULL 
 RVersion     <- "R (>= 2.15.1)" 

@@ -2,13 +2,8 @@
 \alias{edbQuery.RODBC_MySQL}
 \title{Send and retrieve a query in a SQLite database (referenced by 'edb').}
 \description{Send and retrieve a query in a SQLIte database (referenced by 'edb'). }
-\usage{
-\method{edbQuery}{RODBC_MySQL}(edb,
-statement,
-formatCol = NULL,
-verbose = FALSE,
-...)
-}
+\usage{\method{edbQuery}{RODBC_MySQL}(edb, statement, formatCol = NULL, verbose = FALSE, 
+    ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}
   \item{statement}{Single character string. SQL statement / SQL query to be passed 

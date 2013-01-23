@@ -462,7 +462,7 @@ edbNames.RODBC_Access <- function(# Retrieve table names in a MS Access database
 
 
 
-"[.RODBC_Access" <- function(# "[" method for reading all or part of a table in a MS Access database (referenced by 'edb').
+"[.RODBC_Access" <- function(# "[]" method for reading all or part of a table in a MS Access database (referenced by 'edb').
 ### "[" method for reading all or part of a table in a MS Access 
 ### database (referenced by 'edb'). Wrapper for 
 ### \code{\link{edbRead.RODBC_Access}}. 
