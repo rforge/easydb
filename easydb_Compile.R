@@ -1,13 +1,11 @@
-# source( "C:/_R_PACKAGES/easydb/easydb_Compile.R", echo = TRUE, verbose = FALSE ) 
 rm(list=ls(all=TRUE)) 
 pkgName     <- "easydb" 
 rootDir     <- "D:/Users/julienm/Documents/_WORKS/_PROJECTS/r_packages/easydb" 
 pkgDir      <- file.path( rootDir, "pkg" )  
-pkgVersion  <- "0.7.3" 
+pkgVersion  <- "0.7.4" 
 pkgDepends  <- NULL 
 pkgSuggests <- NULL # c( "easyrsqlite", "easyrodbcexcel", "easyrodbcmysql", "easyrodbcaccess" ) 
 RVersion    <- NULL 
-r.path       <- ""  #  Use curent R version
 
 # Version history
 #       0.2.x = MySQL finshed; 
@@ -18,6 +16,7 @@ r.path       <- ""  #  Use curent R version
 #       0.7.x = Separated base-easydb from easyrodbcexcel and 
 #               easyrsqlite
 #       0.7.3 = new 64 bit computer
+#       0.7.4 = compiled on R 3.0.0 
 
 
 
