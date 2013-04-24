@@ -342,7 +342,8 @@ edbRead.RODBC_Access <- function(# Read all or part of a table in a MS Access da
         edb          = edb, 
         expr         = expression({ 
             exprOut <- sqlQuery( 
-                channel = dbCon, 
+                channel          = dbCon, 
+                stringsAsFactors = FALSE, 
                 ...  
             )   #
         }), 
@@ -556,8 +557,9 @@ edbNames.RODBC_Access <- function(# Retrieve table names in a MS Access database
 
 ){  #
     exprOut <- sqlQuery( 
-        channel = channel, 
-        query   = query[1], 
+        channel          = channel, 
+        query            = query[1], 
+        stringsAsFactors = FALSE, 
         ... 
     )   #
     #
@@ -568,7 +570,8 @@ edbNames.RODBC_Access <- function(# Retrieve table names in a MS Access database
     )   #
     #
     exprOut <- sqlGetResults( 
-        channel = channel, 
+        channel          = channel, 
+        stringsAsFactors = FALSE, 
         ... 
     )   #
     #
@@ -1329,7 +1332,8 @@ edbDelete.RODBC_Access <- function(# Delete all or some rows in a table in a MS 
         edb          = edb, 
         expr         = expression({ 
             exprOut <- sqlQuery( 
-                channel = dbCon, 
+                channel          = dbCon, 
+                stringsAsFactors = FALSE, 
                 ...  
             )   #
         }),  #
@@ -1438,7 +1442,8 @@ edbDrop.RODBC_Access <- function(# Drop a table in a MS Access database (referen
         edb          = edb, 
         expr         = expression({ 
             exprOut <- sqlQuery( 
-                channel = dbCon, 
+                channel          = dbCon, 
+                stringsAsFactors = FALSE, 
                 ...  
             )   #
         }),  #
@@ -1534,7 +1539,8 @@ edbQuery.RODBC_Access <- function(# Send and retrieve a query in an MS Access da
         edb          = edb, 
         expr         = expression({ 
             exprOut <- sqlQuery( 
-                channel = dbCon, 
+                channel          = dbCon, 
+                stringsAsFactors = FALSE, 
                 ...  
             )   #
         }),  #
