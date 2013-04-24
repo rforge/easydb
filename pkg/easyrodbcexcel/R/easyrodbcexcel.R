@@ -390,7 +390,8 @@ edbRead.RODBC_Excel <- function(# Read all or part of a table in a MS Excel file
         edb          = edb, 
         expr         = expression({ 
             exprOut <- sqlQuery( 
-                channel = dbCon, 
+                channel          = dbCon, 
+                stringsAsFactors = FALSE, 
                 ...  
             )   #
         }),  #
@@ -604,8 +605,9 @@ edbNames.RODBC_Excel <- function(# Retrieve table names in a MS Excel file (refe
 
 ){  #
     exprOut <- sqlQuery( 
-        channel = channel, 
-        query   = query[1], 
+        channel          = channel, 
+        query            = query[1], 
+        stringsAsFactors = FALSE, 
         ... 
     )   #
     #
@@ -616,7 +618,8 @@ edbNames.RODBC_Excel <- function(# Retrieve table names in a MS Excel file (refe
     )   #
     #
     exprOut <- sqlGetResults( 
-        channel = channel, 
+        channel          = channel, 
+        stringsAsFactors = FALSE, 
         ... 
     )   #
     #
@@ -1436,7 +1439,8 @@ edbDrop.RODBC_Excel <- function(# Drop a table in a MS Excel file (referenced by
         edb          = edb, 
         expr         = expression({ 
             exprOut <- sqlQuery( 
-                channel = dbCon, 
+                channel          = dbCon, 
+                stringsAsFactors = FALSE, 
                 ...  
             )   #
         }),  #
@@ -1540,7 +1544,8 @@ edbQuery.RODBC_Excel <- function(# Send and retrieve a query in an MS Excel data
         edb          = edb, 
         expr         = expression({ 
             exprOut <- sqlQuery( 
-                channel = dbCon, 
+                channel          = dbCon, 
+                stringsAsFactors = FALSE, 
                 ...  
             )   #
         }),  #
