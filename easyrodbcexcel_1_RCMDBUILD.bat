@@ -1,8 +1,8 @@
-set pkgname=easyrodbcaccess
+set pkgname=easyrodbcexcel
 set projectname=easydb
 
 cd /D "%rPackagesDir%\%projectname%\pkg" 
 
-R CMD build --compact-vignettes="gs" easyrodbcexcel 
+R CMD build --compact-vignettes="gs" %pkgname% 
 
 pause

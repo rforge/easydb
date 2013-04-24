@@ -1,5 +1,7 @@
-c:
-cd \
-cd "_R_PACKAGES\easydb\pkg" 
-R CMD INSTALL --build --compact-docs --byte-compile easyrodbcexcel
+set pkgname=easyrodbcexcel
+set projectname=easydb
+
+cd /D "%rPackagesDir%\%projectname%\pkg" 
+
+R CMD INSTALL --build --compact-docs --byte-compile %pkgname%
 pause
