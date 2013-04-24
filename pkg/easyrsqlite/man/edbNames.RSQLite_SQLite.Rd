@@ -2,11 +2,7 @@
 \alias{edbNames.RSQLite_SQLite}
 \title{Retrieve table names in a SQLIte database (referenced by 'edb').}
 \description{Retrieve table names in a SQLite database (referenced by 'edb'). }
-\usage{
-\method{edbNames}{RSQLite_SQLite}(edb,
-testFiles = TRUE,
-...)
-}
+\usage{\method{edbNames}{RSQLite_SQLite}(edb, testFiles = TRUE, ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}
   \item{testFiles}{Single logical. Should the function test for the presence 

@@ -2,21 +2,10 @@
 \alias{edbDelete.RSQLite_SQLite}
 \title{Delete all or some rows in a table in a SQLIte database (referenced by 'edb').}
 \description{Delete all or some rows in a table in a SQLIte database (referenced by 'edb'). }
-\usage{
-\method{edbDelete}{RSQLite_SQLite}(edb,
-tableName,
-sRow = NULL,
-sRowOp = c("AND",
-"OR")[1],
-logOp = FALSE,
-logRandId = rnorm(1),
-logMsg = as.character(NA),
-logTableName = "edbLog",
-logCreateTableIfNotExist = TRUE,
-testFiles = TRUE,
-verbose = FALSE,
-...)
-}
+\usage{\method{edbDelete}{RSQLite_SQLite}(edb, tableName, sRow = NULL, sRowOp = c("AND", 
+    "OR")[1], logOp = FALSE, logRandId = rnorm(1), logMsg = as.character(NA), 
+    logTableName = "edbLog", logCreateTableIfNotExist = TRUE, 
+    testFiles = TRUE, verbose = FALSE, ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}
   \item{tableName}{Single character string. Name of the table to read in 'edb'.}

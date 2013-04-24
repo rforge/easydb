@@ -2,14 +2,8 @@
 \alias{edbQuery.RSQLite_SQLite}
 \title{Send and retrieve a query in a SQLIte database (referenced by 'edb').}
 \description{Send and retrieve a query in a SQLIte database (referenced by 'edb'). }
-\usage{
-\method{edbQuery}{RSQLite_SQLite}(edb,
-statement,
-formatCol = NULL,
-testFiles = TRUE,
-verbose = FALSE,
-...)
-}
+\usage{\method{edbQuery}{RSQLite_SQLite}(edb, statement, formatCol = NULL, testFiles = TRUE, 
+    verbose = FALSE, ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}
   \item{statement}{Single character string. SQL statement / SQL query to be passed 

@@ -5,12 +5,8 @@
 (referenced by 'edb'). Wrapper around DBI::dbListFields().
 Notice that the method does NOT retrieve the full table to 
 get its column names (so it should work even if the table is big).}
-\usage{
-\method{edbColnames}{RSQLite_SQLite}(edb,
-tableName,
-testFiles = TRUE,
-...)
-}
+\usage{\method{edbColnames}{RSQLite_SQLite}(edb, tableName, testFiles = TRUE, 
+    ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}
   \item{tableName}{Single character string. Name of the table to read in 'edb'.}
