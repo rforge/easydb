@@ -1,10 +1,11 @@
 Package: easyrodbcaccess
-Version: 0.7.3
-Date: 2012-11-30
+Version: 0.7.5
+Date: 2013-04-24
 Title: Simple database interface for SQLite, MySQL and MS Access.
 Author: Julien MOEYS <Julien.Moeys@mark.slu.se> 
 Maintainer: Julien MOEYS <Julien.Moeys@mark.slu.se> 
-Depends: R (>= 2.15.1), RODBC, easydb
+Depends: R (>= 3.0.0), RODBC, easydb
 Description: Simple database interface for MS Access. easyrodbcaccess is build on top of RODBC. It provides functions for reading, writing, listing and subsetting tables in MS Access. easyrodbcaccess allow to retrieve, write and subset database's tables in a similar way as data.frame's, using single square brackets db[,,,]. easyrodbcaccess internalise many database operations (otherwise tedious) such as rows and columns subsetting (no SQL needed) and connection and disconnection to / from databases. 
 License: AGPL-3
 URL: http://easydb.r-forge.r-project.org/ 
+Suggests: 
