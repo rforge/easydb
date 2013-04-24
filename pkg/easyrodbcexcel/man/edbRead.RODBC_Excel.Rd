@@ -2,21 +2,10 @@
 \alias{edbRead.RODBC_Excel}
 \title{Read all or part of a table in a MS Excel file (referenced by 'edb').}
 \description{Read all or part of a table in a MS Excel file (referenced by 'edb'). }
-\usage{
-\method{edbRead}{RODBC_Excel}(edb,
-tableName,
-sRow = NULL,
-sCol = NULL,
-sRowOp = c("AND",
-"OR")[1],
-formatCol = NULL,
-distinct = FALSE,
-orderBy = NULL,
-testFiles = TRUE,
-tableNameSuffix = "$",
-verbose = FALSE,
-...)
-}
+\usage{\method{edbRead}{RODBC_Excel}(edb, tableName, sRow = NULL, sCol = NULL, 
+    sRowOp = c("AND", "OR")[1], formatCol = NULL, distinct = FALSE, 
+    orderBy = NULL, testFiles = TRUE, tableNameSuffix = "$", 
+    verbose = FALSE, ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}
   \item{tableName}{Single character string. Name of the table to read in 'edb'.}
@@ -59,7 +48,7 @@ column names between square brackets [] if they contain spaces.}
 to fetch information from the database? }
   \item{tableNameSuffix}{Single logical. Suffix added at the end of the table name, if 
 not already present. For some reasons ODBC Excel functions need 
-column names ending with a  suffix. Set to  
+column names ending with a \code{"$"} suffix. Set to \code{""} 
 to skip the suffix.}
   \item{verbose}{Single logical. If TRUE, information on what is done are output 
 on screen.}

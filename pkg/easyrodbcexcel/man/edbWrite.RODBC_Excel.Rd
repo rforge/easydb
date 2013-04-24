@@ -2,29 +2,12 @@
 \alias{edbWrite.RODBC_Excel}
 \title{Write data in a MS Excel table in a database (referenced by 'edb').}
 \description{Write data in a table in a MS Excel file (referenced by 'edb'). }
-\usage{
-\method{edbWrite}{RODBC_Excel}(edb,
-tableName,
-data,
-mode = c("a",
-"u",
-"o")[1],
-pKey = NULL,
-getKey = NULL,
-formatCol = NULL,
-posixFormat = "",
-dateFormat = "",
-logOp = FALSE,
-logRandId = rnorm(1),
-logMsg = as.character(NA),
-logTableName = "edbLog",
-logCreateTableIfNotExist = TRUE,
-parano = TRUE,
-testFiles = TRUE,
-tableNameSuffix = "$",
-verbose = FALSE,
-...)
-}
+\usage{\method{edbWrite}{RODBC_Excel}(edb, tableName, data, mode = c("a", "u", 
+    "o")[1], pKey = NULL, getKey = NULL, formatCol = NULL, posixFormat = "", 
+    dateFormat = "", logOp = FALSE, logRandId = rnorm(1), logMsg = as.character(NA), 
+    logTableName = "edbLog", logCreateTableIfNotExist = TRUE, 
+    parano = TRUE, testFiles = TRUE, tableNameSuffix = "$", verbose = FALSE, 
+    ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}
   \item{tableName}{Single character string. Name of the table to read in 'edb'.}
@@ -70,7 +53,7 @@ a bit (more) the function, but it may avoid some mistakes.}
 to fetch information from the database? }
   \item{tableNameSuffix}{Single logical. Suffix added at the end of the table name, if 
 not already present. For some reasons ODBC Excel functions need 
-column names ending with a  suffix. Set to  
+column names ending with a \code{"$"} suffix. Set to \code{""} 
 to skip the suffix.}
   \item{verbose}{Single logical. If TRUE, information on what is done are output 
 on screen.}

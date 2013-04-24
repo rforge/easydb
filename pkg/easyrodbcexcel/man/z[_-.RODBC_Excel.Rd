@@ -4,18 +4,7 @@
 \description{"[<-" method for MS Excel files. Write data in a table in a 
 MS Excel file (referenced by 'edb'). }
 \usage{
-\method{[}{RODBC_Excel}(edb,
-tableName,
-mode = "a",
-pKey = NULL,
-getKey = NULL,
-formatCol = NULL,
-posixFormat = "",
-dateFormat = "",
-parano = TRUE,
-verbose = FALSE,
-...) <- 
-value
+\method{[}{RODBC_Excel}(edb, tableName, mode = "a", pKey = NULL, getKey = NULL, formatCol = NULL, posixFormat = "", dateFormat = "", parano = TRUE, verbose = FALSE, ...) <- value
 }
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}
