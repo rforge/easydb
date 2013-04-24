@@ -9,7 +9,7 @@
 
 ){  #
     msg <- sprintf( 
-        "'%s' package loaded. Type help(package='%s') for examples and help.", 
+        "'%s' package loaded. For the help menu, type help(pack='%s')", 
         pkgname, pkgname ) 
     
     packageStartupMessage( msg ) 
