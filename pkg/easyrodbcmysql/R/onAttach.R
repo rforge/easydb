@@ -1,4 +1,4 @@
-.onLoad <- function(# Print a welcome message
+.onAttach <- function(# Print a welcome message
 ### Print a welcome message.
 
  libname, 
@@ -15,3 +15,4 @@
     packageStartupMessage( msg ) 
 ### Does not return anything.
 }   #
+

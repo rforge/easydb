@@ -492,7 +492,8 @@ edbRead.RODBC_MySQL <- function(# Read all or part of a table in a MySQL databas
         edb          = edb, 
         expr         = expression({ 
             exprOut <- sqlQuery( 
-                channel = dbCon, 
+                channel          = dbCon, 
+                stringsAsFactors = FALSE, 
                 ...  
             )   #
         }),  #
@@ -696,8 +697,9 @@ edbNames.RODBC_MySQL <- function(# Retrieve table names in a MySQL database (ref
 
 ){  #
     exprOut <- sqlQuery( 
-        channel = channel, 
-        query   = query[1], 
+        channel          = channel, 
+        query            = query[1], 
+        stringsAsFactors = FALSE, 
         ... 
     )   #
     #
@@ -708,7 +710,8 @@ edbNames.RODBC_MySQL <- function(# Retrieve table names in a MySQL database (ref
     )   #
     #
     exprOut <- sqlGetResults( 
-        channel = channel, 
+        channel          = channel, 
+        stringsAsFactors = FALSE, 
         ... 
     )   #
     #
@@ -1167,7 +1170,8 @@ edbWrite.RODBC_MySQL <- function(# Write data in a MySQL table in a database (re
                     edb          = edb, 
                     expr         = expression({ 
                         exprOut <- sqlQuery( 
-                            channel = dbCon, 
+                            channel          = dbCon, 
+                            stringsAsFactors = FALSE, 
                             ... 
                         )   #
                     }),  #
@@ -1470,7 +1474,8 @@ edbDelete.RODBC_MySQL <- function(# Delete all or some rows in a table in a MySQ
         edb          = edb, 
         expr         = expression({ 
             exprOut <- sqlQuery( 
-                channel = dbCon, 
+                channel          = dbCon, 
+                stringsAsFactors = FALSE, 
                 ...  
             )   #
         }),  #
@@ -1575,7 +1580,8 @@ edbDrop.RODBC_MySQL <- function(# Drop a table in a MySQL database (referenced b
         edb          = edb, 
         expr         = expression({ 
             exprOut <- sqlQuery( 
-                channel = dbCon, 
+                channel          = dbCon, 
+                stringsAsFactors = FALSE, 
                 ...  
             )   #
         }),  #
@@ -1672,7 +1678,8 @@ edbQuery.RODBC_MySQL <- function(# Send and retrieve a query in a SQLite databas
         edb          = edb, 
         expr         = expression({ 
             exprOut <- sqlQuery( 
-                channel = dbCon, 
+                channel          = dbCon, 
+                stringsAsFactors = FALSE, 
                 ...  
             )   #
         }),  #
