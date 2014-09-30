@@ -1,18 +1,26 @@
-.onAttach <- function(# Print a welcome message
-### Print a welcome message.
 
+.onAttach <- function(# Internal. Message displayed when loading the package.
  libname, 
-### See help(".onLoad")
-
- pkgname
-### See help(".onLoad")
-
-){  #
-    msg <- sprintf( 
-        "'%s' package loaded. For the help menu, type help(pack='%s')", 
-        pkgname, pkgname ) 
-    
-    packageStartupMessage( msg ) 
-### Does not return anything.
-}   #
-
+ pkgname  
+){      
+    # Welcome message
+    if( interactive() ){ 
+        svnVersion <- system.file( "SVN_VERSION", package = pkgname ) 
+        
+        if( svnVersion != "" ){ 
+            svnVersion <- readLines( con = svnVersion )[ 1L ] 
+            svnVersion <- sprintf( "(svn revision: %s)", svnVersion ) 
+        }else{ 
+            svnVersion <- "(svn revision: ?)" 
+        }   
+        
+        msg <- sprintf( 
+            "%s %s %s. For help type: help(pack='%s')", 
+            pkgname, 
+            as.character( packageVersion( pkgname ) ), 
+            svnVersion, 
+            pkgname ) 
+        
+        packageStartupMessage( msg ) 
+    }   
+}   
