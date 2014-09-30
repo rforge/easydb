@@ -216,7 +216,7 @@ edbDataSource.RODBC_MySQL <- function(# Create an RODBC MySQL data source (from 
 ### Additional parameters to be passed to some function in \code{expr}.
 
 ){  
-    require( "RODBC" ) 
+    # require( "RODBC" ) 
     
     # Test that the ODBC datasource has been set:
     sourceTest <- edb[[ "dbSourceName" ]] %in% names( odbcDataSources() ) 
