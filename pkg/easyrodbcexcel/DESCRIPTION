@@ -1,10 +1,10 @@
 Package: easyrodbcexcel
-Version: 0.7.5
-Date: 2013-04-24
+Version: 0.7.6
+Date: 2014-09-30
 Title: Simple database interface for RODBC Excel.
 Author: Julien MOEYS <Julien.Moeys@mark.slu.se> 
 Maintainer: Julien MOEYS <Julien.Moeys@mark.slu.se> 
-Depends: R (>= 3.0.0), RODBC, easydb
+Depends: R (>= 3.1.1), RODBC, easydb
 Suggests: 
 Description: Simple database interface for RODBC Excel. Package build on top of RODBC. Provides functions for reading, writing, listing and subsetting tables in Excel. Allows to retrieve, write and subset Excel files's spreadsheets in a similar way as data.frame's, using single square brackets db[,,,]. easyrodbcexcel internalise many database operations (otherwise tedious) such as rows and columns subsetting (no SQL needed) and connection and disconnection to / from databases. 
 License: AGPL-3

@@ -42,7 +42,7 @@
 ### Additional parameters to be passed to some function in \code{expr}.
 
 ){  
-    require( "RODBC" ) 
+    # require( "RODBC" ) 
     
 #     if( "dbLogin" %in% names(edb) ){ 
 #         uid <- edb[[ "dbLogin" ]] 
