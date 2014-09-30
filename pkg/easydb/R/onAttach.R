@@ -1,45 +1,29 @@
-# .onLoad <- function(# Print a welcome message
-# ### Print a welcome message.
 
- # libname, 
-# ### See help(".onLoad")
-
- # pkgname
-# ### See help(".onLoad")
-
-# ){  #
-    # msg <- sprintf( 
-        # "'%s' package loaded. Type help(package='%s') for examples and help.", 
-        # pkgname, pkgname ) 
-    
-    # msg2 <- sprintf( 
-        # "    Notice that '%s' has been significantly refactored. Please have a look at 'easyrsqlite', 'easyrodbcaccess', 'easyrodbcexcel' or 'easyrodbcmysql'.", 
-        # pkgname, pkgname ) 
-    
-    # packageStartupMessage( msg, msg2 ) 
-# ### Does not return anything.
-# }   #
-
-
-
-.onAttach <- function(# Print a welcome message
-### Print a welcome message.
-
+.onAttach <- function(# Internal. Message displayed when loading the package.
  libname, 
-### See help(".onLoad")
+ pkgname  
+){      
+    # Welcome message
+    if( interactive() ){ 
+        svnVersion <- system.file( "SVN_VERSION", package = pkgname ) 
+        
+        if( svnVersion != "" ){ 
+            svnVersion <- readLines( con = svnVersion )[ 1L ] 
+            svnVersion <- sprintf( "(svn revision: %s)", svnVersion ) 
+        }else{ 
+            svnVersion <- "(svn revision: ?)" 
+        }   
+        
+        msg <- sprintf( 
+            "%s %s %s. For help type: help(pack='%s')", 
+            pkgname, 
+            as.character( packageVersion( pkgname ) ), 
+            svnVersion, 
+            pkgname ) 
+        
+        packageStartupMessage( msg ) 
+    }   
+}   
 
- pkgname
-### See help(".onLoad")
 
-){  #
-    msg <- sprintf( 
-        "'%s' package loaded. For the help menu, type help(pack='%s')", 
-        pkgname, pkgname ) 
-    
-    # msg2 <- sprintf( 
-        # "    Notice that '%s' has been significantly refactored. Please have a look at 'easyrsqlite', 'easyrodbcaccess', 'easyrodbcexcel' or 'easyrodbcmysql'.", 
-        # pkgname, pkgname ) 
-    
-    packageStartupMessage( msg ) # , msg2
-### Does not return anything.
-}   #
+
