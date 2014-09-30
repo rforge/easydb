@@ -1,7 +1,7 @@
 \name{[<-.RSQLite_SQLite}
 \alias{[<-.RSQLite_SQLite}
-\title{"[<-" method for SQLite databases. Write data in a SQLite table in a database (referenced by 'edb').}
-\description{"[<-" method for SQLite databases. Write data in a table in a 
+\title{Assign method for SQLite databases. Write data in a SQLite table in a database (referenced by 'edb').}
+\description{Assign method for SQLite databases. Write data in a table in a 
 SQLite database (referenced by 'edb'). }
 \usage{
 \method{[}{RSQLite_SQLite}(edb, tableName, mode = "a", pKey = NULL, getKey = NULL, formatCol = NULL, posixFormat = "", dateFormat = "", parano = TRUE, testFiles = TRUE, verbose = FALSE, ...) <- value

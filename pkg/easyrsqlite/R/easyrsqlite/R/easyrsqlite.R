@@ -44,7 +44,7 @@
 ### Additional parameters to be passed to some function in \code{expr}.
 
 ){  
-    # require( "RSQLite" ) 
+    require( "RSQLite" ) 
     
     sqliteCon <- dbDriver( 
         drvName = "SQLite", 

@@ -1,7 +1,7 @@
 \name{[.RSQLite_SQLite}
 \alias{[.RSQLite_SQLite}
-\title{"[" method for reading all or part of a table in a SQLite database (referenced by 'edb').}
-\description{"[" method for reading all or part of a table in a SQLite 
+\title{Extract method for reading all or part of a table in a SQLite database (referenced by 'edb').}
+\description{Extract method for reading all or part of a table in a SQLite 
 database (referenced by 'edb'). Wrapper for 
 \code{\link{edbRead.RSQLite_SQLite}}. }
 \usage{
