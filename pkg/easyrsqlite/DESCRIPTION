@@ -1,11 +1,11 @@
 Package: easyrsqlite
-Version: 0.7.4
-Date: 2014-09-30
-Title: Simple database interface for SQLite.
-Author: Julien MOEYS <Julien.Moeys@mark.slu.se> 
-Maintainer: Julien MOEYS <Julien.Moeys@mark.slu.se> 
+Version: 0.7.5
+Date: 2015-05-04
+Title: Simple Database Interface for SQLite
+Author: Julien MOEYS <Julien.Moeys@mark.slu.se>
+Maintainer: Julien MOEYS <Julien.Moeys@mark.slu.se>
 Depends: R (>= 3.1.1), RSQLite, easydb
-Suggests: 
-Description: Simple database interface for SQLite. easyrsqlite is build on top of RSQLite. It provides functions for reading, writing, listing and subsetting tables in SQLite. easyrsqlite allow to retrieve, write and subset database's tables in a similar way as data.frame's, using single square brackets db[,,,]. easyrsqlite internalise many database operations (otherwise tedious) such as rows and columns subsetting (no SQL needed) and connection and disconnection to / from databases. 
+Description: Simple database interface for SQLite. easyrsqlite is build on top of RSQLite. It provides functions for reading, writing, listing and subsetting tables in SQLite. easyrsqlite allow to retrieve, write and subset database's tables in a similar way as data.frame's, using single square brackets db[,,,]. easyrsqlite internalise many database operations (otherwise tedious) such as rows and columns subsetting (no SQL needed) and connection and disconnection to / from databases.
 License: AGPL-3
-URL: http://easydb.r-forge.r-project.org/ 
+URL: http://easydb.r-forge.r-project.org/
+Imports: DBI

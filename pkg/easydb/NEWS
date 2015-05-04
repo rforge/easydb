@@ -1,6 +1,10 @@
 
 Package: easydb
 
+VERSION 0.7.6
+
+    2015/05/04  Compiled for R 3.2.0
+
 VERSION 0.7.5
 
     2014/09/29  Compiled for R 3.1.1

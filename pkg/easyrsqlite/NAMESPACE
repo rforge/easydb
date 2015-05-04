@@ -1,4 +1,4 @@
-import(RSQLite, easydb)
+import(RSQLite, easydb, DBI)
 
 exportPattern("^[[:alpha:]]+")
 
@@ -12,3 +12,5 @@ S3method("edbNRow", "RSQLite_SQLite")
 S3method("edbQuery", "RSQLite_SQLite")
 S3method("edbRead", "RSQLite_SQLite")
 S3method("edbWrite", "RSQLite_SQLite")
+
+importFrom("DBI","dbDriver")
