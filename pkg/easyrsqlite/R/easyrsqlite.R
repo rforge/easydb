@@ -37,8 +37,8 @@
 #  drvName="SQLite",
 # ### Single character string. See ?dbDriver 
 
- maxCon=1,  
-### Single integer. See ?dbDriver 
+ # maxCon=1,  
+# ### Single integer. See ?dbDriver 
 
  ...
 ### Additional parameters to be passed to some function in \code{expr}.
@@ -47,8 +47,8 @@
     # require( "RSQLite" ) 
     
     sqliteCon <- dbDriver( 
-        drvName = "SQLite", 
-        max.con = maxCon  
+        drvName = "SQLite"  
+        # max.con = maxCon  
     )   #
     
     dbCon <- dbConnect( 
@@ -172,7 +172,7 @@ edbColnames.RSQLite_SQLite <- function(# Retrieve column names of a table in a S
                 ... 
             )   #
         }), #
-        maxCon       = 1,  
+        # maxCon       = 1,  
         # errorClasses = c("simpleError","error","condition"),  
         # stopOnError  = TRUE, 
         errorMessage = msg, 
@@ -332,7 +332,7 @@ edbRead.RSQLite_SQLite <- function(# Read all or part of a table in a SQLIte dat
                 ...  
             )   #
         }),  #
-        maxCon       = 1,  
+        # maxCon       = 1,  
         # errorClasses = c("simpleError","error","condition"),  
         # stopOnError  = TRUE, 
         errorMessage = msg, 
@@ -419,7 +419,7 @@ edbNames.RSQLite_SQLite <- function(# Retrieve table names in a SQLIte database 
                 ...  
             )   #
         }), #
-        maxCon       = 1, 
+        # maxCon       = 1, 
         # errorClasses = c("simpleError","error","condition"),  
         # stopOnError  = TRUE, 
         errorMessage = msg, 
@@ -844,7 +844,7 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
                             ... 
                         )   #
                     }),  #
-                    maxCon       = 1,  
+                    # maxCon       = 1,  
                     # errorClasses = c("simpleError","error","condition"),  
                     # stopOnError  = TRUE, 
                     errorMessage = msg, 
@@ -913,7 +913,7 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
                         expr         = expression({ 
                             exprOut <- .edbSendGetQuery.RSQLite_SQLite( conn = dbCon, ... )
                         }), #
-                        maxCon       = 1,  
+                        # maxCon       = 1,  
                         # errorClasses = c("simpleError","error","condition"),  
                         # stopOnError  = TRUE, 
                         errorMessage = msg, 
@@ -1037,7 +1037,7 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
                             ... 
                         )   
                     }),  #
-                    maxCon       = 1,  
+                    # maxCon       = 1,  
                     # errorClasses = c("simpleError","error","condition"),  
                     # stopOnError  = TRUE, 
                     errorMessage = msg, 
@@ -1329,7 +1329,7 @@ edbDelete.RSQLite_SQLite <- function(# Delete all or some rows in a table in a S
                 ...  
             )   #
         }),  #
-        maxCon       = 1,  
+        # maxCon       = 1,  
         # errorClasses = c("simpleError","error","condition"),  
         # stopOnError  = TRUE, 
         errorMessage = msg, 
@@ -1443,7 +1443,7 @@ edbDrop.RSQLite_SQLite <- function(# Delete all or some rows in a table in a SQL
                 ...  
             )   #
         }),  #
-        maxCon       = 1,  
+        # maxCon       = 1,  
         # errorClasses = c("simpleError","error","condition"),  
         # stopOnError  = TRUE, 
         errorMessage = msg, 
@@ -1601,7 +1601,7 @@ edbQuery.RSQLite_SQLite <- function(# Send and retrieve a query in a SQLIte data
                 ...  
             )   #
         }),  #
-        maxCon       = 1,  
+        # maxCon       = 1,  
         # errorClasses = c("simpleError","error","condition"),  
         # stopOnError  = TRUE, 
         errorMessage = msg, 

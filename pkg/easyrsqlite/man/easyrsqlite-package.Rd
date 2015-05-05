@@ -7,7 +7,7 @@
 \details{
 \tabular{ll}{Package: \tab easyrsqlite\cr
 Version: \tab 0.7.5\cr
-Date: \tab 2015-05-04\cr
+Date: \tab 2015-05-05\cr
 Title: \tab Simple Database Interface for SQLite\cr
 Author: \tab Julien MOEYS <Julien.Moeys@mark.slu.se>\cr
 Maintainer: \tab Julien MOEYS <Julien.Moeys@mark.slu.se>\cr

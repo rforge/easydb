@@ -1,6 +1,6 @@
 Package: easyrsqlite
 Version: 0.7.5
-Date: 2015-05-04
+Date: 2015-05-05
 Title: Simple Database Interface for SQLite
 Author: Julien MOEYS <Julien.Moeys@mark.slu.se>
 Maintainer: Julien MOEYS <Julien.Moeys@mark.slu.se>
