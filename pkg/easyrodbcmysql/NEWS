@@ -4,7 +4,10 @@ Package: easyrodbcmysql
 VERSION 0.7.7
 
     2015/05/05  Compiled for R 3.2.0
-
+    
+        .edbOperation.RODBC_MySQL() has lost its maxCon 
+        argument
+    
 VERSION 0.7.6
 
     2014/09/29  Compiled for R 3.1.1
