@@ -209,8 +209,8 @@ edbDataSource.RODBC_MySQL <- function(# Create an RODBC MySQL data source (from 
 ### Error message to be send if an error is detected. Either as 
 ### stop message if \code{stopOnError = TRUE} or as a warning 
 
- maxCon=1,  
-### Single integer. See ?dbDriver 
+ # maxCon=1,  
+# ### Single integer. See ?dbDriver 
 
  ...
 ### Additional parameters to be passed to some function in \code{expr}.
@@ -339,7 +339,7 @@ edbColnames.RODBC_MySQL <- function(# Retrieve column names of a table in a MySQ
                 ... 
             )   #
         }), #
-        maxCon       = 1,  
+        # maxCon       = 1,  
         # errorClasses = c("simpleError","error","condition"),  
         # stopOnError  = TRUE, 
         errorMessage = msg, 
@@ -497,7 +497,7 @@ edbRead.RODBC_MySQL <- function(# Read all or part of a table in a MySQL databas
                 ...  
             )   #
         }),  #
-        maxCon       = 1,  
+        # maxCon       = 1,  
         # errorClasses = c("simpleError","error","condition"),  
         # stopOnError  = TRUE, 
         errorMessage = msg, 
@@ -582,7 +582,7 @@ edbNames.RODBC_MySQL <- function(# Retrieve table names in a MySQL database (ref
                 ...  
             )   #
         }), #
-        maxCon       = 1,  
+        # maxCon       = 1,  
         # errorClasses = c("simpleError","error","condition"),  
         # stopOnError  = TRUE, 
         errorMessage = msg, 
@@ -990,7 +990,7 @@ edbWrite.RODBC_MySQL <- function(# Write data in a MySQL table in a database (re
                             ... 
                         )   #
                     }),  #
-                    maxCon       = 1,  
+                    # maxCon       = 1,  
                     errorMessage = msg, 
                     # ... options for expr:
                     tablename    = tableName, 
@@ -1055,7 +1055,7 @@ edbWrite.RODBC_MySQL <- function(# Write data in a MySQL table in a database (re
                         expr         = expression({ 
                             exprOut <- .edbSendGetQuery.RODBC_MySQL( channel = dbCon, ... )
                         }), #
-                        maxCon       = 1,  
+                        # maxCon       = 1,  
                         # errorClasses = c("simpleError","error","condition"),  
                         # stopOnError  = TRUE, 
                         errorMessage = msg, 
@@ -1175,7 +1175,7 @@ edbWrite.RODBC_MySQL <- function(# Write data in a MySQL table in a database (re
                             ... 
                         )   #
                     }),  #
-                    maxCon       = 1,  
+                    # maxCon       = 1,  
                     # errorClasses = c("simpleError","error","condition"),  
                     # stopOnError  = TRUE, 
                     errorMessage = msg, 
@@ -1479,7 +1479,7 @@ edbDelete.RODBC_MySQL <- function(# Delete all or some rows in a table in a MySQ
                 ...  
             )   #
         }),  #
-        maxCon       = 1,  
+        # maxCon       = 1,  
         # errorClasses = c("simpleError","error","condition"),  
         # stopOnError  = TRUE, 
         errorMessage = msg, 
@@ -1585,7 +1585,7 @@ edbDrop.RODBC_MySQL <- function(# Drop a table in a MySQL database (referenced b
                 ...  
             )   #
         }),  #
-        maxCon       = 1,  
+        # maxCon       = 1,  
         # errorClasses = c("simpleError","error","condition"),  
         # stopOnError  = TRUE, 
         errorMessage = msg, 
