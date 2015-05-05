@@ -1,11 +1,10 @@
-Package: easyrodbcmysql 
-Version: 0.7.6
-Date: 2014-09-30
-Title: Simple database interface for MySQL.
-Author: Julien MOEYS <Julien.Moeys@mark.slu.se> 
-Maintainer: Julien MOEYS <Julien.Moeys@mark.slu.se> 
+Package: easyrodbcmysql
+Version: 0.7.7
+Date: 2015-05-05
+Title: Simple Database Interface for MySQL
+Author: Julien MOEYS <Julien.Moeys@mark.slu.se>
+Maintainer: Julien MOEYS <Julien.Moeys@mark.slu.se>
 Depends: R (>= 3.1.1), RODBC, easydb
-Description: Simple database interface for MySQL. easyrodbcmysql is build on top of RODBC. It provides functions for reading, writing, listing and subsetting tables in MySQL. easyrodbcmysql allow to retrieve, write and subset database's tables in a similar way as data.frame's, using single square brackets db[,,,]. easyrodbcmysql internalise many database operations (otherwise tedious) such as rows and columns subsetting (no SQL needed) and connection and disconnection to / from databases. 
+Description: Simple database interface for MySQL. easyrodbcmysql is build on top of RODBC. It provides functions for reading, writing, listing and subsetting tables in MySQL. easyrodbcmysql allow to retrieve, write and subset database's tables in a similar way as data.frame's, using single square brackets db[,,,]. easyrodbcmysql internalise many database operations (otherwise tedious) such as rows and columns subsetting (no SQL needed) and connection and disconnection to / from databases.
 License: AGPL-3
-URL: http://easydb.r-forge.r-project.org/ 
-Suggests: 
+URL: http://easydb.r-forge.r-project.org/
