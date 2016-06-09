@@ -3,6 +3,10 @@ import()
 #   export
 exportPattern("^[[:alpha:]]+")
 export(.edb.sRow)
+export(.edb.sCol)
+export(.edbFileExists)
+export(.formatCol)
+export(.formatTable4Query) 
 
 #   importFrom
 importFrom(utils,packageVersion)
