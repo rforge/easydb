@@ -13,3 +13,5 @@ S3method("edbNRow", "RODBC_MySQL")
 S3method("edbQuery", "RODBC_MySQL")
 S3method("edbRead", "RODBC_MySQL")
 S3method("edbWrite", "RODBC_MySQL")
+
+importFrom("stats","rnorm")
