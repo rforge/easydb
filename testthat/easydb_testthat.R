@@ -18,8 +18,9 @@ context("1. Testing easydb for MySQL databases")
 # Load password and host name (only available on local
 # computer) -- replace this by your own password and 
 # host IP.
-ref <- dget( file = 
-    "D:/Users/julienm/Documents/_WORKS/_PROJECTS/r_packages/easydb/testthat_ref/testthat_ref.txt" ) 
+ref <- dget( file = sprintf( 
+    "%s/easydb/testthat_ref/testthat_ref.txt", 
+    Sys.getenv("rPackagesDir") ) ) 
 names( ref ); class( ref ) 
 # [1] "dbPwd"  "dbHost"
 # [1] "list"
