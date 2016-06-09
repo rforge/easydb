@@ -3,10 +3,11 @@
 \title{NOT SUPORTED FOR EXCEL. Delete all or some rows in a table in a MS Excel file (referenced by 'edb').}
 \description{NOT SUPORTED FOR EXCEL. Delete all or some rows in a table 
 in a MS Excel file (referenced by 'edb'). }
-\usage{\method{edbDelete}{RODBC_Excel}(edb, tableName, sRow = NULL, sRowOp = c("AND", 
-    "OR")[1], logOp = FALSE, logRandId = rnorm(1), logMsg = as.character(NA), 
-    logTableName = "edbLog", logCreateTableIfNotExist = TRUE, 
-    testFiles = TRUE, verbose = FALSE, ...)}
+\usage{\method{edbDelete}{RODBC_Excel}(edb, tableName, sRow = NULL, 
+    sRowOp = c("AND", "OR")[1], logOp = FALSE, logRandId = rnorm(1), 
+    logMsg = as.character(NA), logTableName = "edbLog", 
+    logCreateTableIfNotExist = TRUE, testFiles = TRUE, 
+    verbose = FALSE, ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}
   \item{tableName}{Single character string. Name of the table to read in 'edb'.}

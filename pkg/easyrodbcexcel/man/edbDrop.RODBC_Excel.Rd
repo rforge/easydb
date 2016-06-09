@@ -2,8 +2,9 @@
 \alias{edbDrop.RODBC_Excel}
 \title{Drop a table in a MS Excel file (referenced by 'edb').}
 \description{Drop a table in a MS Excel file (referenced by 'edb'). }
-\usage{\method{edbDrop}{RODBC_Excel}(edb, tableName, logOp = FALSE, logRandId = rnorm(1), 
-    logMsg = as.character(NA), logTableName = "edbLog", logCreateTableIfNotExist = TRUE, 
+\usage{\method{edbDrop}{RODBC_Excel}(edb, tableName, logOp = FALSE, 
+    logRandId = rnorm(1), logMsg = as.character(NA), 
+    logTableName = "edbLog", logCreateTableIfNotExist = TRUE, 
     testFiles = TRUE, verbose = FALSE, ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}

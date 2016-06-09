@@ -1,4 +1,4 @@
-import(RODBC, easydb)
+import(RODBC, easydb, stats, utils)
 
 exportPattern("^[[:alpha:]]+")
 
@@ -12,3 +12,6 @@ S3method("edbNRow", "RODBC_Excel")
 S3method("edbQuery", "RODBC_Excel")
 S3method("edbRead", "RODBC_Excel")
 S3method("edbWrite", "RODBC_Excel")
+
+importFrom(utils,packageVersion)
+importFrom(stats,rnorm)

@@ -2,12 +2,13 @@
 \alias{edbWrite.RODBC_Excel}
 \title{Write data in a MS Excel table in a database (referenced by 'edb').}
 \description{Write data in a table in a MS Excel file (referenced by 'edb'). }
-\usage{\method{edbWrite}{RODBC_Excel}(edb, tableName, data, mode = c("a", "u", 
-    "o")[1], pKey = NULL, getKey = NULL, formatCol = NULL, posixFormat = "", 
-    dateFormat = "", logOp = FALSE, logRandId = rnorm(1), logMsg = as.character(NA), 
+\usage{\method{edbWrite}{RODBC_Excel}(edb, tableName, data, mode = c("a", 
+    "u", "o")[1], pKey = NULL, getKey = NULL, formatCol = NULL, 
+    posixFormat = "", dateFormat = "", logOp = FALSE, 
+    logRandId = rnorm(1), logMsg = as.character(NA), 
     logTableName = "edbLog", logCreateTableIfNotExist = TRUE, 
-    parano = TRUE, testFiles = TRUE, tableNameSuffix = "$", verbose = FALSE, 
-    ...)}
+    parano = TRUE, testFiles = TRUE, tableNameSuffix = "$", 
+    verbose = FALSE, ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}
   \item{tableName}{Single character string. Name of the table to read in 'edb'.}

@@ -1,6 +1,10 @@
 
 Package: easyrodbcexcel
 
+VERSION 0.7.7
+
+    2016/06/09  Compiled for R 3.3.0
+
 VERSION 0.7.6
 
     2014/09/29  Compiled for R 3.1.1

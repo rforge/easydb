@@ -170,7 +170,7 @@ edbColnames.RODBC_Excel <- function(# Retrieve column names of a table in a MS E
 ){  #
     if( testFiles ) 
     {   # Check if the database files is present:
-        easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+        easydb::.edbFileExists( edb[[ "dbName" ]] ) 
     }   #
     
     msg <- sprintf( 
@@ -324,7 +324,7 @@ edbRead.RODBC_Excel <- function(# Read all or part of a table in a MS Excel file
 ){  #
     if( testFiles ) 
     {   # Check if the database files is present:
-        easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+        easydb::.edbFileExists( edb[[ "dbName" ]] ) 
     }   #
     
     ## Add a suffix if absent
@@ -334,7 +334,7 @@ edbRead.RODBC_Excel <- function(# Read all or part of a table in a MS Excel file
     )   
     
     # Prepare the list of columns to choose in the table:
-    selectWhat <- easydb:::.edb.sCol( 
+    selectWhat <- easydb::.edb.sCol( 
         edb       = edb, 
         sCol      = sCol, 
         tableName = tableName, 
@@ -344,7 +344,7 @@ edbRead.RODBC_Excel <- function(# Read all or part of a table in a MS Excel file
     selectWhat <- selectWhat[[ "selectWhat" ]] 
     
     # Prepare the 1st series of constrains:
-    sRow <- easydb:::.edb.sRow( # Create row constrains
+    sRow <- easydb::.edb.sRow( # Create row constrains
         sRow    = sRow, 
         sRowOp  = sRowOp, 
         charQ   = "'", 
@@ -434,7 +434,7 @@ edbRead.RODBC_Excel <- function(# Read all or part of a table in a MS Excel file
     #     }   #
     # }   #
     
-    tbl <- easydb:::.formatCol( 
+    tbl <- easydb::.formatCol( 
         x         = tbl, 
         formatCol = formatCol 
     )   #
@@ -474,7 +474,7 @@ edbNames.RODBC_Excel <- function(# Retrieve table names in a MS Excel file (refe
 ){  #
     if( testFiles ) 
     {   # Check if the database files is present:
-        easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+        easydb::.edbFileExists( edb[[ "dbName" ]] ) 
     }   #
     #
     msg <- sprintf( 
@@ -741,7 +741,7 @@ edbWrite.RODBC_Excel <- function(# Write data in a MS Excel table in a database 
 ){  #
     if( testFiles ) 
     {   # Check if the database files is present:
-        easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+        easydb::.edbFileExists( edb[[ "dbName" ]] ) 
     }   #
     
     # Save the existing state of 'last.warning' to be able to detect 
@@ -764,7 +764,7 @@ edbWrite.RODBC_Excel <- function(# Write data in a MS Excel table in a database 
     }   
     #
     # Convert the format of some columns:
-    data <- easydb:::.formatCol( 
+    data <- easydb::.formatCol( 
         x         = data, 
         formatCol = formatCol 
     )   #
@@ -862,7 +862,7 @@ edbWrite.RODBC_Excel <- function(# Write data in a MS Excel table in a database 
             #
             warning( "Primary key are not supported by Excel, so retrieving autoincrement primary key is not possible ( !is.null(getKey) )" )
             #
-            data <- easydb:::.formatTable4Query( 
+            data <- easydb::.formatTable4Query( 
                 data        = data, 
                 del         = "'", 
                 posixFormat = posixFormat, 
@@ -1416,7 +1416,7 @@ edbDrop.RODBC_Excel <- function(# Drop a table in a MS Excel file (referenced by
 ){  # 
     if( testFiles ) 
     {   # Check if the database files is present:
-        easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+        easydb::.edbFileExists( edb[[ "dbName" ]] ) 
     }   #
     #
     # Create the full querry statement:
@@ -1524,7 +1524,7 @@ edbQuery.RODBC_Excel <- function(# Send and retrieve a query in an MS Excel data
 ){  #
     if( testFiles ) 
     {   # Check if the database files is present:
-        easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+        easydb::.edbFileExists( edb[[ "dbName" ]] ) 
     }   #
     #
     if( verbose ){ 
@@ -1559,7 +1559,7 @@ edbQuery.RODBC_Excel <- function(# Send and retrieve a query in an MS Excel data
         ... 
     )   #
     #
-    qRes <- easydb:::.formatCol( 
+    qRes <- easydb::.formatCol( 
         x         = qRes, 
         formatCol = formatCol 
     )   #
@@ -1610,7 +1610,7 @@ edbNRow.RODBC_Excel <- function(# Retrieve the number of rows of a table in a da
 ){  # Retrieve the dimention of the table:
     statement <- paste( "SELECT Count(*) FROM [", tableName, "]", sep = "" ) 
     #
-    sRow <- easydb:::.edb.sRow( # Create row constrains
+    sRow <- easydb::.edb.sRow( # Create row constrains
         sRow    = sRow, 
         sRowOp  = sRowOp, 
         charQ   = "'", 
