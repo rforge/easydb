@@ -1,4 +1,10 @@
 import()
 
+#   export
 exportPattern("^[[:alpha:]]+")
+export(.edb.sRow)
 
+#   importFrom
+importFrom(utils,packageVersion)
+importFrom(utils,installed.packages)
+importFrom(stats,rnorm)

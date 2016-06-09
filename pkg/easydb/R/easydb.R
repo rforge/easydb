@@ -1179,7 +1179,7 @@ edbLog <- function(# Write an operation "log" (used when modifying the database)
     
     if( is.null( edbVersion ) )
     {   #
-        edbVersion <- installed.packages()[,c("Package","Version")] 
+        edbVersion <- utils::installed.packages()[,c("Package","Version")] 
         #
         selRow <- edbVersion[, "Package" ] == "easydb" 
         #

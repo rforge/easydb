@@ -1,11 +1,10 @@
 Package: easydb
-Version: 0.7.6
-Date: 2015-05-04
+Version: 0.7.8
+Date: 2016-06-09
 Title: Generic S3 Classes for Simple Database Interfaces
-Author: Julien MOEYS <Julien.Moeys@mark.slu.se> 
-Maintainer: Julien MOEYS <Julien.Moeys@mark.slu.se> 
-Depends: R (>= 3.1.1)
-Description: Generic S3 classes for simple database interfaces. (presently RODBC and RSQLite). 'easydb' provide common S3 classes for reading, writing, listing and subsetting tables in RODBC and (R)SQLite databases. Functions in 'easydb' alone DO NOT provide any database interface, but they are used in other packages that provide inteface to various database systems (see suggests). 'easydb' allows to retrieve, write and subset database's tables in a similar way as data.frame's, using single square brackets db[,,,]. easydb internalise many database operations (otherwise tedious) such as rows and columns subsetting (no SQL needed) and connection and disconnection to / from databases. 
+Author: Julien MOEYS <Julien.Moeys@mark.slu.se>
+Maintainer: Julien MOEYS <Julien.Moeys@mark.slu.se>
+Depends: R (>= 3.3.0)
+Description: Generic S3 classes for simple database interfaces. (presently RODBC and RSQLite). 'easydb' provide common S3 classes for reading, writing, listing and subsetting tables in RODBC and (R)SQLite databases. Functions in 'easydb' alone DO NOT provide any database interface, but they are used in other packages that provide inteface to various database systems (see suggests). 'easydb' allows to retrieve, write and subset database's tables in a similar way as data.frame's, using single square brackets db[,,,]. easydb internalise many database operations (otherwise tedious) such as rows and columns subsetting (no SQL needed) and connection and disconnection to / from databases.
 License: AGPL-3
-URL: http://easydb.r-forge.r-project.org/ 
-Suggests: 
+URL: http://easydb.r-forge.r-project.org/

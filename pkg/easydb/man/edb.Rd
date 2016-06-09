@@ -6,7 +6,8 @@ other functions. Notice that this is _not_ a database connection,
 so the function won't give a warning if the database does not 
 exists (yet) or if some parameters are wrong.}
 \usage{edb(dbType, dbName, dbSourceName = "edbDefault", dbHost = "", 
-    dbLogin = "", dbPwd = "", dbPort = integer(0), ...)}
+    dbLogin = "", dbPwd = "", dbPort = integer(0), 
+    ...)}
 \arguments{
   \item{dbType}{Single character string. Type of the database to describe, 
 formatted as \code{RPackageName_DatabaseType}. Possible values 
