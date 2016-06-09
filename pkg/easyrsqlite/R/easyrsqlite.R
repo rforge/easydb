@@ -156,7 +156,7 @@ edbColnames.RSQLite_SQLite <- function(# Retrieve column names of a table in a S
 ){  
     if( testFiles ) 
     {   # Check if the database files is present:
-        easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+        easydb::.edbFileExists( edb[[ "dbName" ]] ) 
     }   
     
     msg <- sprintf( 
@@ -265,11 +265,11 @@ edbRead.RSQLite_SQLite <- function(# Read all or part of a table in a SQLIte dat
 ){  #
     if( testFiles ) 
     {   # Check if the database files is present:
-        easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+        easydb::.edbFileExists( edb[[ "dbName" ]] ) 
     }   #
     # 
     # Prepare the list of columns to choose in the table:
-    selectWhat <- easydb:::.edb.sCol( 
+    selectWhat <- easydb::.edb.sCol( 
         edb       = edb, 
         sCol      = sCol, 
         tableName = tableName, 
@@ -365,7 +365,7 @@ edbRead.RSQLite_SQLite <- function(# Read all or part of a table in a SQLIte dat
     #     }   #
     # }   #
     
-    tbl <- easydb:::.formatCol( 
+    tbl <- easydb::.formatCol( 
         x         = tbl, 
         formatCol = formatCol 
     )   #
@@ -400,7 +400,7 @@ edbNames.RSQLite_SQLite <- function(# Retrieve table names in a SQLIte database 
 ){  #
     if( testFiles ) 
     {   # Check if the database files is present:
-        easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+        easydb::.edbFileExists( edb[[ "dbName" ]] ) 
     }   #
     #
     # require( "DBI" ) # in .edbOperation.RSQLite_SQLite
@@ -672,7 +672,7 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
 ){  #
     if( testFiles ) 
     {   # Check if the database files is present:
-        easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+        easydb::.edbFileExists( edb[[ "dbName" ]] ) 
     }   
     
     # require( "DBI" ) # in .edbOperation.RSQLite_SQLite
@@ -698,7 +698,7 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
     }   
     
     # Convert the format of some columns:
-    data <- easydb:::.formatCol( 
+    data <- easydb::.formatCol( 
         x         = data, 
         formatCol = formatCol 
     )   #
@@ -861,7 +861,7 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
             # }   
         }else{ 
             #
-            data <- easydb:::.formatTable4Query( 
+            data <- easydb::.formatTable4Query( 
                 data        = data, 
                 del         = "\"", 
                 posixFormat = posixFormat, 
@@ -935,7 +935,7 @@ edbWrite.RSQLite_SQLite <- function(# Write data in a SQLite table in a database
         }   #    
     }else{ ### mode == "u", update mode.
         #
-        data <- easydb:::.formatTable4Query( 
+        data <- easydb::.formatTable4Query( 
             data        = data, 
             del         = "\"", 
             posixFormat = posixFormat, 
@@ -1289,7 +1289,7 @@ edbDelete.RSQLite_SQLite <- function(# Delete all or some rows in a table in a S
 ){  #
     if( testFiles ) 
     {   # Check if the database files is present:
-        easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+        easydb::.edbFileExists( edb[[ "dbName" ]] ) 
     }   #
     # 
     # Prepare the 1st series of constrains:
@@ -1412,7 +1412,7 @@ edbDrop.RSQLite_SQLite <- function(# Delete all or some rows in a table in a SQL
 ){  #
     if( testFiles ) 
     {   # Check if the database files is present:
-        easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+        easydb::.edbFileExists( edb[[ "dbName" ]] ) 
     }   #
     #
     # Create the full querry statement:
@@ -1577,7 +1577,7 @@ edbQuery.RSQLite_SQLite <- function(# Send and retrieve a query in a SQLIte data
 ){  
     if( testFiles ) 
     {   # Check if the database files is present:
-        easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+        easydb::.edbFileExists( edb[[ "dbName" ]] ) 
     }   #
     
     if( verbose ){ 
@@ -1610,7 +1610,7 @@ edbQuery.RSQLite_SQLite <- function(# Send and retrieve a query in a SQLIte data
         ... 
     )   
     
-    qRes <- easydb:::.formatCol( 
+    qRes <- easydb::.formatCol( 
         x         = qRes, 
         formatCol = formatCol 
     )   #
