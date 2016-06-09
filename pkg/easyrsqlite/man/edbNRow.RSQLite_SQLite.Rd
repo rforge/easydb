@@ -4,8 +4,8 @@
 \description{Retrieve the number of rows of a table in a database (referenced by 
 'edb'). Notice that the methods do NOT retrieve the full table to 
 get its column names (so it should work even if the table is big).}
-\usage{\method{edbNRow}{RSQLite_SQLite}(edb, tableName, sRow = NULL, sRowOp = c("AND", 
-    "OR")[1], verbose = FALSE, ...)}
+\usage{\method{edbNRow}{RSQLite_SQLite}(edb, tableName, sRow = NULL, 
+    sRowOp = c("AND", "OR")[1], verbose = FALSE, ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}
   \item{tableName}{Single character string. Name of the table to read in 'edb'.}

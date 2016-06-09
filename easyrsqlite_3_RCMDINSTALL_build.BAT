@@ -1,6 +1,6 @@
 set pkgname=easyrsqlite
 set projectname=easydb
-set version=0.7.5
+set version=0.7.6
 
 cd /D "%rPackagesDir%\%projectname%\pkg" 
 

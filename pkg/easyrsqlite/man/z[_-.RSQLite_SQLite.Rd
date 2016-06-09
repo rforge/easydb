@@ -3,9 +3,12 @@
 \title{Assign method for SQLite databases. Write data in a SQLite table in a database (referenced by 'edb').}
 \description{Assign method for SQLite databases. Write data in a table in a 
 SQLite database (referenced by 'edb'). }
-\usage{
-\method{[}{RSQLite_SQLite}(edb, tableName, mode = "a", pKey = NULL, getKey = NULL, formatCol = NULL, posixFormat = "", dateFormat = "", parano = TRUE, testFiles = TRUE, verbose = FALSE, ...) <- value
-}
+\usage{
+
+\method{[}{RSQLite_SQLite}(edb, tableName, mode = "a", pKey = NULL, getKey = NULL, formatCol = NULL, posixFormat = "", dateFormat = "", parano = TRUE, testFiles = TRUE, verbose = FALSE, ...) <- value
+
+}
+
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}
   \item{tableName}{Single character string. Name of the table to read in 'edb'.}

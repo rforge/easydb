@@ -1,9 +1,9 @@
 
 rm(list=ls(all=TRUE)) 
 pkgName     <- "easyrsqlite" 
-rootDir     <- "D:/Users/julienm/Documents/_WORKS/_PROJECTS/r_packages/easydb" 
+rootDir     <- sprintf( "%s/easydb", Sys.getenv("rPackagesDir") )
 pkgDir      <- file.path( rootDir, "pkg" )  
-pkgVersion  <- "0.7.5" 
+pkgVersion  <- "0.7.6" 
 pkgDepends  <- c("RSQLite","easydb") 
 pkgSuggests <- NULL # c( "easyrsqlite", "easyrodbcexcel", "easyrodbcmysql", "easyrodbcaccess" ) 
 pkgImports  <- "DBI"

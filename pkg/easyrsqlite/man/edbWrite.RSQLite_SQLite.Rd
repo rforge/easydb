@@ -2,11 +2,13 @@
 \alias{edbWrite.RSQLite_SQLite}
 \title{Write data in a SQLite table in a database (referenced by 'edb').}
 \description{Write data in a table in a SQLite database (referenced by 'edb'). }
-\usage{\method{edbWrite}{RSQLite_SQLite}(edb, tableName, data, mode = c("a", "u", 
-    "o")[1], pKey = NULL, getKey = NULL, formatCol = NULL, posixFormat = "", 
-    dateFormat = "", logOp = FALSE, logRandId = rnorm(1), logMsg = as.character(NA), 
+\usage{\method{edbWrite}{RSQLite_SQLite}(edb, tableName, data, mode = c("a", 
+    "u", "o")[1], pKey = NULL, getKey = NULL, formatCol = NULL, 
+    posixFormat = "", dateFormat = "", logOp = FALSE, 
+    logRandId = rnorm(1), logMsg = as.character(NA), 
     logTableName = "edbLog", logCreateTableIfNotExist = TRUE, 
-    parano = TRUE, testFiles = TRUE, verbose = FALSE, ...)}
+    parano = TRUE, testFiles = TRUE, verbose = FALSE, 
+    ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}
   \item{tableName}{Single character string. Name of the table to read in 'edb'.}

@@ -2,8 +2,9 @@
 \alias{edbDrop.RSQLite_SQLite}
 \title{Delete all or some rows in a table in a SQLIte database (referenced by 'edb').}
 \description{Delete all or some rows in a table in a SQLIte database (referenced by 'edb'). }
-\usage{\method{edbDrop}{RSQLite_SQLite}(edb, tableName, logOp = FALSE, logRandId = rnorm(1), 
-    logMsg = as.character(NA), logTableName = "edbLog", logCreateTableIfNotExist = TRUE, 
+\usage{\method{edbDrop}{RSQLite_SQLite}(edb, tableName, logOp = FALSE, 
+    logRandId = rnorm(1), logMsg = as.character(NA), 
+    logTableName = "edbLog", logCreateTableIfNotExist = TRUE, 
     testFiles = TRUE, verbose = FALSE, ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}

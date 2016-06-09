@@ -279,7 +279,7 @@ edbRead.RSQLite_SQLite <- function(# Read all or part of a table in a SQLIte dat
     selectWhat <- selectWhat[[ "selectWhat" ]] 
     # 
     # Prepare the 1st series of constrains:
-    sRow <- easydb:::.edb.sRow( # Create row constrains
+    sRow <- easydb::.edb.sRow( # Create row constrains
         sRow    = sRow, 
         sRowOp  = sRowOp, 
         charQ   = "\"", 
@@ -1293,7 +1293,7 @@ edbDelete.RSQLite_SQLite <- function(# Delete all or some rows in a table in a S
     }   #
     # 
     # Prepare the 1st series of constrains:
-    sRow <- easydb:::.edb.sRow( # Create row constrains
+    sRow <- easydb::.edb.sRow( # Create row constrains
         sRow    = sRow, 
         sRowOp  = sRowOp, 
         charQ   = "\"", 
@@ -1517,7 +1517,7 @@ edbNRow.RSQLite_SQLite <- function(# Retrieve the number of rows of a table in a
 ){  # Retrieve the dimention of the table:
     statement <- paste("SELECT Count(*) FROM [", tableName, "]", sep = "" ) 
     #
-    sRow <- easydb:::.edb.sRow( # Create row constrains
+    sRow <- easydb::.edb.sRow( # Create row constrains
         sRow    = sRow, 
         sRowOp  = sRowOp, 
         charQ   = "\"", 

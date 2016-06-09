@@ -2,9 +2,10 @@
 \alias{edbRead.RSQLite_SQLite}
 \title{Read all or part of a table in a SQLIte database (referenced by 'edb').}
 \description{Read all or part of a table in a SQLIte database (referenced by 'edb'). }
-\usage{\method{edbRead}{RSQLite_SQLite}(edb, tableName, sRow = NULL, sCol = NULL, 
-    sRowOp = c("AND", "OR")[1], formatCol = NULL, distinct = FALSE, 
-    orderBy = NULL, testFiles = TRUE, verbose = FALSE, ...)}
+\usage{\method{edbRead}{RSQLite_SQLite}(edb, tableName, sRow = NULL, 
+    sCol = NULL, sRowOp = c("AND", "OR")[1], formatCol = NULL, 
+    distinct = FALSE, orderBy = NULL, testFiles = TRUE, 
+    verbose = FALSE, ...)}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}
   \item{tableName}{Single character string. Name of the table to read in 'edb'.}
