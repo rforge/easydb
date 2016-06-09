@@ -1,6 +1,10 @@
 
 Package: easyrodbcmysql
 
+VERSION 0.7.8
+
+    2016/06/09  Compiled for R 3.3.0
+
 VERSION 0.7.7
 
     2015/05/05  Compiled for R 3.2.0

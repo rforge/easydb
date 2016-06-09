@@ -436,7 +436,7 @@ edbRead.RODBC_MySQL <- function(# Read all or part of a table in a MySQL databas
 
 ){  #
     # Prepare the list of columns to choose in the table:
-    selectWhat <- easydb:::.edb.sCol( 
+    selectWhat <- easydb::.edb.sCol( 
         edb       = edb, 
         sCol      = sCol, 
         tableName = tableName, 
@@ -446,7 +446,7 @@ edbRead.RODBC_MySQL <- function(# Read all or part of a table in a MySQL databas
     selectWhat <- selectWhat[[ "selectWhat" ]] 
     # 
     # Prepare the 1st series of constrains:
-    sRow <- easydb:::.edb.sRow( # Create row constrains
+    sRow <- easydb::.edb.sRow( # Create row constrains
         sRow    = sRow, 
         sRowOp  = sRowOp, 
         charQ   = "\"", 
@@ -536,7 +536,7 @@ edbRead.RODBC_MySQL <- function(# Read all or part of a table in a MySQL databas
     #     }   #
     # }   #
     
-    tbl <- easydb:::.formatCol( 
+    tbl <- easydb::.formatCol( 
         x         = tbl, 
         formatCol = formatCol 
     )   #
@@ -859,7 +859,7 @@ edbWrite.RODBC_MySQL <- function(# Write data in a MySQL table in a database (re
     }   #
     #
     # Convert the format of some columns:
-    data <- easydb:::.formatCol( 
+    data <- easydb::.formatCol( 
         x         = data, 
         formatCol = formatCol 
     )   #
@@ -918,7 +918,7 @@ edbWrite.RODBC_MySQL <- function(# Write data in a MySQL table in a database (re
             }   #
             
             if( speedInsert ){ ## Fast, bulk insert of rows
-                data <- easydb:::.splitBySize( 
+                data <- easydb::.splitBySize( 
                     x    = data, 
                     size = speedInsertNRow 
                 )   
@@ -927,7 +927,7 @@ edbWrite.RODBC_MySQL <- function(# Write data in a MySQL table in a database (re
                     X   = data, 
                     FUN = function(X,tableName){ 
                         ## Format the table fort sending as a query
-                        X <- easydb:::.formatTable4Query( 
+                        X <- easydb::.formatTable4Query( 
                             data        = X, 
                             del         = "'", 
                             posixFormat = posixFormat, 
@@ -1003,7 +1003,7 @@ edbWrite.RODBC_MySQL <- function(# Write data in a MySQL table in a database (re
                 options( "warn" = oldOptions ) 
             }   
         }else{ ## !is.null( getKey )
-            data <- easydb:::.formatTable4Query( 
+            data <- easydb::.formatTable4Query( 
                 data        = data, 
                 del         = "'", 
                 posixFormat = posixFormat, 
@@ -1072,7 +1072,7 @@ edbWrite.RODBC_MySQL <- function(# Write data in a MySQL table in a database (re
         }   #    
     }else{ ### mode == "u", update mode.
         #
-        data <- easydb:::.formatTable4Query( 
+        data <- easydb::.formatTable4Query( 
             data        = data, 
             del         = "'", 
             posixFormat = posixFormat, 
@@ -1445,7 +1445,7 @@ edbDelete.RODBC_MySQL <- function(# Delete all or some rows in a table in a MySQ
 
 ){  # 
     # Prepare the 1st series of constrains:
-    sRow <- easydb:::.edb.sRow( # Create row constrains
+    sRow <- easydb::.edb.sRow( # Create row constrains
         sRow    = sRow, 
         sRowOp  = sRowOp, 
         charQ   = "\"", 
@@ -1658,7 +1658,7 @@ edbQuery.RODBC_MySQL <- function(# Send and retrieve a query in a SQLite databas
 ){  #
 #     if( testFiles ) 
 #     {   # Check if the database files is present:
-#         easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+#         easydb::.edbFileExists( edb[[ "dbName" ]] ) 
 #     }   #
     #
     if( verbose ){ 
@@ -1692,7 +1692,7 @@ edbQuery.RODBC_MySQL <- function(# Send and retrieve a query in a SQLite databas
         ... 
     )   
     
-    qRes <- easydb:::.formatCol( 
+    qRes <- easydb::.formatCol( 
         x         = qRes, 
         formatCol = formatCol 
     )   #
@@ -1743,7 +1743,7 @@ edbNRow.RODBC_MySQL <- function(# Retrieve the number of rows of a table in a da
 ){  # Retrieve the dimention of the table:
     statement <- paste("SELECT Count(*) FROM `", tableName, "`", sep = "" ) 
     #
-    sRow <- easydb:::.edb.sRow( # Create row constrains
+    sRow <- easydb::.edb.sRow( # Create row constrains
         sRow    = sRow, 
         sRowOp  = sRowOp, 
         charQ   = "\"", 
