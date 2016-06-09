@@ -7,6 +7,7 @@ export(.edb.sCol)
 export(.edbFileExists)
 export(.formatCol)
 export(.formatTable4Query) 
+export(.splitBySize) 
 
 #   importFrom
 importFrom(utils,packageVersion)
