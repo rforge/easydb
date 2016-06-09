@@ -1,9 +1,9 @@
 
 rm(list=ls(all=TRUE)) 
 pkgName     <- "easydb" 
-rootDir     <- "D:/Users/julienm/Documents/_WORKS/_PROJECTS/r_packages/easydb" 
+rootDir     <- sprintf( "%s/easydb", Sys.getenv("rPackagesDir") )
 pkgDir      <- file.path( rootDir, "pkg" )  
-pkgVersion  <- "0.7.6" 
+pkgVersion  <- "0.7.8" 
 pkgDepends  <- NULL 
 pkgSuggests <- NULL # c( "easyrsqlite", "easyrodbcexcel", "easyrodbcmysql", "easyrodbcaccess" ) 
 RVersion    <- NULL 
@@ -18,6 +18,8 @@ RVersion    <- NULL
 #               easyrsqlite
 #       0.7.3 = new 64 bit computer
 #       0.7.4 = compiled on R 3.0.0 
+#       0.7.6 = compiled on R 3.2.0 
+#       0.7.9 = compiled on R 3.3.0 
 
 
 

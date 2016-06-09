@@ -1,5 +1,5 @@
 set pkgname=easydb
-set version=0.7.6
+set version=0.7.8
 
 cd /D "%rPackagesDir%\%pkgname%\pkg" 
 
