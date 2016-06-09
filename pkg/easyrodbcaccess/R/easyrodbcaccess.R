@@ -168,7 +168,7 @@ edbColnames.RODBC_Access <- function(# Retrieve column names of a table in a MS 
 ){  #
     if( testFiles ) 
     {   # Check if the database files is present:
-        easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+        easydb::.edbFileExists( edb[[ "dbName" ]] ) 
     }   #
     
     msg <- sprintf( 
@@ -281,11 +281,11 @@ edbRead.RODBC_Access <- function(# Read all or part of a table in a MS Access da
 ){  #
     if( testFiles ) 
     {   # Check if the database files is present:
-        easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+        easydb::.edbFileExists( edb[[ "dbName" ]] ) 
     }   #
     
     # Prepare the list of columns to choose in the table:
-    selectWhat <- easydb:::.edb.sCol( 
+    selectWhat <- easydb::.edb.sCol( 
         edb       = edb, 
         sCol      = sCol, 
         tableName = tableName, 
@@ -296,7 +296,7 @@ edbRead.RODBC_Access <- function(# Read all or part of a table in a MS Access da
     
     # Prepare the 1st series of constrains:
     
-    sRow <- easydb:::.edb.sRow( # Create row constrains
+    sRow <- easydb::.edb.sRow( # Create row constrains
         sRow    = sRow, 
         sRowOp  = sRowOp, 
         charQ   = "'", 
@@ -387,7 +387,7 @@ edbRead.RODBC_Access <- function(# Read all or part of a table in a MS Access da
     #     }   
     # }   
     
-    tbl <- easydb:::.formatCol( 
+    tbl <- easydb::.formatCol( 
         x         = tbl, 
         formatCol = formatCol 
     )   
@@ -427,7 +427,7 @@ edbNames.RODBC_Access <- function(# Retrieve table names in a MS Access database
 ){  #
     if( testFiles ) 
     {   # Check if the database files is present:
-        easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+        easydb::.edbFileExists( edb[[ "dbName" ]] ) 
     }   #
     
     msg <- sprintf( 
@@ -689,7 +689,7 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
 ){  #
     if( testFiles ) 
     {   # Check if the database files is present:
-        easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+        easydb::.edbFileExists( edb[[ "dbName" ]] ) 
     }   #
     #
     # Save the existing state of 'last.warning' to be able to detect 
@@ -712,7 +712,7 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
     }   #
     #
     # Convert the format of some columns:
-    data <- easydb:::.formatCol( 
+    data <- easydb::.formatCol( 
         x         = data, 
         formatCol = formatCol 
     )   #
@@ -800,7 +800,7 @@ edbWrite.RODBC_Access <- function(# Write data in a MS Access table in a databas
             options( "warn" = oldOptions ) 
         }else{ 
             #
-            data <- easydb:::.formatTable4Query( 
+            data <- easydb::.formatTable4Query( 
                 data        = data, 
                 del         = "'", 
                 posixFormat = posixFormat, 
@@ -1299,11 +1299,11 @@ edbDelete.RODBC_Access <- function(# Delete all or some rows in a table in a MS 
 ){  # 
     if( testFiles ) 
     {   # Check if the database files is present:
-        easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+        easydb::.edbFileExists( edb[[ "dbName" ]] ) 
     }   #
     #
     # Prepare the 1st series of constrains:
-    sRow <- easydb:::.edb.sRow( # Create row constrains
+    sRow <- easydb::.edb.sRow( # Create row constrains
         sRow    = sRow, 
         sRowOp  = sRowOp, 
         charQ   = "'", 
@@ -1419,7 +1419,7 @@ edbDrop.RODBC_Access <- function(# Drop a table in a MS Access database (referen
 ){  # 
     if( testFiles ) 
     {   # Check if the database files is present:
-        easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+        easydb::.edbFileExists( edb[[ "dbName" ]] ) 
     }   #
     #
     # Create the full querry statement:
@@ -1519,7 +1519,7 @@ edbQuery.RODBC_Access <- function(# Send and retrieve a query in an MS Access da
 ){  #
     if( testFiles ) 
     {   # Check if the database files is present:
-        easydb:::.edbFileExists( edb[[ "dbName" ]] ) 
+        easydb::.edbFileExists( edb[[ "dbName" ]] ) 
     }   #
     #
     if( verbose ){ 
@@ -1553,7 +1553,7 @@ edbQuery.RODBC_Access <- function(# Send and retrieve a query in an MS Access da
         ... 
     )   
     
-    qRes <- easydb:::.formatCol( 
+    qRes <- easydb::.formatCol( 
         x         = qRes, 
         formatCol = formatCol 
     )   #
@@ -1604,7 +1604,7 @@ edbNRow.RODBC_Access <- function(# Retrieve the number of rows of a table in a d
 ){  # Retrieve the dimention of the table:
     statement <- paste( "SELECT Count(*) FROM [", tableName, "]", sep = "" ) 
     #
-    sRow <- easydb:::.edb.sRow( # Create row constrains
+    sRow <- easydb::.edb.sRow( # Create row constrains
         sRow    = sRow, 
         sRowOp  = sRowOp, 
         charQ   = "'", 

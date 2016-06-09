@@ -1,6 +1,6 @@
 set pkgname=easyrodbcaccess
 set projectname=easydb
-set version=0.7.7
+set version=0.7.8
 
 cd /D "%rPackagesDir%\%projectname%\pkg" 
 

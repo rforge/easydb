@@ -1,4 +1,4 @@
-import(RODBC, easydb)
+import(RODBC, easydb, stats, utils)
 
 exportPattern("^[[:alpha:]]+")
 

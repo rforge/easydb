@@ -3,9 +3,7 @@
 \title{"[<-" method for MS Access databases. Write data in a MS Access table in a database (referenced by 'edb').}
 \description{"[<-" method for MS Access databases. Write data in a table in a 
 MS Access database (referenced by 'edb'). }
-\usage{
-\method{[}{RODBC_Access}(edb, tableName, mode = "a", pKey = NULL, getKey = NULL, formatCol = NULL, posixFormat = "", dateFormat = "", parano = TRUE, verbose = FALSE, ...) <- value
-}
+\usage{"\\n\method{[}{RODBC_Access}(edb, tableName, mode = \\"a\\", pKey = NULL, getKey = NULL, formatCol = NULL, posixFormat = \\"\\", dateFormat = \\"\\", parano = TRUE, verbose = FALSE, ...) <- value\\n"}
 \arguments{
   \item{edb}{An object of class 'edb', such as returned by \code{\link[easydb]{edb}}.}
   \item{tableName}{Single character string. Name of the table to read in 'edb'.}

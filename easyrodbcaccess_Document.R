@@ -1,10 +1,11 @@
 
 rm(list=ls(all=TRUE)) 
 pkgName     <- "easyrodbcaccess" 
-rootDir     <- "D:/Users/julienm/Documents/_WORKS/_PROJECTS/r_packages/easydb" 
+rootDir     <- sprintf( "%s/easydb", Sys.getenv("rPackagesDir") )
 pkgDir      <- file.path( rootDir, "pkg" )  
-pkgVersion  <- "0.7.7" 
-pkgDepends  <- c("RODBC","easydb")  
+pkgVersion  <- "0.7.8" 
+pkgDepends  <- c( "RODBC", "easydb" ) 
+pkgImports  <- c( "stats", "utils" ) 
 pkgSuggests <- NULL # c( "easyrsqlite", "easyrodbcexcel", "easyrodbcmysql", "easyrodbcaccess" ) 
 RVersion    <- NULL 
 
@@ -22,6 +23,7 @@ pkgDescription(
     pkgDir      = pkgDir, 
     pkgVersion  = pkgVersion, 
     pkgDepends  = pkgDepends, 
+    pkgImports  = pkgImports, 
     pkgSuggests = pkgSuggests, 
     RVersion    = RVersion  
 )   #
